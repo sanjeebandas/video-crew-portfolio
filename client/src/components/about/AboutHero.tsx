@@ -1,6 +1,7 @@
 const AboutHero = () => {
   return (
-    <section className="w-full bg-black text-white py-12 md:py-20 overflow-x-hidden">
+    <section className="w-full bg-black text-white py-12 md:py-20">
+
       <div className="max-w-[1248px] mx-auto px-0 sm:px-6 md:px-0">
         {/* Flex container to handle centering on mobile */}
         <div className="flex justify-center md:justify-start">
