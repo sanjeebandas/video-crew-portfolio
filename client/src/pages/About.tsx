@@ -1,5 +1,7 @@
-
+import AboutGrid from "../components/about/AboutGrid";
 import AboutHero from "../components/about/AboutHero";
+import AboutWorkCultureGrid from "../components/about/AboutWorkCultureGrid";
+import TrustedCompaniesBar from "../components/home/TrustedCompaniesBar ";
 
 type Props = {};
 
@@ -35,6 +37,60 @@ const About = (props: Props) => {
 
       {/* HeroSection of About Page */}
       <AboutHero />
+      <div className="w-full bg-black overflow-hidden">
+        <div className="max-w-[1248px] mx-auto px-6 md:px-0 mt-4 sm:mt-6 md:mt-8">
+          <img
+            src="/imgs/Frame 430.webp"
+            alt="Section Separator Design"
+            className="w-full h-auto object-cover transform scale-[1.5] sm:scale-100 transition-transform duration-300"
+          />
+        </div>
+      </div>
+
+      {/* Decorative Centered Separator Image */}
+      <div className="w-full mt-4 sm:mt-6 md:mt-5">
+        <img
+          src="/imgs/Image.webp"
+          alt="Section Separator Design"
+          className="w-full h-auto object-cover"
+        />
+      </div>
+
+      {/* Core Value Text Block */}
+      <div className="w-full px-6">
+        <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
+          <h2 className="text-lg sm:text-3xl md:text-4xl font-bold mb-2 leading-snug">
+            Core Value
+          </h2>
+          <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
+            당신의 이야기에 생명을 불어넣는 영상,
+            <br className="block sm:hidden" />
+            비디오크루가 만듭니다.
+            <br />
+            모든 프레임에 가치를 담다, 비디오크루
+          </p>
+        </div>
+      </div>
+      {/* About Grid */}
+      <AboutGrid />
+      <img
+        src="/imgs/Image-1.webp"
+        alt="Section Separator Design"
+        className="w-full h-auto object-cover -mt-10 sm:-mt-10"
+      />
+      {/* Work Culture Text Block */}
+      <div className="w-full px-6 lg:-mt-32">
+        <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
+          <h2 className="text-lg sm:text-3xl md:text-4xl font-bold mb-2 leading-snug">
+            Work Culture
+          </h2>
+          <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
+            비디오크루의 업무 문화는 여러 차원에서 뛰어난 그릭들이 그걸을
+            가버드로 합니다.
+          </p>
+        </div>
+      </div>
+      <AboutWorkCultureGrid />
     </div>
   );
 };
