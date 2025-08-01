@@ -1,7 +1,6 @@
 import AboutGrid from "../components/about/AboutGrid";
 import AboutHero from "../components/about/AboutHero";
 import AboutWorkCultureGrid from "../components/about/AboutWorkCultureGrid";
-import TrustedCompaniesBar from "../components/home/TrustedCompaniesBar ";
 
 type Props = {};
 

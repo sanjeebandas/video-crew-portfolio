@@ -1,10 +1,15 @@
-import React from 'react';
+import React from "react";
+import ContactBanner from "../components/contact/ContactBanner";
+import ContactForm from "../components/contact/ContactForm";
 
 type Props = {};
 
 const Contact = (props: Props) => {
   return (
-    <div>Contact Page</div>
+    <div>
+      <ContactBanner />
+      <ContactForm />
+    </div>
   );
 };
 
