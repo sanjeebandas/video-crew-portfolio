@@ -1,10 +1,82 @@
-import React from 'react';
+import ProcessBanner from "../process/ProcessBanner";
+import ProcessStep from "../process/ProcessStep";
 
-type Props = {};
+const processSteps = [
+  {
+    id: "01",
+    title: "상담 및 목표 설정",
+    subtitle: "Consultation & Goal Setting",
+    description:
+      "비디오크루는 고객님의 입장에서 먼저 고민합니다. 영상 제작의 궁극적인 목적에 따라 브랜드 인지도 향상, 제품 판매 증진, 정보 전달과 기대 효과, 주요 타겟 시청자...",
+    image: "imgs/process/Frame 395.webp",
+    offsetY: "md:-mt-0",
+  },
+  {
+    id: "02",
+    title: "영상 기획 및 전략 수립",
+    subtitle: "Video Planning & Strategy",
+    description:
+      "설정된 목표와 예비분석을 영상화 전략에 반영. 주요 스토리라인, 편집적인 흐름, 촬영컨셉을 구체화합니다...",
+    image: "imgs/process/Frame 396.webp",
+    offsetY: "md:-mt-92",
+  },
+  {
+    id: "03",
+    title: "촬영 준비 및 일정 조율",
+    subtitle: "Pre-Production & Scheduling",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae erat at justo lacinia rutrum. Nulla facilisi. Fusce vel turpis a nulla malesuada tincidunt.",
+    image: "imgs/process/Frame 397.webp",
+    offsetY: "md:-mt-36",
+  },
+  {
+    id: "04",
+    title: "현장 촬영",
+    subtitle: "On-Site Filming",
+    description:
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.",
+    image: "imgs/process/Frame 396-1.webp",
+    offsetY: "md:-mt-92",
+  },
+  {
+    id: "05",
+    title: "편집 및 후반 작업",
+    subtitle: "Editing & Post-Production",
+    description:
+      "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium. Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae.",
+    image: "imgs/process/Frame 423.webp",
+    offsetY: "md:-mt-28",
+  },
+  {
+    id: "06",
+    title: "최종 납품 및 피드백",
+    subtitle: "Final Delivery & Feedback",
+    description:
+      "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.",
+    image: "imgs/process/Frame 396-2.webp",
+    offsetY: "md:-mt-96",
+  },
+];
 
-const Process = (props: Props) => {
+const Process = () => {
   return (
-    <div>Process Page</div>
+    <div className="bg-black text-white">
+      <ProcessBanner />
+      <div className="max-w-[1248px] mx-auto px-4 py-12 md:py-32 flex flex-col gap-32">
+        {processSteps.map((step, index) => (
+          <ProcessStep
+            key={step.id}
+            id={step.id}
+            title={step.title}
+            subtitle={step.subtitle}
+            description={step.description}
+            image={step.image}
+            reverse={index % 2 !== 0}
+            offsetY={step.offsetY}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
