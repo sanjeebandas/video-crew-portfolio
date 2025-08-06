@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-// TypeScript interface for strong typing
 export interface IContactInquiry extends Document {
   name: string;
   email: string;

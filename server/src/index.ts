@@ -14,7 +14,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ✅ Middleware
+// Middleware
 
 const corsOptions = {
   origin: "http://localhost:5173",
@@ -29,10 +29,10 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Connect to DB
+// Connect to DB
 connectDB?.();
 
-// ✅ API Routes
+// API Routes
 app.use("/api/ping", pingRoute);
 app.use("/api/portfolio", portfolioRoutes);
 app.use("/api/auth", authRoutes);
@@ -41,12 +41,12 @@ app.use("/api/upload", uploadRoutes);
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-// ✅ Fallback for 404
+// Fallback for 404
 app.use((_req, res) => {
   res.status(404).json({ message: "API route not found" });
 });
 
-// ✅ Start server
+// Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
