@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 
-type Props = {};
-
-const ContactForm = (props: Props) => {
+const ContactForm = () => {
   const [formData, setFormData] = useState({
     namePosition: "",
     email: "",
@@ -65,10 +63,7 @@ const ContactForm = (props: Props) => {
 
       const loadingToast = toast.loading("제출 중입니다...");
 
-      await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/contact`,
-        payload
-      );
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/contact`, payload);
 
       toast.dismiss(loadingToast);
       toast.success("문의가 성공적으로 제출되었습니다!");
