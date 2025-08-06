@@ -182,6 +182,7 @@ Response:
 - No password reset functionality
 - No email verification or activity logs
 - Some Figma design elements not fully implemented (gradient backgrounds, etc.)
+- Not able to create 10 portfolio items due to delay in deploymentd due to connection issues and tight deadline
 
 ---
 
