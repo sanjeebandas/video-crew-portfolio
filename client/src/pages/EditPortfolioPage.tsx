@@ -120,7 +120,6 @@ const EditPortfolioPage = () => {
     }
   };
 
-  // Enhanced loading state with skeleton
   if (loading) {
     return (
       <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen p-4 md:p-6">
@@ -149,7 +148,7 @@ const EditPortfolioPage = () => {
   return (
     <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen p-4 md:p-6">
       <div className="max-w-4xl mx-auto">
-        {/* Enhanced Header */}
+        {/*Header */}
         <div className="flex items-center gap-4 mb-8">
           <button
             onClick={() => navigate("/admin/portfolio")}
@@ -171,7 +170,7 @@ const EditPortfolioPage = () => {
           </div>
         </div>
 
-        {/* Enhanced Form Container */}
+        {/*Form Container */}
         <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden">
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             {/* Basic Information Section */}
@@ -440,7 +439,7 @@ const EditPortfolioPage = () => {
               </div>
             </div>
 
-            {/* Enhanced Action Buttons */}
+            {/*Action Buttons */}
             <div className="flex gap-4 pt-4">
               <button
                 type="button"

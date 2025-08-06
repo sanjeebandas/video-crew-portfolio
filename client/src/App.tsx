@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { Toaster } from "react-hot-toast"; // ✅ new hot-toast import
+import { Toaster } from "react-hot-toast"; 
+
 
 // Public Pages
 import Home from "./pages/Home";
@@ -57,7 +58,7 @@ function LayoutWrapper() {
 
       {!isAdminRoute && <Footer />}
 
-      {/* ✅ Global Hot Toast Container */}
+      {/* Global Hot Toast Container */}
       <Toaster
         position="top-right"
         toastOptions={{

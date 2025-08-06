@@ -1,9 +1,7 @@
-import React from "react";
-
 const ProcessBanner = () => {
   return (
     <section className="w-full">
-      {/* ✅ Desktop Layout */}
+      {/* Desktop Layout */}
       <div className="hidden lg:flex justify-center">
         <div className="grid grid-cols-5 w-[1248px] h-[570px] border border-white/20 overflow-hidden">
           {/* Left side - Text */}
@@ -32,7 +30,7 @@ const ProcessBanner = () => {
         </div>
       </div>
 
-      {/* ✅ Mobile Layout */}
+      {/* Mobile Layout */}
       <div className="lg:hidden flex flex-col items-center justify-center bg-black text-white p-6">
         <div className="border border-white/20 rounded overflow-hidden w-full">
           {/* Text Content */}

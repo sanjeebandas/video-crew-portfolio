@@ -1,4 +1,3 @@
-import React from "react";
 
 const companyLogos = [
   { src: "/imgs/logos/hyundai.webp", alt: "Hyundai" },

@@ -1,7 +1,3 @@
-import React from "react";
-
-type Props = {};
-
 const workCultureItems = [
   {
     title: "'Agile' Performance",
@@ -25,7 +21,7 @@ const workCultureItems = [
   },
 ];
 
-const AboutWorkCultureGrid = (props: Props) => {
+const AboutWorkCultureGrid = () => {
   return (
     <section className="w-full bg-black text-white px-6 py-16">
       <div className="max-w-[1248px] mx-auto">

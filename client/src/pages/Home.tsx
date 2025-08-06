@@ -1,18 +1,11 @@
-import React from "react";
 import HeroSection from "../components/home/HeroSection";
 import ServicesGrid from "../components/home/ServicesGrid";
 import PortfolioScroller from "../components/home/PortfolioScroller";
-import TrustedCompaniesBar from "../components/home/TrustedCompaniesBar ";
 import BackgroundBanner from "../components/home/BackgroundBanner";
-import BlobBackground from "../components/common/BlobBackground";
 
-type Props = {};
-
-const Home = (props: Props) => {
+const Home = () => {
   return (
     <div className="relative overflow-hidden">
-      {/* ✅ Reusable decorative background */}
-      <BlobBackground />
       <HeroSection />
       {/* This NEW Section comes after Hero */}
       <section className="bg-black text-white w-full px-6 py-20">
@@ -71,7 +64,16 @@ const Home = (props: Props) => {
           비디오크루와 함께 하고 있습니다.
         </h2>
       </div>
-      <TrustedCompaniesBar />
+
+      {/* Full-Width Separator Image */}
+      <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mt-8 mb-12">
+        <img
+          src="/imgs/Frame 430.webp"
+          alt="Section Separator Design"
+          className="w-full h-auto object-cover"
+        />
+      </div>
+
       <BackgroundBanner />
     </div>
   );

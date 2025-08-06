@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../../services/auth";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
-import { Eye, EyeOff } from "lucide-react"; // 👁️ icons
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const { login: authLogin } = useAuth();

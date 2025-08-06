@@ -103,16 +103,18 @@ const PortfolioManager = () => {
       </div>
     );
 
-  if (error) 
+  if (error)
     return (
       <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen flex items-center justify-center p-6">
         <div className="bg-red-900/20 border border-red-500/30 rounded-2xl p-8 text-center max-w-md">
           <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-red-400 text-2xl">⚠️</span>
           </div>
-          <h3 className="text-red-400 text-lg font-semibold mb-2">Error Loading Portfolio</h3>
+          <h3 className="text-red-400 text-lg font-semibold mb-2">
+            Error Loading Portfolio
+          </h3>
           <p className="text-red-300">{error}</p>
-          <button 
+          <button
             onClick={fetchItems}
             className="mt-4 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition-all duration-200"
           >
@@ -125,33 +127,39 @@ const PortfolioManager = () => {
   return (
     <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Enhanced Header with glassmorphism */}
+        {/*  Header with glassmorphism */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
           <button
             onClick={() => navigate("/admin/dashboard")}
             className="group bg-slate-800/80 backdrop-blur-sm hover:bg-slate-700/80 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 shadow-lg border border-slate-700/50 hover:border-slate-600/50 flex items-center gap-2 w-fit"
           >
-            <span className="group-hover:-translate-x-1 transition-transform duration-200">←</span>
+            <span className="group-hover:-translate-x-1 transition-transform duration-200">
+              ←
+            </span>
             Back to Dashboard
           </button>
-          
+
           <div className="text-center">
             <h2 className="text-3xl md:text-4xl text-white font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
               Portfolio Manager
             </h2>
-            <p className="text-slate-400 text-sm mt-1">{items.length} items total</p>
+            <p className="text-slate-400 text-sm mt-1">
+              {items.length} items total
+            </p>
           </div>
-          
+
           <button
             onClick={() => setShowForm(true)}
             className="group bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:shadow-emerald-500/40 hover:scale-105 flex items-center gap-2 w-fit md:w-auto justify-center"
           >
-            <span className="text-lg group-hover:rotate-90 transition-transform duration-200">+</span>
+            <span className="text-lg group-hover:rotate-90 transition-transform duration-200">
+              +
+            </span>
             Create Portfolio Item
           </button>
         </div>
 
-        {/* Enhanced Create Modal */}
+        {/*  Create Modal */}
         {showForm && (
           <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl p-6 w-full max-w-2xl relative shadow-2xl transform animate-in zoom-in-95 duration-200">
@@ -172,7 +180,7 @@ const PortfolioManager = () => {
           </div>
         )}
 
-        {/* Enhanced Video Preview Modal */}
+        {/*  Video Preview Modal */}
         {previewVideo && (
           <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
             <div className="bg-slate-900/95 backdrop-blur-sm p-6 rounded-2xl w-full max-w-4xl relative shadow-2xl border border-slate-700/50">
@@ -191,7 +199,7 @@ const PortfolioManager = () => {
           </div>
         )}
 
-        {/* Enhanced Details Modal */}
+        {/*  Details Modal */}
         {selectedItemForDetails && (
           <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
             <div className="bg-gradient-to-br from-slate-800 to-slate-900 text-white p-6 rounded-2xl w-full max-w-lg relative shadow-2xl border border-slate-700/50">
@@ -201,31 +209,35 @@ const PortfolioManager = () => {
               >
                 ×
               </button>
-              
+
               <div className="space-y-4">
                 <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
                   {selectedItemForDetails.title}
                 </h3>
-                
+
                 <div className="grid grid-cols-1 gap-3 text-sm">
                   <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
                     <span className="text-slate-400 font-medium">Created:</span>
                     <span className="text-white">
-                      {new Date(selectedItemForDetails.createdAt).toLocaleDateString("en-IN", {
+                      {new Date(
+                        selectedItemForDetails.createdAt
+                      ).toLocaleDateString("en-IN", {
                         day: "numeric",
                         month: "short",
                         year: "numeric",
                       })}
                     </span>
                   </div>
-                  
+
                   <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
-                    <span className="text-slate-400 font-medium">Category:</span>
+                    <span className="text-slate-400 font-medium">
+                      Category:
+                    </span>
                     <span className="text-white bg-slate-600 px-2 py-1 rounded-full text-xs">
                       {selectedItemForDetails.category}
                     </span>
                   </div>
-                  
+
                   <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
                     <span className="text-slate-400 font-medium">Client:</span>
                     <span className="text-white">
@@ -233,9 +245,11 @@ const PortfolioManager = () => {
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="p-4 bg-slate-700/20 rounded-lg border border-slate-600/30">
-                  <h4 className="text-slate-400 font-medium mb-2">Description:</h4>
+                  <h4 className="text-slate-400 font-medium mb-2">
+                    Description:
+                  </h4>
                   <p className="text-white text-sm leading-relaxed">
                     {selectedItemForDetails.description}
                   </p>
@@ -245,14 +259,18 @@ const PortfolioManager = () => {
           </div>
         )}
 
-        {/* Enhanced Portfolio Cards */}
+        {/*  Portfolio Cards */}
         {items.length === 0 ? (
           <div className="text-center mt-20">
             <div className="w-24 h-24 bg-slate-800/50 rounded-full flex items-center justify-center mx-auto mb-6">
               <span className="text-slate-500 text-4xl">📁</span>
             </div>
-            <h3 className="text-xl text-slate-300 font-semibold mb-2">No Portfolio Items</h3>
-            <p className="text-slate-400 mb-6">Get started by creating your first portfolio item</p>
+            <h3 className="text-xl text-slate-300 font-semibold mb-2">
+              No Portfolio Items
+            </h3>
+            <p className="text-slate-400 mb-6">
+              Get started by creating your first portfolio item
+            </p>
             <button
               onClick={() => setShowForm(true)}
               className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white px-6 py-3 rounded-xl font-medium shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:shadow-emerald-500/40 hover:scale-105"
@@ -331,7 +349,9 @@ const PortfolioManager = () => {
 
                 <div className="mt-6 flex gap-3">
                   <button
-                    onClick={() => navigate(`/admin/portfolio/edit/${item._id}`)}
+                    onClick={() =>
+                      navigate(`/admin/portfolio/edit/${item._id}`)
+                    }
                     className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-4 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm hover:scale-105 shadow-lg shadow-blue-500/20"
                   >
                     ✏️ Edit

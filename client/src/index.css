@@ -9,7 +9,6 @@ body {
   font-family: "Montserrat", sans-serif;
 }
 
-/* ✅ Keep animations OUTSIDE @layer */
 @keyframes scrollLeft {
   0% {
     transform: translateX(0%);
@@ -28,7 +27,6 @@ body {
   }
 }
 
-/* ✅ Utility class definitions can stay inside @layer */
 @layer utilities {
   .animate-scroll-left {
     animation: scrollLeft 40s linear infinite;

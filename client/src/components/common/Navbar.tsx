@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
-type Props = {};
-
-const Navbar = (props: Props) => {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Optional: Prevent background scroll when mobile menu is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -16,19 +14,60 @@ const Navbar = (props: Props) => {
 
   return (
     <nav className="w-full text-white py-4 shadow-md relative z-50">
-      <div className="max-w-[1248px] mx-auto px-6 flex items-center justify-between">
+      <div className="max-w-[1248px] mx-auto px-2 flex items-center justify-between font-suit">
         {/* Logo */}
         <div className="flex items-center space-x-3">
-          <img src="/sample-logo.png" alt="Logo" className="h-8 w-auto" />
+          <Link to="/">
+            <img
+              src="imgs/Frame 362.png"
+              alt="Logo"
+              className="h-8 w-auto hover:scale-105 transition-transform duration-200"
+            />
+          </Link>
         </div>
 
         {/* Desktop Nav */}
         <ul className="hidden md:flex space-x-8 text-sm font-medium">
-          <li className="hover:text-gray-300 cursor-pointer">Lorem 1</li>
-          <li className="hover:text-gray-300 cursor-pointer">Lorem 2</li>
-          <li className="hover:text-gray-300 cursor-pointer">Lorem 3</li>
-          <li className="hover:text-gray-300 cursor-pointer">Lorem 4</li>
-          <li className="hover:text-gray-300 cursor-pointer">Lorem 5</li>
+          <li>
+            <Link
+              to="/about"
+              className="hover:text-gray-300 transition-colors duration-200"
+            >
+              회사소개
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/process"
+              className="hover:text-gray-300 transition-colors duration-200"
+            >
+              프로세스
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/differentiation"
+              className="hover:text-gray-300 transition-colors duration-200"
+            >
+              차별점
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/portfolio"
+              className="hover:text-gray-300 transition-colors duration-200"
+            >
+              포트폴리오
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/contact"
+              className="hover:text-gray-300 transition-colors duration-200"
+            >
+              문의하기
+            </Link>
+          </li>
         </ul>
 
         {/* Hamburger Toggle */}
@@ -50,11 +89,41 @@ const Navbar = (props: Props) => {
       {/* Mobile Menu Overlay */}
       {isOpen && (
         <div className="md:hidden fixed inset-0 bg-black/90 backdrop-blur-sm p-6 z-40 flex flex-col items-center justify-center space-y-6 text-sm font-medium">
-          <li className="hover:text-gray-300 cursor-pointer">Lorem 1</li>
-          <li className="hover:text-gray-300 cursor-pointer">Lorem 2</li>
-          <li className="hover:text-gray-300 cursor-pointer">Lorem 3</li>
-          <li className="hover:text-gray-300 cursor-pointer">Lorem 4</li>
-          <li className="hover:text-gray-300 cursor-pointer">Lorem 5</li>
+          <Link
+            to="/about"
+            onClick={() => setIsOpen(false)}
+            className="hover:text-gray-300 transition-colors duration-200"
+          >
+            회사소개
+          </Link>
+          <Link
+            to="/process"
+            onClick={() => setIsOpen(false)}
+            className="hover:text-gray-300 transition-colors duration-200"
+          >
+            프로세스
+          </Link>
+          <Link
+            to="/differentiation"
+            onClick={() => setIsOpen(false)}
+            className="hover:text-gray-300 transition-colors duration-200"
+          >
+            차별점
+          </Link>
+          <Link
+            to="/portfolio"
+            onClick={() => setIsOpen(false)}
+            className="hover:text-gray-300 transition-colors duration-200"
+          >
+            포트폴리오
+          </Link>
+          <Link
+            to="/contact"
+            onClick={() => setIsOpen(false)}
+            className="hover:text-gray-300 transition-colors duration-200"
+          >
+            문의하기
+          </Link>
         </div>
       )}
     </nav>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { PortfolioItem } from "../../types/portfolio";
 
 type Props = {

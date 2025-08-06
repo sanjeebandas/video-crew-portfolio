@@ -1,13 +1,9 @@
-import React from "react";
-
-type Props = {};
-
 const services = [
   {
     title: "Creative Solutions",
     description:
       "틀에 박힌 형식이 아닌, 메시지의 최적화를 돕는 독창적인 아이디어를 제시합니다.",
-    image: "/imgs/image 1.webp",
+    image: "/imgs/image 3.webp",
   },
   {
     title: "Professional Quality",
@@ -19,11 +15,11 @@ const services = [
     title: "All-in-One Service",
     description:
       "복잡한 영상 제작 과정, 비디오크루에서는 기획부터 최종 발표까지 원스톱으로 책임져 드립니다.",
-    image: "/imgs/image 3.webp",
+    image: "/imgs/image 1.webp",
   },
 ];
 
-const ServicesGrid = (props: Props) => {
+const ServicesGrid = () => {
   return (
     <section className="w-full bg-black text-white px-6 py-16">
       <div className="max-w-[1248px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 place-items-center">

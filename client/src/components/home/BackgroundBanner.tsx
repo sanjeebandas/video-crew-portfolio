@@ -1,7 +1,3 @@
-import React from "react";
-
-type Props = {};
-
 const stats = [
   { value: "10+", label: "다년간의 경험" },
   { value: "100+", label: "누적 프로젝트 수" },
@@ -9,10 +5,10 @@ const stats = [
   { value: "90%", label: "프로젝트 재수주율" },
 ];
 
-const BackgroundBanner = (props: Props) => {
+const BackgroundBanner = () => {
   return (
     <section
-      className="mt-14 relative w-full h-auto py-10 bg-cover bg-center flex items-center justify-center text-white"
+      className="mt-24 relative w-full h-auto py-10 bg-cover bg-center flex items-center justify-center text-white"
       style={{ backgroundImage: "url('/imgs/Frame.webp')" }}
     >
       <div className="w-full max-w-[1248px] px-6 flex flex-col sm:flex-row justify-between items-center text-center gap-y-8">

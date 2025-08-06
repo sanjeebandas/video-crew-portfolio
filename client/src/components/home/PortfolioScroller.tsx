@@ -1,5 +1,3 @@
-import React from "react";
-
 const images = [
   "/imgs/Group 41.webp",
   "/imgs/Group 42.webp",
@@ -30,7 +28,7 @@ const PortfolioScroller = () => {
         </div>
       </div>
 
-      {/* Carousel Rows with responsive spacing */}
+      {/* Carousel Rows */}
       <div className="space-y-4 sm:space-y-6 mt-12 sm:mt-24">
         {/* Row 1 - Left to Right */}
         <div className="flex gap-2 sm:gap-4 animate-scroll-left px-4 sm:px-0">

@@ -15,7 +15,7 @@ export const uploadImage = async (file: File): Promise<string> => {
       },
     });
 
-    return response.data.url; // assuming your controller returns { url: "..." }
+    return response.data.url;
   } catch (error) {
     console.error("Image upload failed:", error);
     throw error;

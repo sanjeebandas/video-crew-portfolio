@@ -2,9 +2,8 @@ import AboutGrid from "../components/about/AboutGrid";
 import AboutHero from "../components/about/AboutHero";
 import AboutWorkCultureGrid from "../components/about/AboutWorkCultureGrid";
 
-type Props = {};
 
-const About = (props: Props) => {
+const About = () => {
   return (
     <div>
       <section className="bg-black text-white w-full px-6 py-12">

@@ -79,7 +79,9 @@ const ContactManager = () => {
     const token = localStorage.getItem("token");
     if (!token) return toast.error("❌ No token found. Please login again.");
 
-    const confirmed = window.confirm("Are you sure you want to delete this inquiry?");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this inquiry?"
+    );
     if (!confirmed) return;
 
     try {
@@ -112,9 +114,12 @@ const ContactManager = () => {
         <h1 className="text-3xl font-bold text-white">Contact Inquiries</h1>
         <button
           onClick={() => navigate("/admin/dashboard")}
-          className="px-3 py-1 rounded bg-gray-100 text-sm text-gray-800 hover:bg-gray-200 transition"
+          className="group bg-slate-800/80 backdrop-blur-sm hover:bg-slate-700/80 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 shadow-lg border border-slate-700/50 hover:border-slate-600/50 flex items-center gap-2 w-fit"
         >
-          ← Back to Dashboard
+          <span className="group-hover:-translate-x-1 transition-transform duration-200">
+            ←
+          </span>
+          Back to Dashboard
         </button>
       </div>
 
@@ -157,7 +162,10 @@ const ContactManager = () => {
                     <select
                       value={contact.status || "new"}
                       onChange={(e) =>
-                        updateStatus(contact._id, e.target.value as Contact["status"])
+                        updateStatus(
+                          contact._id,
+                          e.target.value as Contact["status"]
+                        )
                       }
                       className="border border-gray-600 rounded px-2 py-1 bg-gray-800 text-sm"
                       disabled={updatingId === contact._id}
@@ -178,22 +186,43 @@ const ContactManager = () => {
 
                 {isExpanded && (
                   <div className="border-t border-gray-700 p-4 grid gap-2 text-sm bg-[#111]">
-                    <div><strong>Phone:</strong> {contact.phone || "-"}</div>
-                    <div><strong>Company:</strong> {contact.company || "-"}</div>
-                    <div><strong>Budget:</strong> {contact.budget || "-"}</div>
-                    <div><strong>Preferred Date:</strong> {contact.preferredDate || "-"}</div>
-                    <div><strong>Service:</strong> {contact.service || "-"}</div>
-                    <div><strong>Subject:</strong> {contact.subject}</div>
-                    <div><strong>Message:</strong> {contact.message}</div>
-                    <div><strong>Admin Notes:</strong> {contact.adminNotes || "-"}</div>
+                    <div>
+                      <strong>Phone:</strong> {contact.phone || "-"}
+                    </div>
+                    <div>
+                      <strong>Company:</strong> {contact.company || "-"}
+                    </div>
+                    <div>
+                      <strong>Budget:</strong> {contact.budget || "-"}
+                    </div>
+                    <div>
+                      <strong>Preferred Date:</strong>{" "}
+                      {contact.preferredDate || "-"}
+                    </div>
+                    <div>
+                      <strong>Service:</strong> {contact.service || "-"}
+                    </div>
+                    <div>
+                      <strong>Subject:</strong> {contact.subject}
+                    </div>
+                    <div>
+                      <strong>Message:</strong> {contact.message}
+                    </div>
+                    <div>
+                      <strong>Admin Notes:</strong> {contact.adminNotes || "-"}
+                    </div>
                     <div className="pt-2">
                       <button
                         onClick={() => deleteContact(contact._id)}
                         className={`text-red-500 hover:text-red-700 font-medium ${
-                          deletingId === contact._id ? "opacity-50 pointer-events-none" : ""
+                          deletingId === contact._id
+                            ? "opacity-50 pointer-events-none"
+                            : ""
                         }`}
                       >
-                        {deletingId === contact._id ? "Deleting..." : "Delete Inquiry"}
+                        {deletingId === contact._id
+                          ? "Deleting..."
+                          : "Delete Inquiry"}
                       </button>
                     </div>
                   </div>

@@ -7,7 +7,6 @@ type Props = {
   currentFilter: string;
 };
 
-// Map filter keys to actual Korean category names (used in DB)
 const backendCategoryMap: Record<string, string> = {
   "advertisement/promotional": "광고 · 홍보 영상",
   "e-learning": "이러닝 영상",
@@ -38,7 +37,9 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
       try {
         const category = backendCategoryMap[currentFilter];
         const response = await axios.get(
-          `${API_BASE_URL}/portfolio/category?name=${encodeURIComponent(category)}`
+          `${API_BASE_URL}/portfolio/category?name=${encodeURIComponent(
+            category
+          )}`
         );
 
         const items: PortfolioItem[] = response.data?.data || [];

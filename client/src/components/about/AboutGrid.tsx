@@ -1,7 +1,3 @@
-import React from "react";
-
-type Props = {};
-
 const services = [
   {
     title: "Customer-Centric",
@@ -21,7 +17,7 @@ const services = [
   },
 ];
 
-const AboutGrid = (props: Props) => {
+const AboutGrid = () => {
   return (
     <section className="w-full bg-black text-white px-6 py-16">
       <div className="max-w-[1248px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 place-items-center">

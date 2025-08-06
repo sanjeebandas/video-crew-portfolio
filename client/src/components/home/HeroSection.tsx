@@ -1,15 +1,11 @@
-import React from "react";
-
-type Props = {};
-
-const HeroSection = (props: Props) => {
+const HeroSection = () => {
   return (
     <section className="relative w-full h-screen bg-black text-white">
       {/* Banner Image */}
       <img
         src="/imgs/Banner-Image.webp"
         alt="Video Crew Banner"
-        className='absolute top-0 left-0 w-full h-full object-cover object-[center_30%] md:object-top z-0 -translate-y-3 md:-translate-y-5'
+        className="absolute top-0 left-0 w-full h-full object-cover object-[center_30%] md:object-top z-0 -translate-y-3 md:-translate-y-5"
       />
 
       {/* HeroSection Content */}
