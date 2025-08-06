@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
+import axios from "axios";
 
 type Props = {};
 
@@ -33,9 +35,64 @@ const ContactForm = (props: Props) => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+
+    if (!formData.agreeToTerms) {
+      toast.error("개인정보 수집 및 이용에 동의해주세요.");
+      return;
+    }
+
+    try {
+      const payload = {
+        name: formData.namePosition,
+        email: formData.email,
+        phone: formData.contact,
+        company: formData.companyChannel,
+        budget: formData.budget,
+        preferredDate: formData.deliveryDate,
+        service: formData.productionPurpose,
+        subject: `${formData.videoCount} Videos • ${formData.runningTime} Runtime • Platform: ${formData.uploadPlatform}`,
+        message: `
+          참고 영상: ${formData.referenceVideos}
+          웹사이트 링크: ${formData.websiteLinks}
+          기타 정보: ${formData.additionalInfo}
+        `,
+        status: "new",
+        submittedAt: new Date().toISOString(), // optional, in case you want to track manually
+        source: "website", // optional: to help identify the origin
+      };
+
+      const loadingToast = toast.loading("제출 중입니다...");
+
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/contact`,
+        payload
+      );
+
+      toast.dismiss(loadingToast);
+      toast.success("문의가 성공적으로 제출되었습니다!");
+
+      setFormData({
+        namePosition: "",
+        email: "",
+        contact: "",
+        companyChannel: "",
+        videoCount: "",
+        deliveryDate: "",
+        runningTime: "",
+        budget: "",
+        productionPurpose: "",
+        uploadPlatform: "",
+        referenceVideos: "",
+        websiteLinks: "",
+        additionalInfo: "",
+        agreeToTerms: false,
+      });
+    } catch (err: any) {
+      toast.error("제출에 실패했습니다. 다시 시도해주세요.");
+      console.error("Submission error:", err.response?.data || err.message);
+    }
   };
 
   return (

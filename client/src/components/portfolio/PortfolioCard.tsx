@@ -48,7 +48,9 @@ const PortfolioCard = ({ item }: Props) => {
 
                 {/* Title + Subtitle */}
                 <div className="text-left">
-                  <p className="text-sm md:text-base font-semibold">{item.title}</p>
+                  <p className="text-sm md:text-base font-semibold">
+                    {item.title}
+                  </p>
                   <p className="text-xs md:text-sm text-gray-400">Play Video</p>
                 </div>
               </div>

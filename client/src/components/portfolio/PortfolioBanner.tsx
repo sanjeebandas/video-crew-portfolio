@@ -1,13 +1,14 @@
-import React from "react";
-
 type Props = {
   currentFilter: string;
   setCurrentFilter: (filter: string) => void;
+  categories: { label: string; value: string }[];
 };
 
-const PortfolioBanner = ({ currentFilter, setCurrentFilter }: Props) => {
-  const categories = ["광고 · 홍보 영상", "이러닝 영상", "기업 행사 영상"];
-
+const PortfolioBanner = ({
+  currentFilter,
+  setCurrentFilter,
+  categories,
+}: Props) => {
   return (
     <section className="text-center py-16 px-4 md:px-8 lg:px-0">
       <div className="max-w-[1248px] mx-auto">
@@ -21,17 +22,20 @@ const PortfolioBanner = ({ currentFilter, setCurrentFilter }: Props) => {
         </h1>
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-          {categories.map((label, idx) => (
+          {categories.map(({ label, value }) => (
             <button
-              key={idx}
-              onClick={() => setCurrentFilter(label)}
+              key={value}
+              onClick={() => {
+                console.log("Selected filter:", value); // 🔍 Debug log
+                setCurrentFilter(value);
+              }}
               className={`w-[268px] h-[27px] md:w-[274px] md:h-[70px] 
-    text-xs md:text-xl rounded-full border transition
-    ${
-      currentFilter === label
-        ? "bg-white text-black border-white"
-        : "text-white border-white hover:bg-white hover:text-black"
-    }`}
+              text-xs md:text-xl rounded-full border transition
+              ${
+                currentFilter === value
+                  ? "bg-white text-black border-white"
+                  : "text-white border-white hover:bg-white hover:text-black"
+              }`}
             >
               {label}
             </button>

@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createPortfolioItem,
+  getPortfolioItemsByCategory,
   getAllPortfolioItems,
   getPortfolioItemById,
   updatePortfolioItem,
@@ -13,6 +14,10 @@ const router = express.Router();
 // @route   POST /api/portfolio
 router.post("/", authenticateAdmin, createPortfolioItem);
 
+// ✅ New route: category-based filter
+// @route   GET /api/portfolio/category?name=광고 · 홍보 영상
+router.get("/category", getPortfolioItemsByCategory);
+
 // @route   GET /api/portfolio
 router.get("/", getAllPortfolioItems);
 
@@ -24,5 +29,6 @@ router.put("/:id", authenticateAdmin, updatePortfolioItem);
 
 // @route   DELETE /api/portfolio/:id
 router.delete("/:id", authenticateAdmin, deletePortfolioItem);
+
 
 export default router;

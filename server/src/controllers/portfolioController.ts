@@ -66,3 +66,45 @@ export const deletePortfolioItem = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error deleting item", error });
   }
 };
+
+// Get portfolio items by category
+export const getPortfolioItemsByCategory = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const koreanCategory = req.query.name as string;
+
+    if (!koreanCategory) {
+      return res.status(400).json({ message: "Category name is required" });
+    }
+
+    console.log("Korean category input:", koreanCategory);
+
+    // Mapping Korean names to English slugs (as stored in DB)
+    const categoryMap: Record<string, string> = {
+      "광고/홍보": "advertisement/promotional",
+      이러닝: "e-learning",
+      "기업 행사 영상": "corporate-event",
+    };
+
+    const englishCategory = categoryMap[koreanCategory];
+
+    if (!englishCategory) {
+      return res.status(404).json({ message: "Invalid category name" });
+    }
+
+    const items = await Portfolio.find({ category: englishCategory }).sort({
+      displayOrder: 1,
+    });
+
+    console.log(`Found ${items.length} items for category:`, englishCategory);
+
+    res.status(200).json({ data: items });
+  } catch (error) {
+    console.error("Error fetching portfolio items by category:", error);
+    res
+      .status(500)
+      .json({ message: "Error fetching portfolio items by category", error });
+  }
+};

@@ -23,7 +23,7 @@ const seedAdmin = async () => {
       process.exit(0);
     }
 
-    const hashedPassword = await bcrypt.hash("password123", 10);
+    const hashedPassword = await bcrypt.hash("Test@123", 10);
 
     const admin = new Admin({
       email: "admin@videocrew.com",

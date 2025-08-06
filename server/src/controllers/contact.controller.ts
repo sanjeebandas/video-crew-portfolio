@@ -5,10 +5,22 @@ import ContactInquiry from "../models/ContactInquiry";
 //POST /api/contact
 export const submitContactForm = async (req: Request, res: Response) => {
   try {
-    const { name, email, subject, message } = req.body;
+    const {
+      name,
+      email,
+      subject,
+      message,
+      company,
+      phone,
+      budget,
+      service,
+      preferredDate,
+    } = req.body;
 
     if (!name || !email || !subject || !message) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res
+        .status(400)
+        .json({ message: "Name, email, subject, and message are required" });
     }
 
     const inquiry = await ContactInquiry.create({
@@ -16,6 +28,11 @@ export const submitContactForm = async (req: Request, res: Response) => {
       email,
       subject,
       message,
+      company,
+      phone,
+      budget,
+      service,
+      preferredDate,
     });
 
     res.status(201).json({
@@ -33,7 +50,7 @@ export const getAllInquiries = async (req: Request, res: Response) => {
   try {
     const inquiries = await ContactInquiry.find().sort({ createdAt: -1 });
 
-    res.status(200).json(inquiries);
+    res.status(200).json({ contacts: inquiries });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
@@ -68,6 +85,24 @@ export const updateInquiry = async (req: Request, res: Response) => {
       message: "Inquiry updated successfully",
       updated,
     });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+// DELETE /api/contact/:id
+// Admin-only: Delete an inquiry
+export const deleteInquiry = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await ContactInquiry.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Inquiry not found" });
+    }
+
+    res.status(200).json({ message: "Inquiry deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
