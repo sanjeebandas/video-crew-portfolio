@@ -57,7 +57,7 @@ const About = () => {
       {/* Core Value Text Block */}
       <div className="w-full px-6">
         <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
-          <h2 className="text-lg sm:text-3xl md:text-4xl font-bold mb-2 leading-snug">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 leading-snug">
             Core Value
           </h2>
           <p className="text-sm sm:text-base text-gray-400 leading-relaxed">

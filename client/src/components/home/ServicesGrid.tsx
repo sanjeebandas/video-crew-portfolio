@@ -35,14 +35,16 @@ const ServicesGrid = () => {
               className="w-full h-full object-cover"
             />
 
-            {/* Overlay Text - bottom-aligned */}
+            {/* Overlay (aligned like AboutGrid) */}
             <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 via-black/30 to-transparent">
-              <h3 className="text-base md:text-lg font-bold mb-1">
-                {service.title}
-              </h3>
-              <p className="text-xs md:text-sm text-gray-200 leading-snug md:leading-relaxed">
-                {service.description}
-              </p>
+              <div className="flex flex-col justify-start gap-2 min-h-[10px] md:min-h-[100px]">
+                <h3 className="text-xs md:text-lg font-bold">
+                  {service.title}
+                </h3>
+                <p className="text-xs md:text-sm text-gray-200 leading-snug md:leading-relaxed">
+                  {service.description}
+                </p>
+              </div>
             </div>
           </div>
         ))}
