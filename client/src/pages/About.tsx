@@ -46,7 +46,7 @@ const About = () => {
       </div>
 
       {/* Decorative Centered Separator Image */}
-      <div className="w-full mt-4 sm:mt-6 md:mt-5">
+      <div className="w-full mt-4 sm:mt-6 md:-mt-10">
         <img
           src="/imgs/Image.webp"
           alt="Section Separator Design"
@@ -83,8 +83,8 @@ const About = () => {
             Work Culture
           </h2>
           <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
-            비디오크루의 업무 문화는 여러 차원에서 뛰어난 그릭들이 그걸을
-            가버드로 합니다.
+            비디오크루의 업무 문화는 여러 차원에서 뛰어난 크리에이터들이 그들의
+            열정을 바탕으로 합니다.
           </p>
         </div>
       </div>

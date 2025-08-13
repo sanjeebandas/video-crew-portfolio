@@ -23,7 +23,7 @@ const workCultureItems = [
 
 const AboutWorkCultureGrid = () => {
   return (
-    <section className="w-full bg-black text-white px-6 py-16">
+    <section className="w-full bg-black text-white px-6 py-16 -mt-10">
       <div className="max-w-[1248px] mx-auto">
         {/* Desktop Layout */}
         <div className="hidden min-[1024px]:grid grid-cols-2 gap-6">

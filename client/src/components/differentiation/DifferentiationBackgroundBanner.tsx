@@ -10,7 +10,7 @@ const DifferentiationBackgroundBanner = () => {
           <br />
           비디오크루와 함께하세요!
         </h2>
-        <button className="bg-[#2448FF] hover:bg-[#1E4FD4] transition-colors px-6 py-2 rounded-full text-sm font-semibold">
+        <button className="bg-blue-600 hover:bg-blue-800 transition-colors px-6 py-2 rounded-full text-sm font-semibold">
           문의하기
         </button>
       </div>

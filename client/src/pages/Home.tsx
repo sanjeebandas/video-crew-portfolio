@@ -44,7 +44,7 @@ const Home = () => {
       {/* Browse Portfolio Button */}
       <div className="w-full flex justify-center my-8 sm:my-10">
         <div className="max-w-[1248px] w-full flex justify-center">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-full transition duration-300">
+          <button className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-3 px-8 rounded-full transition duration-300">
             포트폴리오 둘러보기
           </button>
         </div>
@@ -58,7 +58,7 @@ const Home = () => {
       />
 
       {/* Trusted by Companies Text Block */}
-      <div className="w-full text-center text-white -mt-4 sm:-mt-28 mb-12 px-4">
+      <div className="w-full text-center text-white -mt-4 sm:-mt-28 mb-20 px-4">
         <h2 className="text-lg md:text-3xl font-bold leading-snug">
           이미 수많은 기업이 <br />
           비디오크루와 함께 하고 있습니다.
@@ -66,7 +66,7 @@ const Home = () => {
       </div>
 
       {/* Full-Width Separator Image */}
-      <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mt-8 mb-12">
+      <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mt-16 mb-12">
         <img
           src="/imgs/Frame 430.webp"
           alt="Section Separator Design"
