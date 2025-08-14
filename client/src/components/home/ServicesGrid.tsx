@@ -19,14 +19,24 @@ const services = [
   },
 ];
 
+import { useEffect } from "react";
+import { useScrollAnimations } from "../../utils/animations";
+
 const ServicesGrid = () => {
+  const { stackIn, staggerFadeIn } = useScrollAnimations();
+
+  useEffect(() => {
+    // Services grid animations - animate all cards together with minimal stagger
+    stackIn(".service-card", 0.1);
+  }, []);
+
   return (
     <section className="w-full bg-black text-white px-6 py-16">
       <div className="max-w-[1248px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 place-items-center">
         {services.map((service, idx) => (
           <div
             key={idx}
-            className="relative w-[90vw] max-w-[302px] sm:max-w-[360px] md:max-w-[402px] h-[195px] sm:h-[300px] md:h-[425px] rounded-md overflow-hidden shadow-md border border-white/10 transition-transform duration-300 ease-in-out hover:-translate-y-3"
+            className="service-card relative w-[90vw] max-w-[302px] sm:max-w-[360px] md:max-w-[402px] h-[195px] sm:h-[300px] md:h-[425px] rounded-md overflow-hidden shadow-md border border-white/10 transition-transform duration-300 ease-in-out hover:-translate-y-3"
           >
             {/* Image fills the card */}
             <img
@@ -35,13 +45,13 @@ const ServicesGrid = () => {
               className="w-full h-full object-cover"
             />
 
-            {/* Overlay (aligned like AboutGrid) */}
-            <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 via-black/30 to-transparent">
+            {/* Very subtle overlay for text readability */}
+            <div className="absolute bottom-0 left-0 w-full p-4 ">
               <div className="flex flex-col justify-start gap-2 min-h-[10px] md:min-h-[100px]">
-                <h3 className="text-xs md:text-lg font-bold">
+                <h3 className="text-xs md:text-lg font-bold text-white drop-shadow-sm">
                   {service.title}
                 </h3>
-                <p className="text-xs md:text-sm text-gray-200 leading-snug md:leading-relaxed">
+                <p className="text-xs md:text-sm text-gray-100 leading-snug md:leading-relaxed drop-shadow-sm">
                   {service.description}
                 </p>
               </div>

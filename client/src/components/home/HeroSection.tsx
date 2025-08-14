@@ -1,7 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 const HeroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const heroRef = useRef<HTMLElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
 
   // Array of banner images for the carousel
   const bannerImages = [
@@ -34,7 +37,63 @@ const HeroSection = () => {
     },
   ];
 
-  // Auto-advance carousel every 1 second
+  // Hero section animations
+  useEffect(() => {
+    if (heroRef.current && textRef.current) {
+      // Initial hero animation
+      const heroTimeline = gsap.timeline();
+      
+      heroTimeline
+        .fromTo(heroRef.current, 
+          { opacity: 0 }, 
+          { opacity: 1, duration: 1, ease: "power2.out" }
+        )
+        .fromTo(".hero-subtitle", 
+          { opacity: 0, y: 30 }, 
+          { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 
+          "-=0.5"
+        )
+        .fromTo(".hero-title", 
+          { opacity: 0, y: 50 }, 
+          { opacity: 1, y: 0, duration: 0.1, ease: "power3.inOut" }, 
+          "-=0.3"
+        )
+        .fromTo(".hero-dots", 
+          { opacity: 0, scale: 0.8 }, 
+          { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" }, 
+          "-=0.2"
+        );
+
+      // Carousel dot animations
+      gsap.fromTo(".carousel-dot", 
+        { scale: 0.8, opacity: 0.5 }, 
+        { 
+          scale: 1, 
+          opacity: 1, 
+          duration: 0.3, 
+          stagger: 0.1,
+          ease: "back.out(1.7)" 
+        }
+      );
+    }
+  }, []);
+
+  // Text animation on carousel change
+  useEffect(() => {
+    if (textRef.current) {
+      gsap.fromTo(textRef.current, 
+        { opacity: 0, y: 20 }, 
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.6, 
+          ease: "power2.out" 
+        }
+      );
+    }
+  }, [currentImageIndex]);
+
+  // Auto-advance carousel every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) =>
@@ -51,7 +110,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative w-full h-screen bg-black text-white overflow-hidden">
+    <section ref={heroRef} className="relative w-full h-screen bg-black text-white overflow-hidden">
       {/* Carousel Images */}
       {bannerImages.map((image, index) => (
         <img
@@ -68,8 +127,8 @@ const HeroSection = () => {
       <div className="relative z-20 flex flex-col h-[80vh] justify-end items-center md:items-start text-center md:text-left">
         <div className="max-w-[1248px] mx-auto px-4 -mb-8 w-full">
           {/* Fixed height container for text to prevent layout shifts */}
-          <div className="min-h-[120px] md:min-h-[100px] flex flex-col justify-end">
-            <h1 className="text-sm opacity-75 md:text-2xl lg:text-xl font-normal leading-snug max-w-3xl mx-auto md:mx-0 transition-all duration-1500 ease-in-out">
+          <div ref={textRef} className="min-h-[120px] md:min-h-[100px] flex flex-col justify-end">
+            <h1 className="hero-subtitle text-sm opacity-75 md:text-2xl lg:text-xl font-normal leading-snug max-w-3xl mx-auto md:mx-0 transition-all duration-1500 ease-in-out">
               {carouselContent[currentImageIndex].subtitle
                 .split("\n")
                 .map((line, index) => (
@@ -82,18 +141,18 @@ const HeroSection = () => {
                   </span>
                 ))}
             </h1>
-            <p className="mt-6 text-lg md:text-3xl lg:text-4xl font-bold text-white mx-auto md:mx-0 transition-all duration-1500 ease-in-out">
+            <p className="hero-title mt-6 text-lg md:text-3xl lg:text-4xl font-bold text-white mx-auto md:mx-0 transition-all duration-1500 ease-in-out">
               {carouselContent[currentImageIndex].title}
             </p>
           </div>
 
           {/* Carousel Dots - Fixed position */}
-          <div className="flex items-center justify-center md:justify-start space-x-2 mt-8">
+          <div className="hero-dots flex items-center justify-center md:justify-start space-x-2 mt-8">
             {bannerImages.map((_, index) => (
               <button
                 key={index}
                 onClick={() => handleDotClick(index)}
-                className={`transition-all duration-300 ease-in-out ${
+                className={`carousel-dot transition-all duration-300 ease-in-out ${
                   index === currentImageIndex
                     ? "w-4 h-4 border-2 border-white rounded-full"
                     : "w-3 h-3 border border-white rounded-full opacity-40 hover:opacity-60"

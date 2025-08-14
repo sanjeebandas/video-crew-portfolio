@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast"; 
+import { initGSAP } from "./utils/animations";
 
 
 // Public Pages
@@ -75,6 +76,11 @@ function LayoutWrapper() {
 }
 
 function App() {
+  // Initialize GSAP on app mount
+  useEffect(() => {
+    initGSAP();
+  }, []);
+
   return (
     <BrowserRouter>
       <LayoutWrapper />

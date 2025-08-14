@@ -22,22 +22,22 @@ const ContactBanner = ({
           <img
             src="imgs/contact/Group 90.webp"
             alt="Contact Us"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover contact-image"
           />
         </div>
 
         {/* Right side - Text */}
         <div className="lg:col-span-2 bg-black text-white p-8 lg:p-12 flex flex-col justify-center">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6">{title}</h1>
-          <p className="text-gray-300 text-sm leading-relaxed mb-12">
+          <h1 className="text-4xl lg:text-5xl font-bold mb-6 contact-title">{title}</h1>
+          <div className="contact-text-line text-gray-300 text-sm leading-relaxed mb-12">
             {description}
-          </p>
+          </div>
 
-          <div className="space-y-8">
+          <div className="space-y-8 contact-info-section">
             <h2 className="text-4xl lg:text-5xl font-bold text-white">정보</h2>
 
             {/* Address */}
-            <div>
+            <div className="contact-info-item">
               <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">
                 ADDRESS
               </p>
@@ -46,7 +46,7 @@ const ContactBanner = ({
             </div>
 
             {/* Phone */}
-            <div>
+            <div className="contact-info-item">
               <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">
                 CALL US
               </p>
@@ -60,8 +60,8 @@ const ContactBanner = ({
       <div className="lg:hidden flex flex-col h-full">
         {/* Title + Description */}
         <div className="bg-black text-white p-6 text-center">
-          <h1 className="text-3xl font-bold mb-4">{title}</h1>
-          <p className="text-gray-300 text-sm leading-relaxed">{description}</p>
+          <h1 className="text-3xl font-bold mb-4 contact-title">{title}</h1>
+          <div className="contact-text-line text-gray-300 text-sm leading-relaxed">{description}</div>
         </div>
 
         {/* Image box with only image border */}
@@ -70,16 +70,16 @@ const ContactBanner = ({
             <img
               src="imgs/contact/Group 90.webp"
               alt="Contact Us"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover contact-image"
             />
           </div>
         </div>
 
         {/* Info */}
-        <div className="bg-black text-white p-6 flex flex-col justify-center text-center">
+        <div className="bg-black text-white p-6 flex flex-col justify-center text-center contact-info-section">
           <h2 className="text-3xl font-bold text-white mb-6">정보</h2>
 
-          <div className="mb-6">
+          <div className="mb-6 contact-info-item">
             <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">
               ADDRESS
             </p>
@@ -87,7 +87,7 @@ const ContactBanner = ({
             <p className="text-white text-sm">{addressDetail}</p>
           </div>
 
-          <div>
+          <div className="contact-info-item">
             <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">
               CALL US
             </p>
