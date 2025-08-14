@@ -17,14 +17,24 @@ const services = [
   },
 ];
 
+import { useEffect } from "react";
+import { useScrollAnimations } from "../../utils/animations";
+
 const AboutGrid = () => {
+  const { stackIn } = useScrollAnimations();
+
+  useEffect(() => {
+    // About grid animations - stack effect for cards
+    stackIn(".about-card", 0.1);
+  }, []);
+
   return (
     <section className="w-full bg-black text-white px-6 py-16">
       <div className="max-w-[1248px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 place-items-center">
         {services.map((service, idx) => (
           <div
             key={idx}
-            className="relative w-[302px] h-[257px] min-[768px]:w-[360px] min-[768px]:h-[300px] min-[1024px]:w-[402px] min-[1024px]:h-[425px] rounded-xs overflow-hidden shadow-md border border-white/10 transition-transform duration-300 ease-in-out hover:-translate-y-3"
+            className="about-card relative w-[302px] h-[257px] min-[768px]:w-[360px] min-[768px]:h-[300px] min-[1024px]:w-[402px] min-[1024px]:h-[425px] rounded-xs overflow-hidden shadow-md border border-white/10 transition-transform duration-300 ease-in-out hover:-translate-y-3"
           >
             <img
               src={service.image}

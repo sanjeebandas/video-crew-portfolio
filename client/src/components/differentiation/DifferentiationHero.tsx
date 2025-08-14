@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useScrollAnimations } from "../../utils/animations";
 
 const DifferentiationHero = () => {
+  const { parallaxEffect, staggerFadeIn } = useScrollAnimations();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Array of banner images for the carousel
@@ -23,6 +25,12 @@ const DifferentiationHero = () => {
     return () => clearInterval(interval);
   }, [bannerImages.length]);
 
+  // Hero animations
+  useEffect(() => {
+    parallaxEffect(".diff-hero-image", 0.3);
+    staggerFadeIn(".diff-hero-dot", 0.1);
+  }, []);
+
   // Handle dot click to manually change image
   const handleDotClick = (index: number) => {
     setCurrentImageIndex(index);
@@ -39,21 +47,21 @@ const DifferentiationHero = () => {
                 key={index}
                 src={image}
                 alt={`Differentiation Banner ${index + 1}`}
-                className={`absolute top-0 left-0 w-full h-full object-cover rounded-xs transition-opacity duration-1500 ease-in-out ${
+                className={`diff-hero-image absolute top-0 left-0 w-full h-full object-cover rounded-xs transition-opacity duration-1500 ease-in-out ${
                   index === currentImageIndex ? "opacity-100" : "opacity-0"
                 }`}
               />
             ))}
 
             <div
-              className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center space-x-2
-             md:left-10 md:translate-x-0 md:bottom-6"
+              className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center space-x-2
+             md:left-10 md:translate-x-0 md:bottom-20"
             >
               {bannerImages.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => handleDotClick(index)}
-                  className={`transition-all duration-300 ease-in-out rounded-full ${
+                  className={`diff-hero-dot transition-all duration-300 ease-in-out rounded-full ${
                     index === currentImageIndex
                       ? "w-2.5 h-2.5 border-2 border-white"
                       : "w-2 h-2 border border-white opacity-40 hover:opacity-60"

@@ -1,4 +1,13 @@
+import { useEffect } from "react";
+import { useScrollAnimations } from "../../utils/animations";
+
 const WhyVideoCrewBoxes = () => {
+  const { staggerFadeIn } = useScrollAnimations();
+
+  useEffect(() => {
+    // WhyVideoCrewBoxes animations
+    staggerFadeIn(".diff-why-box", 0.2);
+  }, []);
   const items = [
     {
       title: "예산을 초과하는 추가 비용이 발생하진 않을까?",
@@ -22,7 +31,7 @@ const WhyVideoCrewBoxes = () => {
           {items.map((item, index) => (
             <div
               key={index}
-              className="bg-[#0A0A0A] w-full md:w-[397px] h-[192px] border border-neutral-800 p-6"
+              className="diff-why-box bg-[#0A0A0A] w-full md:w-[397px] h-[192px] border border-neutral-800 p-6"
             >
               <div className="w-[80%]">
                 <h3 className="text-base md:text-md font-semibold mb-2 leading-snug">

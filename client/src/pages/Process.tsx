@@ -1,3 +1,7 @@
+import { useEffect, useRef } from "react";
+import { useScrollAnimations, cleanupAnimations } from "../utils/animations";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ProcessBanner from "../process/ProcessBanner";
 import ProcessStep from "../process/ProcessStep";
 
@@ -59,21 +63,77 @@ const processSteps = [
 ];
 
 const Process = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { stackIn, fadeInUp, staggerFadeIn, parallaxEffect } = useScrollAnimations();
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    
+    // Process page scroll animations - alternating left/right fade-in
+    const processSteps = document.querySelectorAll(".process-step");
+    
+    processSteps.forEach((step, index) => {
+      const isEven = index % 2 === 0; // 0, 2, 4 = left to right, 1, 3, 5 = right to left
+      
+      if (isEven) {
+        // Left to right fade-in for even indices (0, 2, 4)
+        gsap.fromTo(step,
+          { x: -100, opacity: 0 },
+          { 
+            x: 0, 
+            opacity: 1, 
+            duration: 1.5, 
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: step,
+              start: "top 90%",
+              end: "bottom 10%",
+              toggleActions: "play none none reverse"
+            }
+          }
+        );
+      } else {
+        // Right to left fade-in for odd indices (1, 3, 5)
+        gsap.fromTo(step,
+          { x: 100, opacity: 0 },
+          { 
+            x: 0, 
+            opacity: 1, 
+            duration: 1.5, 
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: step,
+              start: "top 90%",
+              end: "bottom 10%",
+              toggleActions: "play none none reverse"
+            }
+          }
+        );
+      }
+    });
+
+    // Cleanup on unmount
+    return () => {
+      cleanupAnimations();
+    };
+  }, []);
+
   return (
-    <div className="bg-black text-white">
+    <div ref={containerRef} className="bg-black text-white relative overflow-hidden">
       <ProcessBanner />
       <div className="max-w-[1248px] mx-auto px-4 py-12 md:py-32 flex flex-col gap-32">
         {processSteps.map((step, index) => (
-          <ProcessStep
-            key={step.id}
-            id={step.id}
-            title={step.title}
-            subtitle={step.subtitle}
-            description={step.description}
-            image={step.image}
-            reverse={index % 2 !== 0}
-            offsetY={step.offsetY}
-          />
+          <div key={step.id} className="process-step">
+            <ProcessStep
+              id={step.id}
+              title={step.title}
+              subtitle={step.subtitle}
+              description={step.description}
+              image={step.image}
+              reverse={index % 2 !== 0}
+              offsetY={step.offsetY}
+            />
+          </div>
         ))}
       </div>
     </div>

@@ -93,13 +93,13 @@ const ContactForm = () => {
   return (
     <div className="max-w-4xl mx-auto p-8">
       {/* Title */}
-      <h1 className="text-white text-4xl font-bold text-center mb-12">
+      <h1 className="text-white text-4xl font-bold text-center mb-12 contact-title">
         Contact Us
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Row 1 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 contact-form-row">
           {/* Name / Position */}
           <div>
             <input
@@ -141,7 +141,7 @@ const ContactForm = () => {
         </div>
 
         {/* Row 2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 contact-form-row">
           {/* Email Address */}
           <div>
             <input
@@ -181,7 +181,7 @@ const ContactForm = () => {
         </div>
 
         {/* Row 3 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 contact-form-row">
           {/* Contact Number */}
           <div>
             <input
@@ -222,7 +222,7 @@ const ContactForm = () => {
         </div>
 
         {/* Row 4 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 contact-form-row">
           {/* Company Name / Channel Name */}
           <div>
             <input
@@ -264,7 +264,7 @@ const ContactForm = () => {
         </div>
 
         {/* Row 5 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 contact-form-row">
           {/* Number of Videos */}
           <div>
             <input
@@ -291,7 +291,7 @@ const ContactForm = () => {
         </div>
 
         {/* Row 6 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 contact-form-row">
           {/* Delivery Date */}
           <div>
             <input
@@ -318,7 +318,7 @@ const ContactForm = () => {
         </div>
 
         {/* Privacy Policy */}
-        <div className="space-y-4">
+        <div className="space-y-4 contact-form-row">
           <div className="bg-gray-950 border border-gray-600 p-4 text-xs text-gray-300 leading-relaxed max-h-40 overflow-y-auto">
             <h3 className="text-white text-sm font-medium mb-3">
               개인정보 수집 및 이용 동의
@@ -359,7 +359,7 @@ const ContactForm = () => {
         <div className="flex justify-center pt-6">
           <button
             type="submit"
-            className="px-12 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-colors duration-200"
+            className="px-12 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-colors duration-200 contact-submit-btn"
           >
             제출하기
           </button>
