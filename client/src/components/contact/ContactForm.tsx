@@ -108,7 +108,7 @@ const ContactForm = () => {
               placeholder="성함 / 직책"
               value={formData.namePosition}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
             />
           </div>
 
@@ -118,7 +118,7 @@ const ContactForm = () => {
               name="runningTime"
               value={formData.runningTime}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-300 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -150,7 +150,7 @@ const ContactForm = () => {
               placeholder="이메일 주소"
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
             />
           </div>
 
@@ -160,7 +160,7 @@ const ContactForm = () => {
               name="budget"
               value={formData.budget}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-300 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -190,7 +190,7 @@ const ContactForm = () => {
               placeholder="연락처"
               value={formData.contact}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
             />
           </div>
 
@@ -200,7 +200,7 @@ const ContactForm = () => {
               name="productionPurpose"
               value={formData.productionPurpose}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-300 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -231,7 +231,7 @@ const ContactForm = () => {
               placeholder="회사명 / 채널명"
               value={formData.companyChannel}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
             />
           </div>
 
@@ -241,7 +241,7 @@ const ContactForm = () => {
               name="uploadPlatform"
               value={formData.uploadPlatform}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-300 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -273,7 +273,7 @@ const ContactForm = () => {
               placeholder="영상 제작 편수"
               value={formData.videoCount}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
             />
           </div>
 
@@ -285,7 +285,7 @@ const ContactForm = () => {
               placeholder="참고 영상 전달 (유튜브 링크, 전 작업물 등)"
               value={formData.referenceVideos}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
             />
           </div>
         </div>
@@ -300,7 +300,7 @@ const ContactForm = () => {
               placeholder="희망 영상 납품 일시"
               value={formData.deliveryDate}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
             />
           </div>
 
@@ -312,14 +312,14 @@ const ContactForm = () => {
               placeholder="현재 보유한 홈페이지, SNS, 랜딩페이지 링크를 가능한 모두 적어주세요."
               value={formData.websiteLinks}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
             />
           </div>
         </div>
 
         {/* Privacy Policy */}
         <div className="space-y-4 contact-form-row">
-          <div className="bg-gray-950 border border-gray-600 p-4 text-xs text-gray-300 leading-relaxed max-h-40 overflow-y-auto">
+          <div className="bg-gray-950 border border-gray-600 p-4 text-xs text-gray-300 leading-relaxed max-h-40 overflow-y-auto hover:border-blue-400/30 transition-colors duration-300 ease-out">
             <h3 className="text-white text-sm font-medium mb-3">
               개인정보 수집 및 이용 동의
             </h3>
@@ -347,7 +347,7 @@ const ContactForm = () => {
               name="agreeToTerms"
               checked={formData.agreeToTerms}
               onChange={handleInputChange}
-              className="mt-1 h-4 w-4 bg-transparent border border-gray-600 rounded focus:outline-none"
+              className="mt-1 h-4 w-4 bg-transparent border border-gray-600 rounded focus:outline-none hover:border-blue-400 transition-colors duration-300 ease-out cursor-pointer"
             />
             <label className="text-gray-400 text-sm">
               개인정보 수집 및 이용에 동의합니다
@@ -359,7 +359,7 @@ const ContactForm = () => {
         <div className="flex justify-center pt-6">
           <button
             type="submit"
-            className="px-12 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-colors duration-200 contact-submit-btn"
+            className="px-12 py-3 bg-blue-600 hover:bg-blue-700 hover:scale-105 cursor-pointer hover:shadow-lg text-white font-medium rounded-full transition-all duration-300 ease-out contact-submit-btn"
           >
             제출하기
           </button>

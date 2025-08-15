@@ -34,21 +34,21 @@ const AboutGrid = () => {
         {services.map((service, idx) => (
           <div
             key={idx}
-            className="about-card relative w-[302px] h-[257px] min-[768px]:w-[360px] min-[768px]:h-[300px] min-[1024px]:w-[402px] min-[1024px]:h-[425px] rounded-xs overflow-hidden shadow-md border border-white/10 transition-transform duration-300 ease-in-out hover:-translate-y-3"
+            className="about-card relative w-[302px] h-[257px] min-[768px]:w-[360px] min-[768px]:h-[300px] min-[1024px]:w-[402px] min-[1024px]:h-[425px] rounded-xs overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl hover:border-blue-400/30 group"
           >
             <img
               src={service.image}
               alt={service.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
             />
 
             {/* Overlay */}
-            <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 via-black/30 to-transparent">
+            <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/50 transition-all duration-300 ease-out">
               <div className="flex flex-col justify-start gap-2 min-h-[100px]">
-                <h3 className="text-base min-[1024px]:text-lg font-bold">
+                <h3 className="text-base min-[1024px]:text-lg font-bold group-hover:text-blue-400 transition-colors duration-300 ease-out">
                   {service.title}
                 </h3>
-                <p className="text-xs min-[1024px]:text-sm text-gray-200 leading-snug min-[1024px]:leading-relaxed">
+                <p className="text-xs min-[1024px]:text-sm text-gray-200 leading-snug min-[1024px]:leading-relaxed group-hover:text-white transition-colors duration-300 ease-out">
                   {service.description}
                 </p>
               </div>

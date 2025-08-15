@@ -21,18 +21,18 @@ const DifferentiationFeatureSection = ({
         } gap-8`}
       >
         {/* Text Block */}
-        <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left relative">
-          <span className="text-[96px] font-extrabold text-white opacity-15 leading-none mb-2">
+        <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left relative group">
+          <span className="text-[96px] font-extrabold text-white opacity-15 leading-none mb-2 group-hover:opacity-25 transition-opacity duration-300 ease-out">
             {number}
           </span>
-          <h3 className="text-2xl md:text-3xl font-bold mb-2">{title}</h3>
-          <p className="text-sm md:text-base opacity-70 leading-relaxed">
+          <h3 className="text-2xl md:text-3xl font-bold mb-2 group-hover:text-blue-400 transition-colors duration-300 ease-out">{title}</h3>
+          <p className="text-sm md:text-base opacity-70 leading-relaxed group-hover:opacity-90 group-hover:text-gray-200 transition-all duration-300 ease-out">
             {description}
           </p>
         </div>
 
         {/* Image Block */}
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 group hover:scale-105 transition-transform duration-500 ease-out cursor-pointer">
           <img
             src={imageUrl}
             alt={title}

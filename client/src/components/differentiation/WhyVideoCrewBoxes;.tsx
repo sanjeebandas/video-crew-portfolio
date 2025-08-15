@@ -31,13 +31,13 @@ const WhyVideoCrewBoxes = () => {
           {items.map((item, index) => (
             <div
               key={index}
-              className="diff-why-box bg-[#0A0A0A] w-full md:w-[397px] h-[192px] border border-neutral-800 p-6"
+              className="diff-why-box bg-[#0A0A0A] w-full md:w-[397px] h-[192px] border border-neutral-800 p-6 hover:border-blue-400/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-out group cursor-pointer"
             >
               <div className="w-[80%]">
-                <h3 className="text-base md:text-md font-semibold mb-2 leading-snug">
+                <h3 className="text-base md:text-md font-semibold mb-2 leading-snug group-hover:text-blue-400 transition-colors duration-300 ease-out">
                   {item.title}
                 </h3>
-                <p className="text-sm md:text-base font-medium opacity-70 leading-relaxed">
+                <p className="text-sm md:text-base font-medium opacity-70 leading-relaxed group-hover:opacity-90 group-hover:text-gray-200 transition-all duration-300 ease-out">
                   {item.description}
                 </p>
               </div>

@@ -21,7 +21,7 @@ const DifferentiationBackgroundBanner = () => {
           <br />
           비디오크루와 함께하세요!
         </h2>
-        <button className="diff-banner-button bg-blue-600 hover:bg-blue-800 transition-colors px-6 py-2 rounded-full text-sm font-semibold">
+        <button className="diff-banner-button bg-blue-600 hover:bg-blue-800 hover:scale-110 hover:shadow-lg transition-all duration-300 ease-out px-6 py-2 rounded-full text-sm font-semibold">
           문의하기
         </button>
       </div>

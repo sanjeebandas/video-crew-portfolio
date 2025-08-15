@@ -22,14 +22,14 @@ const ContactBanner = ({
           <img
             src="imgs/contact/Group 90.webp"
             alt="Contact Us"
-            className="w-full h-full object-cover contact-image"
+            className="w-full h-[110%] object-cover contact-image"
           />
         </div>
 
         {/* Right side - Text */}
         <div className="lg:col-span-2 bg-black text-white p-8 lg:p-12 flex flex-col justify-center">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6 contact-title">{title}</h1>
-          <div className="contact-text-line text-gray-300 text-sm leading-relaxed mb-12">
+          <div className="contact-text-line text-white/45 text-sm leading-relaxed mb-12">
             {description}
           </div>
 
@@ -61,7 +61,7 @@ const ContactBanner = ({
         {/* Title + Description */}
         <div className="bg-black text-white p-6 text-center">
           <h1 className="text-3xl font-bold mb-4 contact-title">{title}</h1>
-          <div className="contact-text-line text-gray-300 text-sm leading-relaxed">{description}</div>
+          <div className="contact-text-line text-white/45 text-sm leading-relaxed">{description}</div>
         </div>
 
         {/* Image box with only image border */}
@@ -70,7 +70,7 @@ const ContactBanner = ({
             <img
               src="imgs/contact/Group 90.webp"
               alt="Contact Us"
-              className="w-full h-full object-cover contact-image"
+              className="w-full h-[120%] object-cover contact-image"
             />
           </div>
         </div>

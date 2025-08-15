@@ -36,7 +36,7 @@ const ServicesGrid = () => {
         {services.map((service, idx) => (
           <div
             key={idx}
-            className="service-card relative w-[90vw] max-w-[302px] sm:max-w-[360px] md:max-w-[402px] h-[195px] sm:h-[300px] md:h-[425px] rounded-md overflow-hidden shadow-md border border-white/10 transition-transform duration-300 ease-in-out hover:-translate-y-3"
+            className="service-card relative w-[90vw] max-w-[302px] sm:max-w-[360px] md:max-w-[402px] h-[195px] sm:h-[300px] md:h-[425px] rounded-md overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-out hover:-translate-y-3 hover:border-blue-400/30 hover:shadow-lg hover:shadow-blue-400/20 hover:bg-blue-400/5"
           >
             {/* Image fills the card */}
             <img
