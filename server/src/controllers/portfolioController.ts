@@ -79,12 +79,10 @@ export const getPortfolioItemsByCategory = async (
       return res.status(400).json({ message: "Category name is required" });
     }
 
-    console.log("Korean category input:", koreanCategory);
-
     // Mapping Korean names to English slugs (as stored in DB)
     const categoryMap: Record<string, string> = {
-      "광고/홍보": "advertisement/promotional",
-      이러닝: "e-learning",
+      "광고 · 홍보 영상": "advertisement/promotional",
+      "이러닝 영상": "e-learning",
       "기업 행사 영상": "corporate-event",
     };
 
@@ -97,8 +95,6 @@ export const getPortfolioItemsByCategory = async (
     const items = await Portfolio.find({ category: englishCategory }).sort({
       displayOrder: 1,
     });
-
-    console.log(`Found ${items.length} items for category:`, englishCategory);
 
     res.status(200).json({ data: items });
   } catch (error) {

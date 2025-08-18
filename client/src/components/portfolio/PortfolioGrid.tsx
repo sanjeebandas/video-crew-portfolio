@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PortfolioCard from "./PortfolioCard";
 import type { PortfolioItem } from "../../types/portfolio";
-import axios from "axios";
+import api from "../../services/api";
 
 type Props = {
   currentFilter: string;
@@ -22,8 +22,6 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
@@ -36,10 +34,9 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
 
       try {
         const category = backendCategoryMap[currentFilter];
-        const response = await axios.get(
-          `${API_BASE_URL}/portfolio/category?name=${encodeURIComponent(
-            category
-          )}`
+        
+        const response = await api.get(
+          `/portfolio/category?name=${encodeURIComponent(category)}`
         );
 
         const items: PortfolioItem[] = response.data?.data || [];

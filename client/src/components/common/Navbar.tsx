@@ -22,7 +22,7 @@ const Navbar = () => {
             <img
               src="imgs/Frame 362.png"
               alt="Logo"
-              className="h-8 w-auto group-hover:scale-110 transition-all duration-300 ease-out"
+              className="h-12 w-auto group-hover:scale-110 transition-all duration-300 ease-out"
             />
           </Link>
         </div>
