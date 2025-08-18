@@ -35,6 +35,12 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [thumbnailError, setThumbnailError] = useState<string | null>(null);
+  const [videoError, setVideoError] = useState<string | null>(null);
+
+  // File size constants
+  const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
+  const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -55,10 +61,85 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
     }));
   };
 
+  // File validation functions
+  const validateImageFile = (file: File): boolean => {
+    setThumbnailError(null);
+
+    if (file.size > MAX_IMAGE_SIZE) {
+      setThumbnailError(
+        `Image size must be less than 10MB. Current size: ${(
+          file.size /
+          (1024 * 1024)
+        ).toFixed(1)}MB`
+      );
+      return false;
+    }
+
+    const validTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
+    if (!validTypes.includes(file.type)) {
+      setThumbnailError(
+        "Please upload a valid image file (JPG, PNG, GIF, WebP)"
+      );
+      return false;
+    }
+
+    return true;
+  };
+
+  const validateVideoFile = (file: File): boolean => {
+    setVideoError(null);
+
+    if (file.size > MAX_VIDEO_SIZE) {
+      setVideoError(
+        `Video size must be less than 100MB. Current size: ${(
+          file.size /
+          (1024 * 1024)
+        ).toFixed(1)}MB`
+      );
+      return false;
+    }
+
+    const validTypes = [
+      "video/mp4",
+      "video/mov",
+      "video/avi",
+      "video/webm",
+      "video/quicktime",
+    ];
+    if (!validTypes.includes(file.type)) {
+      setVideoError("Please upload a valid video file (MP4, MOV, AVI, WebM)");
+      return false;
+    }
+
+    return true;
+  };
+
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  };
+
   const uploadMedia = async () => {
     const uploaded: Partial<PortfolioFormData> = {};
     const token = localStorage.getItem("token");
     if (!token) throw new Error("Not authenticated. Please log in again.");
+
+    // Validate files before upload
+    if (thumbnailFile && !validateImageFile(thumbnailFile)) {
+      throw new Error(thumbnailError || "Invalid thumbnail file");
+    }
+    if (videoFile && !validateVideoFile(videoFile)) {
+      throw new Error(videoError || "Invalid video file");
+    }
 
     try {
       if (thumbnailFile) {
@@ -244,13 +325,27 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                 <label className="block text-sm font-medium text-slate-300">
                   Thumbnail Image
                 </label>
-                <div className="border-2 border-dashed border-slate-600/50 hover:border-slate-500/50 rounded-xl p-6 transition-colors duration-200 bg-slate-800/20">
+                <div
+                  className={`border-2 border-dashed rounded-xl p-6 transition-colors duration-200 bg-slate-800/20 ${
+                    thumbnailError
+                      ? "border-red-500/50 hover:border-red-400/50 bg-red-500/5"
+                      : "border-slate-600/50 hover:border-slate-500/50"
+                  }`}
+                >
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) =>
-                      setThumbnailFile(e.target.files?.[0] || null)
-                    }
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+                      if (file) {
+                        if (validateImageFile(file)) {
+                          setThumbnailFile(file);
+                        }
+                      } else {
+                        setThumbnailFile(null);
+                        setThumbnailError(null);
+                      }
+                    }}
                     className="hidden"
                     id="thumbnail-upload"
                   />
@@ -258,11 +353,23 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                     htmlFor="thumbnail-upload"
                     className="cursor-pointer flex flex-col items-center justify-center space-y-3"
                   >
-                    <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">🖼️</span>
+                    <div
+                      className={`w-16 h-16 rounded-full flex items-center justify-center ${
+                        thumbnailError
+                          ? "bg-red-500/20 border-2 border-red-500/30"
+                          : "bg-slate-700/50"
+                      }`}
+                    >
+                      <span className="text-2xl">
+                        {thumbnailError ? "⚠️" : "🖼️"}
+                      </span>
                     </div>
                     <div className="text-center">
-                      <p className="text-slate-300 font-medium">
+                      <p
+                        className={`font-medium ${
+                          thumbnailError ? "text-red-400" : "text-slate-300"
+                        }`}
+                      >
                         Upload Thumbnail
                       </p>
                       <p className="text-slate-400 text-sm">
@@ -272,7 +379,24 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                   </label>
                 </div>
 
-                {thumbnailFile && (
+                {/* Error message for thumbnail */}
+                {thumbnailError && (
+                  <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 animate-in slide-in-from-top-2 fade-in duration-300">
+                    <div className="flex items-start gap-3">
+                      <span className="text-red-400 text-lg">⚠️</span>
+                      <div className="flex-1">
+                        <p className="text-red-400 font-medium text-sm">
+                          File Validation Error
+                        </p>
+                        <p className="text-red-300 text-sm mt-1">
+                          {thumbnailError}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {thumbnailFile && !thumbnailError && (
                   <div className="relative group animate-in slide-in-from-bottom-4 fade-in duration-300">
                     <div className="bg-slate-700/30 rounded-xl p-4 border border-slate-600/50">
                       <img
@@ -281,12 +405,25 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                         className="w-full max-w-xs rounded-lg border border-slate-600/50"
                       />
                       <div className="mt-3 flex items-center justify-between">
-                        <span className="text-slate-300 text-sm font-medium">
-                          {thumbnailFile.name}
-                        </span>
+                        <div className="flex-1">
+                          <span className="text-slate-300 text-sm font-medium">
+                            {thumbnailFile.name}
+                          </span>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-slate-400 text-xs">
+                              {formatFileSize(thumbnailFile.size)}
+                            </span>
+                            <span className="text-emerald-400 text-xs font-medium">
+                              ✓ Valid
+                            </span>
+                          </div>
+                        </div>
                         <button
                           type="button"
-                          onClick={() => setThumbnailFile(null)}
+                          onClick={() => {
+                            setThumbnailFile(null);
+                            setThumbnailError(null);
+                          }}
                           className="bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg px-3 py-1.5 text-sm transition-all duration-200 border border-red-500/30 hover:border-red-500/50"
                         >
                           Remove
@@ -302,11 +439,27 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                 <label className="block text-sm font-medium text-slate-300">
                   Video Demo
                 </label>
-                <div className="border-2 border-dashed border-slate-600/50 hover:border-slate-500/50 rounded-xl p-6 transition-colors duration-200 bg-slate-800/20">
+                <div
+                  className={`border-2 border-dashed rounded-xl p-6 transition-colors duration-200 bg-slate-800/20 ${
+                    videoError
+                      ? "border-red-500/50 hover:border-red-400/50 bg-red-500/5"
+                      : "border-slate-600/50 hover:border-slate-500/50"
+                  }`}
+                >
                   <input
                     type="file"
                     accept="video/*"
-                    onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+                      if (file) {
+                        if (validateVideoFile(file)) {
+                          setVideoFile(file);
+                        }
+                      } else {
+                        setVideoFile(null);
+                        setVideoError(null);
+                      }
+                    }}
                     className="hidden"
                     id="video-upload"
                   />
@@ -314,11 +467,25 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                     htmlFor="video-upload"
                     className="cursor-pointer flex flex-col items-center justify-center space-y-3"
                   >
-                    <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">🎥</span>
+                    <div
+                      className={`w-16 h-16 rounded-full flex items-center justify-center ${
+                        videoError
+                          ? "bg-red-500/20 border-2 border-red-500/30"
+                          : "bg-slate-700/50"
+                      }`}
+                    >
+                      <span className="text-2xl">
+                        {videoError ? "⚠️" : "🎥"}
+                      </span>
                     </div>
                     <div className="text-center">
-                      <p className="text-slate-300 font-medium">Upload Video</p>
+                      <p
+                        className={`font-medium ${
+                          videoError ? "text-red-400" : "text-slate-300"
+                        }`}
+                      >
+                        Upload Video
+                      </p>
                       <p className="text-slate-400 text-sm">
                         MP4, MOV, AVI up to 100MB
                       </p>
@@ -326,7 +493,24 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                   </label>
                 </div>
 
-                {videoFile && (
+                {/* Error message for video */}
+                {videoError && (
+                  <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 animate-in slide-in-from-top-2 fade-in duration-300">
+                    <div className="flex items-start gap-3">
+                      <span className="text-red-400 text-lg">⚠️</span>
+                      <div className="flex-1">
+                        <p className="text-red-400 font-medium text-sm">
+                          File Validation Error
+                        </p>
+                        <p className="text-red-300 text-sm mt-1">
+                          {videoError}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {videoFile && !videoError && (
                   <div className="relative group animate-in slide-in-from-bottom-4 fade-in duration-300">
                     <div className="bg-slate-700/30 rounded-xl p-4 border border-slate-600/50">
                       <video
@@ -335,12 +519,25 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                         className="w-full max-w-xs rounded-lg border border-slate-600/50"
                       />
                       <div className="mt-3 flex items-center justify-between">
-                        <span className="text-slate-300 text-sm font-medium">
-                          {videoFile.name}
-                        </span>
+                        <div className="flex-1">
+                          <span className="text-slate-300 text-sm font-medium">
+                            {videoFile.name}
+                          </span>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-slate-400 text-xs">
+                              {formatFileSize(videoFile.size)}
+                            </span>
+                            <span className="text-emerald-400 text-xs font-medium">
+                              ✓ Valid
+                            </span>
+                          </div>
+                        </div>
                         <button
                           type="button"
-                          onClick={() => setVideoFile(null)}
+                          onClick={() => {
+                            setVideoFile(null);
+                            setVideoError(null);
+                          }}
                           className="bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg px-3 py-1.5 text-sm transition-all duration-200 border border-red-500/30 hover:border-red-500/50"
                         >
                           Remove
@@ -363,9 +560,9 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
               </button>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !!thumbnailError || !!videoError}
                 className={`flex-1 px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg ${
-                  loading
+                  loading || !!thumbnailError || !!videoError
                     ? "bg-slate-600/50 text-slate-400 cursor-not-allowed border border-slate-600/50"
                     : "bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-105"
                 }`}
