@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { gsap } from "gsap";
 import PortfolioCard from "./PortfolioCard";
 import type { PortfolioItem } from "../../types/portfolio";
 import api from "../../services/api";
@@ -21,6 +22,7 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -62,17 +64,66 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
     fetchItems();
   }, [currentFilter]);
 
+  // Smooth animation when cards load - delayed to sync with banner
+  useEffect(() => {
+    if (visibleItems.length > 0 && !loading && !error) {
+      // Check if this is initial load or category switch
+      const isInitialLoad = allItems.length === 0 && visibleItems.length > 0;
+      
+      // Different delays for initial load vs category switch
+      const delay = isInitialLoad ? 1.2 : 0.3; // Initial load waits for banner, category switch is faster
+      
+      gsap.fromTo(
+        ".portfolio-card",
+        { 
+          opacity: 0, 
+          y: 30, 
+          scale: 0.95 
+        },
+        { 
+          opacity: 1, 
+          y: 0, 
+          scale: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+          delay: delay
+        }
+      );
+    }
+  }, [visibleItems, loading, error, allItems.length]);
+
   const handleLoadMore = () => {
     const nextPage = page + 1;
     const nextItems = allItems.slice(0, nextPage * ITEMS_PER_PAGE);
     setVisibleItems(nextItems);
     setPage(nextPage);
+    
+    // Animate new cards when loading more
+    setTimeout(() => {
+      gsap.fromTo(
+        ".portfolio-card",
+        { 
+          opacity: 0, 
+          y: 20, 
+          scale: 0.98 
+        },
+        { 
+          opacity: 1, 
+          y: 0, 
+          scale: 1,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: "power2.out"
+        }
+      );
+    }, 100);
   };
 
   const hasMoreItems = visibleItems.length < allItems.length;
 
   return (
-    <section className="max-w-[1248px] mx-auto px-4 py-10 grid gap-6 text-white">
+    <section ref={containerRef} className="max-w-[1248px] mx-auto px-4 py-10 grid gap-6 text-white">
       {loading && <p className="text-center">로딩 중...</p>}
 
       {error && (
@@ -87,7 +138,9 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
 
       <div className="flex flex-col gap-6">
         {visibleItems.map((item) => (
-          <PortfolioCard key={item._id} item={item} />
+          <div key={item._id} className="portfolio-card">
+            <PortfolioCard item={item} />
+          </div>
         ))}
       </div>
 
