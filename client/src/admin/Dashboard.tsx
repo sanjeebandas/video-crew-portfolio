@@ -1,17 +1,41 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    toast.success("Logged out successfully!");
+  };
+
   return (
     <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/*  Header */}
         <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-3">
-            Admin Dashboard
-          </h1>
-          <p className="text-slate-400 text-lg">
-            Welcome back! Here's your portfolio overview
-          </p>
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-3">
+                Admin Dashboard
+              </h1>
+              <p className="text-slate-400 text-lg">
+                Welcome back! Here's your portfolio overview
+              </p>
+            </div>
+            
+                         {/* Logout Button */}
+             <button
+               onClick={handleLogout}
+               className="group bg-gradient-to-r from-red-600/90 to-pink-600/90 hover:from-red-500 hover:to-pink-500 text-white px-6 py-3 rounded-xl font-medium shadow-lg shadow-red-500/25 hover:shadow-red-500/40 transition-all duration-300 hover:scale-105 border border-red-500/20 hover:border-red-400/30 flex items-center gap-3"
+             >
+               <span className="text-lg group-hover:scale-110 transition-transform duration-200">
+                 🚪
+               </span>
+               <span>Logout</span>
+             </button>
+          </div>
         </div>
 
         {/*  Quick Actions */}

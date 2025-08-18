@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import CreatePortfolioForm from "../components/admin/CreatePortfolioForm";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 type PortfolioItem = {
   _id: string;
@@ -28,6 +29,12 @@ const PortfolioManager = () => {
     useState<PortfolioItem | null>(null);
 
   const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    toast.success("Logged out successfully!");
+  };
 
   const fetchItems = async () => {
     try {
@@ -148,15 +155,27 @@ const PortfolioManager = () => {
             </p>
           </div>
 
-          <button
-            onClick={() => setShowForm(true)}
-            className="group bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:shadow-emerald-500/40 hover:scale-105 flex items-center gap-2 w-fit md:w-auto justify-center"
-          >
-            <span className="text-lg group-hover:rotate-90 transition-transform duration-200">
-              +
-            </span>
-            Create Portfolio Item
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowForm(true)}
+              className="group bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:shadow-emerald-500/40 hover:scale-105 flex items-center gap-2 w-fit md:w-auto justify-center"
+            >
+              <span className="text-lg group-hover:rotate-90 transition-transform duration-200">
+                +
+              </span>
+              Create Portfolio Item
+            </button>
+
+                         <button
+               onClick={handleLogout}
+               className="group bg-gradient-to-r from-red-600/90 to-pink-600/90 hover:from-red-500 hover:to-pink-500 text-white px-4 py-2.5 rounded-xl text-sm font-medium shadow-lg shadow-red-500/25 hover:shadow-red-500/40 transition-all duration-300 hover:scale-105 border border-red-500/20 hover:border-red-400/30 flex items-center gap-2"
+             >
+               <span className="text-sm group-hover:scale-110 transition-transform duration-200">
+                 🚪
+               </span>
+               <span>Logout</span>
+             </button>
+          </div>
         </div>
 
         {/*  Create Modal */}

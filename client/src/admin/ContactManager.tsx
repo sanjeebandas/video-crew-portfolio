@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 type Contact = {
   _id: string;
@@ -27,6 +28,12 @@ const ContactManager = () => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    toast.success("Logged out successfully!");
+  };
 
   const fetchContacts = async () => {
     const token = localStorage.getItem("token");
@@ -112,15 +119,27 @@ const ContactManager = () => {
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-white">Contact Inquiries</h1>
-        <button
-          onClick={() => navigate("/admin/dashboard")}
-          className="group bg-slate-800/80 backdrop-blur-sm hover:bg-slate-700/80 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 shadow-lg border border-slate-700/50 hover:border-slate-600/50 flex items-center gap-2 w-fit"
-        >
-          <span className="group-hover:-translate-x-1 transition-transform duration-200">
-            ←
-          </span>
-          Back to Dashboard
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => navigate("/admin/dashboard")}
+            className="group bg-slate-800/80 backdrop-blur-sm hover:bg-slate-700/80 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 shadow-lg border border-slate-700/50 hover:border-slate-600/50 flex items-center gap-2 w-fit"
+          >
+            <span className="group-hover:-translate-x-1 transition-transform duration-200">
+              ←
+            </span>
+            Back to Dashboard
+          </button>
+
+          <button
+            onClick={handleLogout}
+            className="group bg-gradient-to-r from-red-600/90 to-pink-600/90 hover:from-red-500 hover:to-pink-500 text-white px-4 py-2.5 rounded-xl text-sm font-medium shadow-lg shadow-red-500/25 hover:shadow-red-500/40 transition-all duration-300 hover:scale-105 border border-red-500/20 hover:border-red-400/30 flex items-center gap-2"
+          >
+            <span className="text-sm group-hover:scale-110 transition-transform duration-200">
+              🚪
+            </span>
+            <span>Logout</span>
+          </button>
+        </div>
       </div>
 
       {loading ? (
