@@ -14,8 +14,8 @@ const ProcessBanner = () => {
 
   return (
     <section className="w-full">
-      {/* Desktop Layout */}
-      <div className="hidden lg:flex justify-center">
+      {/* Desktop Layout - Only for larger screens */}
+      <div className="hidden xl:flex justify-center">
         <div className="grid grid-cols-5 w-[1248px] h-[570px] border border-white/20 overflow-hidden">
           {/* Left side - Text */}
           <div className="col-span-2 bg-black text-white px-12 py-16 flex flex-col justify-center h-full">
@@ -43,8 +43,8 @@ const ProcessBanner = () => {
         </div>
       </div>
 
-      {/* Tablet Layout - Intermediate between mobile and desktop */}
-      <div className="hidden md:flex lg:hidden justify-center">
+      {/* Tablet Layout - Including iPad Pro (1024x1366) */}
+      <div className="hidden md:flex xl:hidden justify-center">
         <div className="grid grid-cols-3 w-full max-w-[900px] h-[500px] border border-white/20 overflow-hidden">
           {/* Left side - Text */}
           <div className="col-span-1 bg-black text-white px-8 py-12 flex flex-col justify-center h-full">
@@ -62,7 +62,7 @@ const ProcessBanner = () => {
           </div>
 
           {/* Right side - Image */}
-          <div className="col-span-2 h-full">
+          <div className="col-span-2 h-[120%]">
             <img
               src="/imgs/process/Group 90.webp"
               alt="Process Banner"
