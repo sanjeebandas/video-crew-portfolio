@@ -59,19 +59,19 @@ const BackgroundBanner = () => {
 
   return (
     <section
-      className="mt-24 relative w-full h-auto py-10 bg-cover bg-center flex items-center justify-center text-white"
+      className="mt-16 xs:mt-20 sm:mt-24 relative w-full h-auto py-8 xs:py-10 bg-cover bg-center flex items-center justify-center text-white"
       style={{ backgroundImage: "url('/imgs/Frame.webp')" }}
     >
-      <div className="w-full max-w-[1248px] px-6 flex flex-col sm:flex-row justify-between items-center text-center gap-y-8">
+      <div className="w-full max-w-[1248px] px-4 xs:px-6 md:px-8 lg:px-6 flex flex-col sm:flex-row justify-between items-center text-center gap-y-6 xs:gap-y-8">
         {stats.map((stat, i) => (
-                     <div
-             key={i}
-             className="stat-item flex-1"
-           >
-            <p className="stat-value text-3xl md:text-4xl font-bold mb-1">
+          <div
+            key={i}
+            className="stat-item flex-1"
+          >
+            <p className="stat-value text-2xl xs:text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-bold mb-1">
               {stat.value}
             </p>
-            <p className="text-sm md:text-base text-gray-200">{stat.label}</p>
+            <p className="text-xs xs:text-sm sm:text-base md:text-base lg:text-lg text-gray-200">{stat.label}</p>
           </div>
         ))}
       </div>

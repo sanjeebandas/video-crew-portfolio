@@ -4,7 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
-// Animation configurations
+// Animation configurations with responsive considerations
 export const ANIMATION_CONFIG = {
   duration: 0.8,
   ease: "power2.out",
@@ -16,7 +16,7 @@ export const ANIMATION_CONFIG = {
   },
 };
 
-// Common animation presets
+// Responsive animation presets
 export const ANIMATIONS = {
   slideInLeft: {
     x: -100,
@@ -51,18 +51,39 @@ export const ANIMATIONS = {
   },
 };
 
+// Get responsive animation values based on screen size
+const getResponsiveAnimationValues = () => {
+  const isMobile = window.innerWidth < 640;
+  const isTablet = window.innerWidth >= 640 && window.innerWidth < 1024;
+  const isDesktop = window.innerWidth >= 1024;
+
+  return {
+    slideDistance: isMobile ? 50 : isTablet ? 75 : 100,
+    fadeDistance: isMobile ? 30 : isTablet ? 40 : 50,
+    staggerDelay: isMobile ? 0.05 : isTablet ? 0.08 : 0.1,
+    duration: isMobile ? 0.6 : isTablet ? 0.7 : 0.8,
+  };
+};
+
 // Custom hooks for scroll animations
 export const useScrollAnimations = () => {
   const slideInFromLeft = (
     elements: string | Element | Element[],
     options: any = {}
   ) => {
+    const responsiveValues = getResponsiveAnimationValues();
+    
     return gsap.fromTo(
       elements,
-      { ...ANIMATIONS.slideInLeft },
+      { 
+        x: -responsiveValues.slideDistance, 
+        opacity: 0 
+      },
       {
         x: 0,
         opacity: 1,
+        duration: responsiveValues.duration,
+        ease: ANIMATION_CONFIG.ease,
         ...options,
         scrollTrigger: {
           trigger: elements,
@@ -79,12 +100,19 @@ export const useScrollAnimations = () => {
     elements: string | Element | Element[],
     options: any = {}
   ) => {
+    const responsiveValues = getResponsiveAnimationValues();
+    
     return gsap.fromTo(
       elements,
-      { ...ANIMATIONS.slideInRight },
+      { 
+        x: responsiveValues.slideDistance, 
+        opacity: 0 
+      },
       {
         x: 0,
         opacity: 1,
+        duration: responsiveValues.duration,
+        ease: ANIMATION_CONFIG.ease,
         ...options,
         scrollTrigger: {
           trigger: elements,
@@ -101,12 +129,19 @@ export const useScrollAnimations = () => {
     elements: string | Element | Element[],
     options: any = {}
   ) => {
+    const responsiveValues = getResponsiveAnimationValues();
+    
     return gsap.fromTo(
       elements,
-      { ...ANIMATIONS.fadeInUp },
+      { 
+        y: responsiveValues.fadeDistance, 
+        opacity: 0 
+      },
       {
         y: 0,
         opacity: 1,
+        duration: responsiveValues.duration,
+        ease: ANIMATION_CONFIG.ease,
         ...options,
         scrollTrigger: {
           trigger: elements,
@@ -124,6 +159,8 @@ export const useScrollAnimations = () => {
     stagger: number = 0.15,
     options: any = {}
   ) => {
+    const responsiveValues = getResponsiveAnimationValues();
+    
     return gsap.fromTo(
       elements,
       { ...ANIMATIONS.stackIn },
@@ -131,7 +168,9 @@ export const useScrollAnimations = () => {
         y: 0,
         opacity: 1,
         scale: 1,
-        stagger,
+        stagger: responsiveValues.staggerDelay,
+        duration: responsiveValues.duration,
+        ease: "back.out(1.7)",
         ...options,
         scrollTrigger: {
           trigger: elements,
@@ -149,13 +188,17 @@ export const useScrollAnimations = () => {
     stagger: number = 0.1,
     options: any = {}
   ) => {
+    const responsiveValues = getResponsiveAnimationValues();
+    
     return gsap.fromTo(
       elements,
       { opacity: 0, y: 30 },
       {
         opacity: 1,
         y: 0,
-        stagger,
+        stagger: responsiveValues.staggerDelay,
+        duration: responsiveValues.duration,
+        ease: ANIMATION_CONFIG.ease,
         ...options,
         scrollTrigger: {
           trigger: elements,
@@ -173,8 +216,12 @@ export const useScrollAnimations = () => {
     speed: number = 0.5,
     options: any = {}
   ) => {
+    // Adjust parallax speed for mobile devices
+    const isMobile = window.innerWidth < 768;
+    const adjustedSpeed = isMobile ? speed * 0.5 : speed;
+    
     return gsap.to(element, {
-      yPercent: -50 * speed,
+      yPercent: -50 * adjustedSpeed,
       ease: "none",
       scrollTrigger: {
         trigger: element,
@@ -209,9 +256,18 @@ export const initGSAP = () => {
     duration: 0.8,
   });
 
-  // Optimize ScrollTrigger
+  // Optimize ScrollTrigger for responsive devices
   ScrollTrigger.config({
     ignoreMobileResize: true,
     autoRefreshEvents: "visibilitychange,DOMContentLoaded,load",
+  });
+
+  // Add responsive handling for window resize
+  let resizeTimer: NodeJS.Timeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 250);
   });
 };

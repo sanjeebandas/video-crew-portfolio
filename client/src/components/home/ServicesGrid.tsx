@@ -31,12 +31,12 @@ const ServicesGrid = () => {
   }, []);
 
   return (
-    <section className="w-full bg-black text-white px-6 py-16">
-      <div className="max-w-[1248px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 place-items-center">
+    <section className="w-full bg-black text-white px-4 xs:px-6 md:px-8 lg:px-6 py-12 xs:py-14 md:py-16">
+      <div className="max-w-[1248px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-6 place-items-center">
         {services.map((service, idx) => (
           <div
             key={idx}
-            className="service-card relative w-[90vw] max-w-[302px] sm:max-w-[360px] md:max-w-[402px] h-[195px] sm:h-[300px] md:h-[425px] rounded-md overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-out hover:-translate-y-3 hover:border-blue-400/30 hover:shadow-lg hover:shadow-blue-400/20 hover:bg-blue-400/5"
+            className="service-card relative w-[85vw] xs:w-[90vw] max-w-[280px] xs:max-w-[302px] sm:max-w-[320px] md:max-w-[360px] lg:max-w-[380px] xl:max-w-[402px] h-[180px] xs:h-[195px] sm:h-[250px] md:h-[300px] lg:h-[350px] xl:h-[425px] rounded-md overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-out hover:-translate-y-2 xs:hover:-translate-y-3 hover:border-blue-400/30 hover:shadow-lg hover:shadow-blue-400/20 hover:bg-blue-400/5"
           >
             {/* Image fills the card */}
             <img
@@ -46,12 +46,12 @@ const ServicesGrid = () => {
             />
 
             {/* Very subtle overlay for text readability */}
-            <div className="absolute bottom-0 left-0 w-full p-4 ">
-              <div className="flex flex-col justify-start gap-2 min-h-[10px] md:min-h-[100px]">
-                <h3 className="text-xs md:text-lg font-bold text-white drop-shadow-sm">
+            <div className="absolute bottom-0 left-0 w-full p-3 xs:p-4">
+              <div className="flex flex-col justify-start gap-1.5 xs:gap-2 min-h-[8px] xs:min-h-[10px] sm:min-h-[60px] md:min-h-[80px] lg:min-h-[100px]">
+                <h3 className="text-xs xs:text-sm sm:text-base md:text-lg font-bold text-white drop-shadow-sm">
                   {service.title}
                 </h3>
-                <p className="text-xs md:text-sm text-gray-100 leading-snug md:leading-relaxed drop-shadow-sm">
+                <p className="text-xs xs:text-sm sm:text-sm md:text-sm text-gray-100 leading-snug md:leading-relaxed drop-shadow-sm">
                   {service.description}
                 </p>
               </div>

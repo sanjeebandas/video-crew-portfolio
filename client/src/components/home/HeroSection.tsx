@@ -117,7 +117,7 @@ const HeroSection = () => {
           key={index}
           src={image}
           alt={`Video Crew Banner ${index + 1}`}
-          className={`absolute top-0 left-0 w-full h-full object-cover object-[center_30%] md:object-top z-0 -translate-y-3 md:-translate-y-5 transition-opacity duration-1500 ease-in-out ${
+          className={`absolute top-0 left-0 w-full h-full object-cover object-[center_30%] sm:object-[center_25%] md:object-top z-0 -translate-y-2 xs:-translate-y-3 sm:-translate-y-4 md:-translate-y-5 transition-opacity duration-1500 ease-in-out ${
             index === currentImageIndex ? "opacity-100" : "opacity-0"
           }`}
         />
@@ -125,10 +125,10 @@ const HeroSection = () => {
 
       {/* HeroSection Content */}
       <div className="relative z-20 flex flex-col h-[80vh] justify-end items-center md:items-start text-center md:text-left">
-        <div className="max-w-[1248px] mx-auto px-4 -mb-8 w-full">
+        <div className="max-w-[1248px] mx-auto px-4 xs:px-6 md:px-8 lg:px-6 -mb-6 xs:-mb-8 w-full">
           {/* Fixed height container for text to prevent layout shifts */}
-          <div ref={textRef} className="min-h-[120px] md:min-h-[100px] flex flex-col justify-end">
-            <h1 className="hero-subtitle text-sm opacity-75 md:text-2xl lg:text-xl font-normal leading-snug max-w-3xl mx-auto md:mx-0 transition-all duration-1500 ease-in-out">
+          <div ref={textRef} className="min-h-[100px] xs:min-h-[110px] sm:min-h-[120px] md:min-h-[100px] lg:min-h-[110px] flex flex-col justify-end">
+            <h1 className="hero-subtitle text-sm xs:text-lg sm:text-xl md:text-2xl lg:text-xl xl:text-2xl font-normal leading-snug max-w-2xl xs:max-w-3xl mx-auto md:mx-0 transition-all duration-1500 ease-in-out">
               {carouselContent[currentImageIndex].subtitle
                 .split("\n")
                 .map((line, index) => (
@@ -141,21 +141,21 @@ const HeroSection = () => {
                   </span>
                 ))}
             </h1>
-            <p className="hero-title mt-6 text-lg md:text-3xl lg:text-4xl font-bold text-white mx-auto md:mx-0 transition-all duration-1500 ease-in-out">
+            <p className="hero-title mt-4 xs:mt-6 text-lg xs:text-2xl sm:text-3xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mx-auto md:mx-0 transition-all duration-1500 ease-in-out">
               {carouselContent[currentImageIndex].title}
             </p>
           </div>
 
           {/* Carousel Dots - Fixed position */}
-          <div className="hero-dots flex items-center justify-center md:justify-start space-x-2 mt-8">
+          <div className="hero-dots flex items-center justify-center md:justify-start space-x-2 xs:space-x-3 mt-6 xs:mt-8">
             {bannerImages.map((_, index) => (
               <button
                 key={index}
                 onClick={() => handleDotClick(index)}
                 className={`carousel-dot transition-all duration-300 ease-in-out ${
                   index === currentImageIndex
-                    ? "w-4 h-4 border-2 border-white rounded-full"
-                    : "w-3 h-3 border border-white rounded-full opacity-40 hover:opacity-60"
+                    ? "w-3 h-3 xs:w-4 xs:h-4 border-2 border-white rounded-full"
+                    : "w-2.5 h-2.5 xs:w-3 xs:h-3 border border-white rounded-full opacity-40 hover:opacity-60"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
