@@ -163,11 +163,16 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
       const media = await uploadMedia();
       const payload = { ...formData, ...media };
 
-      await api.post("/portfolio", payload, {
+      const response = await api.post("/portfolio", payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      // Trigger notification for new portfolio item
+      if (typeof window !== 'undefined' && (window as any).addPortfolioNotification) {
+        (window as any).addPortfolioNotification(response.data);
+      }
 
       toast.success("Portfolio created!");
       onCreated?.();
@@ -189,13 +194,13 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
       {/* Scrollable Content */}
       <div className="overflow-y-auto max-h-[90vh] scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-br from-slate-800 to-slate-900 backdrop-blur-sm z-10 px-6 py-4 border-b border-slate-700/50">
+        <div className="sticky top-0 bg-gradient-to-br from-slate-800 to-slate-900 backdrop-blur-sm z-10 px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-700/50">
           <div className="flex justify-between items-center">
             <div>
-              <h2 className="text-3xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
+              <h2 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
                 Create Portfolio Item
               </h2>
-              <p className="text-slate-400 text-sm mt-1">
+              <p className="text-slate-400 text-xs sm:text-sm mt-1">
                 Add a new project to your portfolio
               </p>
             </div>
@@ -203,18 +208,18 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
         </div>
 
         {/* Form Content */}
-        <div className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="p-4 sm:p-6">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             {/* Basic Information Section */}
-            <div className="bg-slate-700/20 backdrop-blur-sm border border-slate-600/30 rounded-2xl p-6 space-y-5">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <div className="bg-slate-700/20 backdrop-blur-sm border border-slate-600/30 rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-5">
+              <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2">
                 <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
                 Basic Information
               </h3>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-slate-300 mb-1 sm:mb-2">
                     Project Title *
                   </label>
                   <input
@@ -223,28 +228,28 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                     required
                     value={formData.title}
                     onChange={handleChange}
-                    className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50"
+                    className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-3 sm:p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50 text-sm sm:text-base"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-slate-300 mb-1 sm:mb-2">
                     Description *
                   </label>
                   <textarea
                     name="description"
                     placeholder="Describe your project in detail..."
                     required
-                    rows={4}
+                    rows={3}
                     value={formData.description}
                     onChange={handleChange}
-                    className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50 resize-none"
+                    className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-3 sm:p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50 resize-none text-sm sm:text-base"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-slate-300 mb-1 sm:mb-2">
                       Category *
                     </label>
                     <select
@@ -252,7 +257,7 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                       required
                       value={formData.category}
                       onChange={handleChange}
-                      className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50"
+                      className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-3 sm:p-4 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50 text-sm sm:text-base"
                     >
                       <option value="" disabled>
                         Select a category
@@ -266,7 +271,7 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-slate-300 mb-1 sm:mb-2">
                       Client Name
                     </label>
                     <input
@@ -274,14 +279,14 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                       placeholder="Optional"
                       value={formData.client}
                       onChange={handleChange}
-                      className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50"
+                      className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-3 sm:p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50 text-sm sm:text-base"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-slate-300 mb-1 sm:mb-2">
                       Display Order
                     </label>
                     <input
@@ -291,20 +296,20 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                       placeholder="1"
                       value={formData.displayOrder}
                       onChange={handleChange}
-                      className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50"
+                      className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-3 sm:p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50 text-sm sm:text-base"
                     />
                   </div>
 
                   <div className="flex items-end">
-                    <label className="flex items-center space-x-3 bg-slate-700/30 p-4 rounded-xl border border-slate-600/30 hover:border-slate-500/50 transition-colors duration-200 cursor-pointer group w-full">
+                    <label className="flex items-center space-x-2 sm:space-x-3 bg-slate-700/30 p-3 sm:p-4 rounded-xl border border-slate-600/30 hover:border-slate-500/50 transition-colors duration-200 cursor-pointer group w-full">
                       <input
                         type="checkbox"
                         name="featured"
                         checked={formData.featured}
                         onChange={handleChange}
-                        className="w-5 h-5 text-emerald-600 bg-slate-700 border-slate-600 rounded focus:ring-emerald-500/50 focus:ring-2"
+                        className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 bg-slate-700 border-slate-600 rounded focus:ring-emerald-500/50 focus:ring-2"
                       />
-                      <span className="text-sm text-slate-300 group-hover:text-white transition-colors duration-200">
+                      <span className="text-xs sm:text-sm text-slate-300 group-hover:text-white transition-colors duration-200">
                         ⭐ Feature this project
                       </span>
                     </label>
@@ -314,19 +319,19 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
             </div>
 
             {/* Media Upload Section */}
-            <div className="bg-slate-700/20 backdrop-blur-sm border border-slate-600/30 rounded-2xl p-6 space-y-5">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <div className="bg-slate-700/20 backdrop-blur-sm border border-slate-600/30 rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-5">
+              <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2">
                 <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
                 Media Assets
               </h3>
 
               {/* Thumbnail Upload */}
-              <div className="space-y-3">
-                <label className="block text-sm font-medium text-slate-300">
+              <div className="space-y-2 sm:space-y-3">
+                <label className="block text-xs sm:text-sm font-medium text-slate-300">
                   Thumbnail Image
                 </label>
                 <div
-                  className={`border-2 border-dashed rounded-xl p-6 transition-colors duration-200 bg-slate-800/20 ${
+                  className={`border-2 border-dashed rounded-xl p-4 sm:p-6 transition-colors duration-200 bg-slate-800/20 ${
                     thumbnailError
                       ? "border-red-500/50 hover:border-red-400/50 bg-red-500/5"
                       : "border-slate-600/50 hover:border-slate-500/50"
@@ -351,28 +356,28 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                   />
                   <label
                     htmlFor="thumbnail-upload"
-                    className="cursor-pointer flex flex-col items-center justify-center space-y-3"
+                    className="cursor-pointer flex flex-col items-center justify-center space-y-2 sm:space-y-3"
                   >
                     <div
-                      className={`w-16 h-16 rounded-full flex items-center justify-center ${
+                      className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center ${
                         thumbnailError
                           ? "bg-red-500/20 border-2 border-red-500/30"
                           : "bg-slate-700/50"
                       }`}
                     >
-                      <span className="text-2xl">
+                      <span className="text-lg sm:text-2xl">
                         {thumbnailError ? "⚠️" : "🖼️"}
                       </span>
                     </div>
                     <div className="text-center">
                       <p
-                        className={`font-medium ${
+                        className={`font-medium text-xs sm:text-sm ${
                           thumbnailError ? "text-red-400" : "text-slate-300"
                         }`}
                       >
                         Upload Thumbnail
                       </p>
-                      <p className="text-slate-400 text-sm">
+                      <p className="text-slate-400 text-xs sm:text-sm">
                         PNG, JPG, GIF up to 10MB
                       </p>
                     </div>
@@ -381,14 +386,14 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
 
                 {/* Error message for thumbnail */}
                 {thumbnailError && (
-                  <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 animate-in slide-in-from-top-2 fade-in duration-300">
-                    <div className="flex items-start gap-3">
-                      <span className="text-red-400 text-lg">⚠️</span>
+                  <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 sm:p-4 animate-in slide-in-from-top-2 fade-in duration-300">
+                    <div className="flex items-start gap-2 sm:gap-3">
+                      <span className="text-red-400 text-base sm:text-lg">⚠️</span>
                       <div className="flex-1">
-                        <p className="text-red-400 font-medium text-sm">
+                        <p className="text-red-400 font-medium text-xs sm:text-sm">
                           File Validation Error
                         </p>
-                        <p className="text-red-300 text-sm mt-1">
+                        <p className="text-red-300 text-xs sm:text-sm mt-1">
                           {thumbnailError}
                         </p>
                       </div>
@@ -398,15 +403,15 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
 
                 {thumbnailFile && !thumbnailError && (
                   <div className="relative group animate-in slide-in-from-bottom-4 fade-in duration-300">
-                    <div className="bg-slate-700/30 rounded-xl p-4 border border-slate-600/50">
+                    <div className="bg-slate-700/30 rounded-xl p-3 sm:p-4 border border-slate-600/50">
                       <img
                         src={URL.createObjectURL(thumbnailFile)}
                         alt="Thumbnail Preview"
                         className="w-full max-w-xs rounded-lg border border-slate-600/50"
                       />
-                      <div className="mt-3 flex items-center justify-between">
+                      <div className="mt-2 sm:mt-3 flex items-center justify-between">
                         <div className="flex-1">
-                          <span className="text-slate-300 text-sm font-medium">
+                          <span className="text-slate-300 text-xs sm:text-sm font-medium">
                             {thumbnailFile.name}
                           </span>
                           <div className="flex items-center gap-2 mt-1">
@@ -424,7 +429,7 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                             setThumbnailFile(null);
                             setThumbnailError(null);
                           }}
-                          className="bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg px-3 py-1.5 text-sm transition-all duration-200 border border-red-500/30 hover:border-red-500/50"
+                          className="bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm transition-all duration-200 border border-red-500/30 hover:border-red-500/50"
                         >
                           Remove
                         </button>
@@ -435,12 +440,12 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
               </div>
 
               {/* Video Upload */}
-              <div className="space-y-3">
-                <label className="block text-sm font-medium text-slate-300">
+              <div className="space-y-2 sm:space-y-3">
+                <label className="block text-xs sm:text-sm font-medium text-slate-300">
                   Video Demo
                 </label>
                 <div
-                  className={`border-2 border-dashed rounded-xl p-6 transition-colors duration-200 bg-slate-800/20 ${
+                  className={`border-2 border-dashed rounded-xl p-4 sm:p-6 transition-colors duration-200 bg-slate-800/20 ${
                     videoError
                       ? "border-red-500/50 hover:border-red-400/50 bg-red-500/5"
                       : "border-slate-600/50 hover:border-slate-500/50"
@@ -465,28 +470,28 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                   />
                   <label
                     htmlFor="video-upload"
-                    className="cursor-pointer flex flex-col items-center justify-center space-y-3"
+                    className="cursor-pointer flex flex-col items-center justify-center space-y-2 sm:space-y-3"
                   >
                     <div
-                      className={`w-16 h-16 rounded-full flex items-center justify-center ${
+                      className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center ${
                         videoError
                           ? "bg-red-500/20 border-2 border-red-500/30"
                           : "bg-slate-700/50"
                       }`}
                     >
-                      <span className="text-2xl">
+                      <span className="text-lg sm:text-2xl">
                         {videoError ? "⚠️" : "🎥"}
                       </span>
                     </div>
                     <div className="text-center">
                       <p
-                        className={`font-medium ${
+                        className={`font-medium text-xs sm:text-sm ${
                           videoError ? "text-red-400" : "text-slate-300"
                         }`}
                       >
                         Upload Video
                       </p>
-                      <p className="text-slate-400 text-sm">
+                      <p className="text-slate-400 text-xs sm:text-sm">
                         MP4, MOV, AVI up to 100MB
                       </p>
                     </div>
@@ -495,14 +500,14 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
 
                 {/* Error message for video */}
                 {videoError && (
-                  <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 animate-in slide-in-from-top-2 fade-in duration-300">
-                    <div className="flex items-start gap-3">
-                      <span className="text-red-400 text-lg">⚠️</span>
+                  <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 sm:p-4 animate-in slide-in-from-top-2 fade-in duration-300">
+                    <div className="flex items-start gap-2 sm:gap-3">
+                      <span className="text-red-400 text-base sm:text-lg">⚠️</span>
                       <div className="flex-1">
-                        <p className="text-red-400 font-medium text-sm">
+                        <p className="text-red-400 font-medium text-xs sm:text-sm">
                           File Validation Error
                         </p>
-                        <p className="text-red-300 text-sm mt-1">
+                        <p className="text-red-300 text-xs sm:text-sm mt-1">
                           {videoError}
                         </p>
                       </div>
@@ -512,15 +517,15 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
 
                 {videoFile && !videoError && (
                   <div className="relative group animate-in slide-in-from-bottom-4 fade-in duration-300">
-                    <div className="bg-slate-700/30 rounded-xl p-4 border border-slate-600/50">
+                    <div className="bg-slate-700/30 rounded-xl p-3 sm:p-4 border border-slate-600/50">
                       <video
                         src={URL.createObjectURL(videoFile)}
                         controls
                         className="w-full max-w-xs rounded-lg border border-slate-600/50"
                       />
-                      <div className="mt-3 flex items-center justify-between">
+                      <div className="mt-2 sm:mt-3 flex items-center justify-between">
                         <div className="flex-1">
-                          <span className="text-slate-300 text-sm font-medium">
+                          <span className="text-slate-300 text-xs sm:text-sm font-medium">
                             {videoFile.name}
                           </span>
                           <div className="flex items-center gap-2 mt-1">
@@ -538,7 +543,7 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                             setVideoFile(null);
                             setVideoError(null);
                           }}
-                          className="bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg px-3 py-1.5 text-sm transition-all duration-200 border border-red-500/30 hover:border-red-500/50"
+                          className="bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm transition-all duration-200 border border-red-500/30 hover:border-red-500/50"
                         >
                           Remove
                         </button>
@@ -550,32 +555,32 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
             </div>
 
             {/* Submit Button */}
-            <div className="flex gap-4 pt-4">
+            <div className="flex gap-3 sm:gap-4 pt-3 sm:pt-4">
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 bg-slate-700/50 hover:bg-slate-600/50 text-slate-300 hover:text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50"
+                className="flex-1 bg-slate-700/50 hover:bg-slate-600/50 text-slate-300 hover:text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50 text-sm sm:text-base"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading || !!thumbnailError || !!videoError}
-                className={`flex-1 px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg ${
+                className={`flex-1 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-all duration-200 shadow-lg text-sm sm:text-base ${
                   loading || !!thumbnailError || !!videoError
                     ? "bg-slate-600/50 text-slate-400 cursor-not-allowed border border-slate-600/50"
                     : "bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-105"
                 }`}
               >
                 {loading ? (
-                  <span className="flex items-center justify-center gap-3">
-                    <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
-                    Creating Portfolio...
+                  <span className="flex items-center justify-center gap-2 sm:gap-3">
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
+                    <span className="text-xs sm:text-sm">Creating Portfolio...</span>
                   </span>
                 ) : (
-                  <span className="flex items-center justify-center gap-2">
-                    <span className="text-lg">🚀</span>
-                    Create Portfolio
+                  <span className="flex items-center justify-center gap-1 sm:gap-2">
+                    <span className="text-base sm:text-lg">🚀</span>
+                    <span className="text-xs sm:text-sm">Create Portfolio</span>
                   </span>
                 )}
               </button>

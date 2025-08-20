@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import axios from "axios";
+import api from "../../services/api";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -51,11 +51,13 @@ const ContactForm = () => {
         preferredDate: formData.deliveryDate,
         service: formData.productionPurpose,
         subject: `${formData.videoCount} Videos • ${formData.runningTime} Runtime • Platform: ${formData.uploadPlatform}`,
-        message: `
-          참고 영상: ${formData.referenceVideos}
-          웹사이트 링크: ${formData.websiteLinks}
-          기타 정보: ${formData.additionalInfo}
-        `,
+        message: formData.additionalInfo || "No additional information provided",
+        referenceVideos: formData.referenceVideos,
+        websiteLinks: formData.websiteLinks,
+        productionPurpose: formData.productionPurpose,
+        uploadPlatform: formData.uploadPlatform,
+        videoCount: formData.videoCount,
+        runningTime: formData.runningTime,
         status: "new",
         submittedAt: new Date().toISOString(), // optional, in case you want to track manually
         source: "website", // optional: to help identify the origin
@@ -63,7 +65,7 @@ const ContactForm = () => {
 
       const loadingToast = toast.loading("제출 중입니다...");
 
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/contact`, payload);
+      await api.post('/contact', payload);
 
       toast.dismiss(loadingToast);
       toast.success("문의가 성공적으로 제출되었습니다!");

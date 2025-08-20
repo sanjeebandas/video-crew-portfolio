@@ -15,6 +15,12 @@ export const submitContactForm = async (req: Request, res: Response) => {
       budget,
       service,
       preferredDate,
+      referenceVideos,
+      websiteLinks,
+      productionPurpose,
+      uploadPlatform,
+      videoCount,
+      runningTime,
     } = req.body;
 
     if (!name || !email || !subject || !message) {
@@ -33,6 +39,12 @@ export const submitContactForm = async (req: Request, res: Response) => {
       budget,
       service,
       preferredDate,
+      referenceVideos,
+      websiteLinks,
+      productionPurpose,
+      uploadPlatform,
+      videoCount,
+      runningTime,
     });
 
     res.status(201).json({

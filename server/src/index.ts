@@ -9,6 +9,7 @@ import portfolioRoutes from "./routes/portfolio";
 import authRoutes from "./routes/auth";
 import contactRoutes from "./routes/contact";
 import uploadRoutes from "./routes/upload";
+import pageVisitRoutes from "./routes/pageVisit";
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ app.use("/api/portfolio", portfolioRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/pagevisit", pageVisitRoutes);
 
 //  Serve static uploads
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
