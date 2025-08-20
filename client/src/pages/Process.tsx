@@ -121,7 +121,7 @@ const Process = () => {
   return (
     <div ref={containerRef} className="bg-black text-white relative overflow-hidden">
       <ProcessBanner />
-      <div className="max-w-[1248px] mx-auto px-4 py-12 md:py-32 flex flex-col gap-32">
+      <div className="max-w-[1248px] mx-auto px-4 py-12 md:py-20 lg:py-32 flex flex-col gap-20 md:gap-28 lg:gap-32">
         {processSteps.map((step, index) => (
           <div key={step.id} className="process-step">
             <ProcessStep
