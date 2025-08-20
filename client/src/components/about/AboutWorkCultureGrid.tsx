@@ -31,17 +31,19 @@ const AboutWorkCultureGrid = () => {
     // Work culture grid animations
     stackIn(".work-culture-card", 0.1); // Desktop cards
     staggerFadeIn(".work-culture-mobile-card", 0.2); // Mobile cards
+    staggerFadeIn(".work-culture-tablet-card", 0.15); // Tablet cards
     
     // Animate inner texts with their respective cards
     staggerFadeIn(".work-culture-text", 0.1); // Desktop text elements
     staggerFadeIn(".work-culture-mobile-text", 0.2); // Mobile text elements
+    staggerFadeIn(".work-culture-tablet-text", 0.15); // Tablet text elements
   }, []);
 
   return (
     <section className="w-full bg-black text-white px-6 py-16 -mt-10">
       <div className="max-w-[1248px] mx-auto">
         {/* Desktop Layout */}
-        <div className="hidden min-[1024px]:grid grid-cols-2 gap-6">
+        <div className="hidden lg:grid grid-cols-2 gap-6">
           {/* Top Row - Two Cards */}
           <div className="grid grid-cols-2 gap-6 col-span-2">
             {workCultureItems.slice(0, 2).map((item, idx) => (
@@ -96,8 +98,64 @@ const AboutWorkCultureGrid = () => {
           </div>
         </div>
 
+        {/* Tablet Layout - Intermediate between mobile and desktop */}
+        <div className="hidden md:grid lg:hidden grid-cols-2 gap-4">
+          {/* Top Row - Two Cards */}
+          <div className="grid grid-cols-2 gap-4 col-span-2">
+            {workCultureItems.slice(0, 2).map((item, idx) => (
+              <div
+                key={idx}
+                className="work-culture-tablet-card relative w-full h-[400px] overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl hover:border-blue-400/30 group"
+              >
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                />
+                                 {/* Overlay */}
+                 <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 ease-out">
+                   <div className="flex flex-col gap-1">
+                     <p className="work-culture-tablet-text text-xs text-gray-300 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                       {item.subtitle}
+                     </p>
+                     <h3 className="work-culture-tablet-text text-base font-bold mb-1 group-hover:text-white transition-colors duration-300 ease-out">{item.title}</h3>
+                     <p className="work-culture-tablet-text text-xs text-gray-200 leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out">
+                       {item.description}
+                     </p>
+                   </div>
+                 </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom Row - One Large Card */}
+          <div className="col-span-2">
+            <div className="work-culture-tablet-card relative w-full h-[450px] overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl hover:border-blue-400/30 group">
+              <img
+                src={workCultureItems[2].image}
+                alt={workCultureItems[2].title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+              />
+                             {/* Overlay */}
+               <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 ease-out">
+                 <div className="flex flex-col gap-1">
+                   <p className="work-culture-tablet-text text-xs text-gray-300 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                     {workCultureItems[2].subtitle}
+                   </p>
+                   <h3 className="work-culture-tablet-text text-lg font-bold mb-1 group-hover:text-white transition-colors duration-300 ease-out">
+                     {workCultureItems[2].title}
+                   </h3>
+                   <p className="work-culture-tablet-text text-sm text-gray-200 leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out">
+                     {workCultureItems[2].description}
+                   </p>
+                 </div>
+               </div>
+            </div>
+          </div>
+        </div>
+
         {/* Mobile Layout */}
-        <div className="min-[1024px]:hidden grid grid-cols-1 gap-6 place-items-center">
+        <div className="md:hidden grid grid-cols-1 gap-6 place-items-center">
           {workCultureItems.map((item, idx) => (
             <div
               key={idx}

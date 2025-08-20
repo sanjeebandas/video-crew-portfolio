@@ -38,12 +38,12 @@ const AboutHero = () => {
   };
 
   return (
-    <section className="w-full bg-black text-white py-12 md:py-20">
-      <div className="max-w-[1248px] mx-auto px-0 sm:px-6 md:px-0">
+    <section className="w-full bg-black text-white py-12 md:py-16 lg:py-20">
+      <div className="max-w-[1248px] mx-auto px-0 sm:px-6 md:px-4 lg:px-0">
         {/* Flex container to handle centering on mobile */}
         <div className="flex justify-center md:justify-start">
           {/* Portrait Card */}
-          <div className="relative aspect-[3/4] w-[302px] md:w-full md:h-[600px] rounded-xs overflow-hidden bg-black">
+          <div className="relative aspect-[3/4] w-[302px] md:w-full md:h-[550px] lg:h-[600px] rounded-xs overflow-hidden bg-black">
             {/* Carousel Images */}
             {bannerImages.map((image, index) => (
               <img
@@ -57,11 +57,11 @@ const AboutHero = () => {
             ))}
 
             {/* Text overlay */}
-            <div className="absolute bottom-12 left-4 right-4 md:bottom-20 md:left-10 md:right-auto about-hero-text">
+            <div className="absolute bottom-12 left-4 right-4 md:bottom-16 md:left-8 md:right-auto lg:bottom-20 lg:left-10 about-hero-text">
               <div>
                 <div>
-                  <h3 className="text-sm md:text-lg font-semibold">회사소개</h3>
-                  <p className="text-sm md:text-sm leading-snug mt-1">
+                  <h3 className="text-sm md:text-base lg:text-lg font-semibold">회사소개</h3>
+                  <p className="text-sm md:text-sm lg:text-sm leading-snug mt-1">
                     <span className="font-semibold">Video Crew,</span>
                     <br />
                     <span className="font-medium opacity-75">
@@ -72,7 +72,7 @@ const AboutHero = () => {
               </div>
 
               {/* Carousel Dots */}
-              <div className="flex items-center space-x-2 mt-2 md:mt-4">
+              <div className="flex items-center space-x-2 mt-2 md:mt-3 lg:mt-4">
                 {bannerImages.map((_, index) => (
                   <button
                     key={index}

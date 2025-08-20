@@ -31,12 +31,12 @@ const About = () => {
   }, []);
   return (
     <div ref={containerRef} className="relative overflow-hidden">
-      <section className="bg-black text-white w-full px-6 py-12">
-        <div className="max-w-[1248px] mx-auto flex flex-col md:flex-row justify-between items-start md:space-x-12 space-y-10 md:space-y-0">
+      <section className="bg-black text-white w-full px-6 py-12 md:py-16 lg:py-20">
+        <div className="max-w-[1248px] mx-auto flex flex-col md:flex-row justify-between items-start md:space-x-8 lg:space-x-12 space-y-10 md:space-y-0">
           {/* Left Title Block */}
           <div className="w-full md:flex-1 text-center md:text-left about-title-left">
             <p className="text-sm text-gray-400 mb-2">Who we are, Video Crew</p>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold leading-snug">
+            <h2 className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold leading-snug">
               스토리로 말하는 영상 콘텐츠,
               <br />
               시선을 사로잡는 영상,
@@ -45,7 +45,7 @@ const About = () => {
           </div>
 
           {/* Right Paragraph Block */}
-          <div className="w-full md:flex-1 text-sm  text-gray-300 leading-relaxed text-center md:text-justify md:mt-8 about-title-right">
+          <div className="w-full md:flex-1 text-sm md:text-sm lg:text-base text-gray-300 leading-relaxed text-center md:text-justify md:mt-6 lg:mt-8 about-title-right">
             <div className="about-text-line">
               우리는 영상이 단순히 기술적인 가치가 있다고 생각하지 않습니다.
               우리에게는 각각 걸어온 하나의 경험을 나타냅니다. 비디오크루는,
@@ -63,7 +63,7 @@ const About = () => {
       {/* HeroSection of About Page */}
       <AboutHero />
       <div className="w-full bg-black overflow-hidden">
-        <div className="max-w-[1248px] mx-auto px-6 md:px-0 mt-4 sm:mt-6 md:mt-8">
+        <div className="max-w-[1248px] mx-auto px-6 md:px-4 lg:px-0 mt-4 sm:mt-6 md:mt-6 lg:mt-8">
           <img
             src="/imgs/Frame 430.webp"
             alt="Section Separator Design"
@@ -73,7 +73,7 @@ const About = () => {
       </div>
 
       {/* Decorative Centered Separator Image */}
-      <div className="w-full mt-4 sm:mt-6 md:-mt-10">
+      <div className="w-full mt-4 sm:mt-6 md:mt-6 lg:mt-8 md:-mt-8 lg:-mt-10">
         <img
           src="/imgs/Image.webp"
           alt="Section Separator Design"
@@ -84,10 +84,10 @@ const About = () => {
       {/* Core Value Text Block */}
       <div className="w-full px-6">
         <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 leading-snug about-section-title">
+          <h2 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug about-section-title">
             Core Value
           </h2>
-          <div className="about-section-text text-sm sm:text-base text-gray-400 leading-relaxed">
+          <div className="about-section-text text-sm sm:text-base md:text-base lg:text-lg text-gray-400 leading-relaxed">
             <div className="about-text-line">
               당신의 이야기에 생명을 불어넣는 영상,
             </div>
@@ -108,12 +108,12 @@ const About = () => {
         className="w-full h-auto object-cover -mt-10 sm:-mt-10 about-separator"
       />
       {/* Work Culture Text Block */}
-      <div className="w-full px-6 lg:-mt-32">
+      <div className="w-full px-6 md:-mt-24 lg:-mt-32">
         <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
-          <h2 className="text-lg sm:text-3xl md:text-4xl font-bold mb-2 leading-snug about-section-title">
+          <h2 className="text-lg sm:text-3xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug about-section-title">
             Work Culture
           </h2>
-          <div className="about-section-text text-sm sm:text-base text-gray-400 leading-relaxed">
+          <div className="about-section-text text-sm sm:text-base md:text-base lg:text-lg text-gray-400 leading-relaxed">
             <div className="about-text-line">
               비디오크루의 업무 문화는 여러 차원에서 뛰어난 크리에이터들이
               그들의 열정을 바탕으로 합니다.
