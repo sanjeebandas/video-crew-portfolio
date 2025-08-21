@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useScrollAnimations, cleanupAnimations } from "../utils/animations";
 import DifferentiationHero from "../components/differentiation/DifferentiationHero";
-import WhyVideoCrewBoxes from "../components/differentiation/WhyVideoCrewBoxes;";
+import WhyVideoCrewBoxes from "../components/differentiation/WhyVideoCrewBoxes";
 import DifferentiationFeatureSection from "../components/differentiation/DifferentiationFeatureSection";
 import DifferentiationBackgroundBanner from "../components/differentiation/DifferentiationBackgroundBanner";
 

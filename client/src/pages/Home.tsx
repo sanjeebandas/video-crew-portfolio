@@ -52,7 +52,7 @@ const Home = () => {
           </div>
 
           {/* Right Paragraph Block — responsive text sizing */}
-          <div className="w-full md:flex-1 text-sm xs:text-base sm:text-lg md:text-base lg:text-lg text-gray-300 leading-relaxed text-center md:text-right home-title-right">
+          <div className="md:pl-28 w-full md:flex-1 text-sm xs:text-base sm:text-lg md:text-base lg:text-lg text-gray-300 leading-relaxed text-center md:text-right home-title-right">
             <div className="home-text-line">
               비디오크루는 단순한 영상 제작을 넘어, 강력한 스토리텔링과 독창적인
             </div>
@@ -93,7 +93,7 @@ const Home = () => {
           </button>
         </div>
       </div>
-
+      
       {/* Decorative Separator Image after PortfolioScroller */}
       <img
         src="/imgs/Image-1.webp"
