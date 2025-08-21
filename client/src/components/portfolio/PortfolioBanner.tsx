@@ -126,14 +126,12 @@ const PortfolioBanner = ({
       }
     });
 
-    // Reduced scale animation to prevent overlap
     gsap.to(button, {
       scale: 1.04,
       duration: 0.25,
       ease: "power2.out",
     });
 
-    // Non-active button hover effect
     const overlay = button.querySelector(".hover-overlay") as HTMLElement;
     if (overlay) {
       gsap.to(overlay, {

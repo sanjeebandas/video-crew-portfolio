@@ -51,7 +51,7 @@ const BackgroundBanner = () => {
           }
         },
         onComplete: function () {
-          element.textContent = targetValue; // Ensure final value is exact
+          element.textContent = targetValue;
         },
       });
     });

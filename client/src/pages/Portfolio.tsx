@@ -2,7 +2,6 @@ import { useState } from "react";
 import PortfolioBanner from "../components/portfolio/PortfolioBanner";
 import PortfolioGrid from "../components/portfolio/PortfolioGrid";
 
-// Updated category keys and labels
 const categories = [
   { label: "광고 · 홍보 영상", value: "advertisement/promotional" },
   { label: "이러닝 영상", value: "e-learning" },

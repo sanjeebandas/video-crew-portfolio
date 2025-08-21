@@ -70,8 +70,8 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
       // Check if this is initial load or category switch
       const isInitialLoad = allItems.length === 0 && visibleItems.length > 0;
       
-      // Different delays for initial load vs category switch
-      const delay = isInitialLoad ? 1.2 : 0.3; // Initial load waits for banner, category switch is faster
+      
+      const delay = isInitialLoad ? 1.2 : 0.3;
       
       gsap.fromTo(
         ".portfolio-card",

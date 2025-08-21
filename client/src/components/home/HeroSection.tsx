@@ -93,7 +93,6 @@ const HeroSection = () => {
     }
   }, [currentImageIndex]);
 
-  // Auto-advance carousel every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) =>
@@ -104,7 +103,6 @@ const HeroSection = () => {
     return () => clearInterval(interval);
   }, [bannerImages.length]);
 
-  // Handle dot click to manually change image
   const handleDotClick = (index: number) => {
     setCurrentImageIndex(index);
   };

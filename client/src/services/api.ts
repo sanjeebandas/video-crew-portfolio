@@ -8,59 +8,63 @@ const api = axios.create({
 // Contact API functions
 export const getContacts = async () => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      console.warn('No authentication token found for contacts request');
+      console.warn("No authentication token found for contacts request");
       return [];
     }
-    
-    const response = await api.get('/contact', {
+
+    const response = await api.get("/contact", {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     // Return the contacts array from the response
     return response.data?.contacts || response.data || [];
   } catch (error) {
-    console.error('Error fetching contacts:', error);
+    console.error("Error fetching contacts:", error);
     return [];
   }
 };
 
 export const updateContactStatus = async (id: string, status: string) => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      throw new Error('No authentication token found');
+      throw new Error("No authentication token found");
     }
-    
-    const response = await api.put(`/contact/${id}`, { status }, {
-      headers: {
-        Authorization: `Bearer ${token}`
+
+    const response = await api.put(
+      `/contact/${id}`,
+      { status },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    });
+    );
     return response.data;
   } catch (error) {
-    console.error('Error updating contact status:', error);
+    console.error("Error updating contact status:", error);
     throw error;
   }
 };
 
 export const deleteContact = async (id: string) => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      throw new Error('No authentication token found');
+      throw new Error("No authentication token found");
     }
-    
+
     const response = await api.delete(`/contact/${id}`, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
-    console.error('Error deleting contact:', error);
+    console.error("Error deleting contact:", error);
     throw error;
   }
 };
@@ -68,40 +72,40 @@ export const deleteContact = async (id: string) => {
 // Portfolio API functions
 export const getPortfolioItems = async () => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      console.warn('No authentication token found for portfolio request');
+      console.warn("No authentication token found for portfolio request");
       return [];
     }
-    
-    const response = await api.get('/portfolio', {
+
+    const response = await api.get("/portfolio", {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     // Return the portfolio items array from the response
     return response.data || [];
   } catch (error) {
-    console.error('Error fetching portfolio items:', error);
+    console.error("Error fetching portfolio items:", error);
     return [];
   }
 };
 
 export const deletePortfolioItem = async (id: string) => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      throw new Error('No authentication token found');
+      throw new Error("No authentication token found");
     }
-    
+
     const response = await api.delete(`/portfolio/${id}`, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
-    console.error('Error deleting portfolio item:', error);
+    console.error("Error deleting portfolio item:", error);
     throw error;
   }
 };
@@ -109,10 +113,10 @@ export const deletePortfolioItem = async (id: string) => {
 // Page Visit API functions
 export const incrementPageVisit = async () => {
   try {
-    const response = await api.post('/pagevisit/increment');
+    const response = await api.post("/pagevisit/increment");
     return response.data;
   } catch (error) {
-    console.error('Error incrementing page visit:', error);
+    console.error("Error incrementing page visit:", error);
     // Don't throw error to avoid breaking user experience
     return { success: false, totalVisits: 0 };
   }
@@ -120,39 +124,39 @@ export const incrementPageVisit = async () => {
 
 export const getPageVisitsFromAPI = async () => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      console.warn('No authentication token found for page visits request');
+      console.warn("No authentication token found for page visits request");
       return 0;
     }
-    
-    const response = await api.get('/pagevisit', {
+
+    const response = await api.get("/pagevisit", {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data?.totalVisits || 0;
   } catch (error) {
-    console.error('Error fetching page visits:', error);
+    console.error("Error fetching page visits:", error);
     return 0;
   }
 };
 
 export const resetPageVisitsAPI = async () => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      throw new Error('No authentication token found');
+      throw new Error("No authentication token found");
     }
-    
-    const response = await api.delete('/pagevisit/reset', {
+
+    const response = await api.delete("/pagevisit/reset", {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
-    console.error('Error resetting page visits:', error);
+    console.error("Error resetting page visits:", error);
     throw error;
   }
 };

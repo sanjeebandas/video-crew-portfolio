@@ -1,9 +1,8 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { Toaster } from "react-hot-toast"; 
+import { Toaster } from "react-hot-toast";
 import { initGSAP } from "./utils/animations";
 import { incrementPageVisit } from "./services/api";
-
 
 // Public Pages
 import Home from "./pages/Home";
@@ -35,7 +34,6 @@ function LayoutWrapper() {
   // Track page visits for analytics (only for public pages)
   useEffect(() => {
     if (!isAdminRoute) {
-      console.log('📊 Tracking page visit for:', location.pathname);
       incrementPageVisit();
     }
   }, [location.pathname, isAdminRoute]);
@@ -85,7 +83,6 @@ function LayoutWrapper() {
 }
 
 function App() {
-  // Initialize GSAP on app mount
   useEffect(() => {
     initGSAP();
   }, []);

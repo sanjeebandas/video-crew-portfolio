@@ -43,13 +43,6 @@ const AnalyticsRow = () => {
       // Get page visits from API
       const currentVisits = await getPageVisitsFromAPI();
 
-      // Debug logging
-      console.log("📊 Analytics Update:", {
-        currentVisits,
-        currentContacts,
-        currentPortfolioItems,
-      });
-
       // Get previous data from localStorage for comparison
       const previousData = localStorage.getItem("analyticsData");
       const previous = previousData
@@ -254,8 +247,6 @@ const AnalyticsRow = () => {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => {
-              console.log("🔄 Manual Refresh - Refreshing analytics data");
-              // Refresh only the analytics data
               loadAnalytics();
             }}
             className="bg-slate-700/50 hover:bg-slate-600/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50 flex items-center gap-1 sm:gap-2"
@@ -269,7 +260,6 @@ const AnalyticsRow = () => {
             onClick={async () => {
               try {
                 await resetPageVisitsAPI();
-                console.log("🧹 Reset page visits");
                 loadAnalytics();
               } catch (error) {
                 console.error("Failed to reset page visits:", error);

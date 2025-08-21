@@ -92,7 +92,7 @@ const PortfolioCard = ({ item }: Props) => {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  // Listen for fullscreen changes
+  
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);

@@ -23,10 +23,9 @@ import { useEffect } from "react";
 import { useScrollAnimations } from "../../utils/animations";
 
 const ServicesGrid = () => {
-  const { stackIn, staggerFadeIn } = useScrollAnimations();
+  const { stackIn } = useScrollAnimations();
 
   useEffect(() => {
-    // Services grid animations - animate all cards together with minimal stagger
     stackIn(".service-card", 0.1);
   }, []);
 

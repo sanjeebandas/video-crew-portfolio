@@ -5,7 +5,6 @@ const WhyVideoCrewBoxes = () => {
   const { staggerFadeIn } = useScrollAnimations();
 
   useEffect(() => {
-    // WhyVideoCrewBoxes animations
     staggerFadeIn(".diff-why-box", 0.2);
   }, []);
   const items = [

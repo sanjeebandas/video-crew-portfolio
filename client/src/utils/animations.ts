@@ -263,7 +263,7 @@ export const initGSAP = () => {
   });
 
   // Add responsive handling for window resize
-  let resizeTimer: NodeJS.Timeout;
+  let resizeTimer: number;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
