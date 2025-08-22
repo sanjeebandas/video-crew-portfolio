@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import ContactInquiry from "../models/ContactInquiry";
+import { sendContactNotification, sendCustomerConfirmation } from "../services/emailService";
 
 //Submit a contact inquiry (Public)
 //POST /api/contact
@@ -46,6 +47,50 @@ export const submitContactForm = async (req: Request, res: Response) => {
       videoCount,
       runningTime,
     });
+
+    // Send email notifications
+    try {
+      // Send notification to admin
+      await sendContactNotification({
+        name,
+        email,
+        phone,
+        company,
+        budget,
+        preferredDate,
+        service,
+        subject,
+        message,
+        referenceVideos,
+        websiteLinks,
+        productionPurpose,
+        uploadPlatform,
+        videoCount,
+        runningTime,
+      });
+
+      // Send confirmation to customer
+      await sendCustomerConfirmation({
+        name,
+        email,
+        phone,
+        company,
+        budget,
+        preferredDate,
+        service,
+        subject,
+        message,
+        referenceVideos,
+        websiteLinks,
+        productionPurpose,
+        uploadPlatform,
+        videoCount,
+        runningTime,
+      });
+    } catch (emailError) {
+      console.error('Failed to send email notifications:', emailError);
+      // Don't fail the request if email fails, just log the error
+    }
 
     res.status(201).json({
       message: "Inquiry submitted successfully",
