@@ -4,6 +4,37 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
+// Extend Window interface to include gsap
+declare global {
+  interface Window {
+    gsap: any;
+  }
+}
+
+// Make gsap available globally for lazy loading compatibility
+window.gsap = gsap;
+
+// Utility function to refresh GSAP animations after lazy loading
+export const refreshGSAPAnimations = (selector?: string) => {
+  if (window.gsap) {
+    // Clear any existing properties that might interfere
+    if (selector) {
+      window.gsap.set(selector, { clearProps: "all" });
+    }
+    
+    // Force ScrollTrigger to refresh
+    if (ScrollTrigger) {
+      ScrollTrigger.refresh();
+    }
+    
+    // Trigger a scroll event to re-evaluate animations
+    setTimeout(() => {
+      const event = new Event('scroll');
+      window.dispatchEvent(event);
+    }, 50);
+  }
+};
+
 // Animation configurations with responsive considerations
 export const ANIMATION_CONFIG = {
   duration: 0.8,

@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ProcessBanner from "../process/ProcessBanner";
 import ProcessStep from "../process/ProcessStep";
+import SEO from "../components/common/SEO";
 
 const processSteps = [
   {
@@ -68,78 +69,89 @@ const Process = () => {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    // Process page scroll animations - alternating left/right fade-in
-    const processSteps = document.querySelectorAll(".process-step");
+    // Add a small delay to ensure lazy loading doesn't interfere with initial animations
+    const timer = setTimeout(() => {
+      // Process page scroll animations - alternating left/right fade-in
+      const processSteps = document.querySelectorAll(".process-step");
 
-    processSteps.forEach((step, index) => {
-      const isEven = index % 2 === 0; // 0, 2, 4 = left to right, 1, 3, 5 = right to left
+      processSteps.forEach((step, index) => {
+        const isEven = index % 2 === 0; // 0, 2, 4 = left to right, 1, 3, 5 = right to left
 
-      if (isEven) {
-        // Left to right fade-in for even indices (0, 2, 4)
-        gsap.fromTo(
-          step,
-          { x: -100, opacity: 0 },
-          {
-            x: 0,
-            opacity: 1,
-            duration: 1.5,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: step,
-              start: "top 90%",
-              end: "bottom 10%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      } else {
-        gsap.fromTo(
-          step,
-          { x: 100, opacity: 0 },
-          {
-            x: 0,
-            opacity: 1,
-            duration: 1.5,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: step,
-              start: "top 90%",
-              end: "bottom 10%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      }
-    });
+        if (isEven) {
+          // Left to right fade-in for even indices (0, 2, 4)
+          gsap.fromTo(
+            step,
+            { x: -100, opacity: 0 },
+            {
+              x: 0,
+              opacity: 1,
+              duration: 1.5,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: step,
+                start: "top 90%",
+                end: "bottom 10%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        } else {
+          gsap.fromTo(
+            step,
+            { x: 100, opacity: 0 },
+            {
+              x: 0,
+              opacity: 1,
+              duration: 1.5,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: step,
+                start: "top 90%",
+                end: "bottom 10%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        }
+      });
+    }, 200);
 
     // Cleanup on unmount
     return () => {
+      clearTimeout(timer);
       cleanupAnimations();
     };
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="bg-black text-white relative overflow-hidden"
-    >
-      <ProcessBanner />
-      <div className="max-w-[1248px] mx-auto px-4 py-12 md:py-20 xl:py-32 flex flex-col gap-20 md:gap-28 xl:gap-32">
-        {processSteps.map((step, index) => (
-          <div key={step.id} className="process-step">
-            <ProcessStep
-              id={step.id}
-              title={step.title}
-              subtitle={step.subtitle}
-              description={step.description}
-              image={step.image}
-              reverse={index % 2 !== 0}
-              offsetY={step.offsetY}
-            />
-          </div>
-        ))}
+    <>
+      <SEO 
+        title="제작 프로세스"
+        description="비디오크루의 전문적인 영상 제작 프로세스를 소개합니다. 상담 및 목표 설정부터 최종 납품까지, 체계적이고 전문적인 6단계 제작 과정으로 고품질 영상을 제작합니다."
+        keywords="영상제작프로세스, 비디오제작과정, 상담목표설정, 영상기획, 촬영준비, 현장촬영, 편집후반작업, 최종납품, 비디오크루프로세스"
+      />
+      <div
+        ref={containerRef}
+        className="bg-black text-white relative overflow-hidden"
+      >
+        <ProcessBanner />
+        <div className="max-w-[1248px] mx-auto px-4 py-12 md:py-20 xl:py-32 flex flex-col gap-20 md:gap-28 xl:gap-32">
+          {processSteps.map((step, index) => (
+            <div key={step.id} className="process-step">
+              <ProcessStep
+                id={step.id}
+                title={step.title}
+                subtitle={step.subtitle}
+                description={step.description}
+                image={step.image}
+                reverse={index % 2 !== 0}
+                offsetY={step.offsetY}
+              />
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import type { PortfolioItem } from "../../types/portfolio";
+import LazyImage from "../common/LazyImage";
 
 type Props = {
   item: PortfolioItem;
@@ -268,9 +269,9 @@ const PortfolioCard = ({ item }: Props) => {
             className="w-full h-full cursor-pointer relative"
             onClick={() => setIsVideoMode(true)}
           >
-            <img
+            <LazyImage
               src={item.thumbnailUrl}
-              alt={item.title}
+              alt={`${item.title} - 비디오크루 포트폴리오 썸네일`}
               className="w-full h-full object-cover"
             />
 

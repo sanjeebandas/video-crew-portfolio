@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import LazyImage from "../common/LazyImage";
 
 const HeroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -111,10 +112,10 @@ const HeroSection = () => {
     <section ref={heroRef} className="relative w-full h-screen bg-black text-white overflow-hidden">
       {/* Carousel Images */}
       {bannerImages.map((image, index) => (
-        <img
+        <LazyImage
           key={index}
           src={image}
-          alt={`Video Crew Banner ${index + 1}`}
+          alt={`비디오크루 배너 이미지 ${index + 1} - ${carouselContent[index].title}`}
           className={`absolute top-0 left-0 w-full h-full object-cover object-[center_30%] sm:object-[center_25%] md:object-top z-0 -translate-y-2 xs:-translate-y-3 sm:-translate-y-4 md:-translate-y-5 transition-opacity duration-1500 ease-in-out ${
             index === currentImageIndex ? "opacity-100" : "opacity-0"
           }`}
