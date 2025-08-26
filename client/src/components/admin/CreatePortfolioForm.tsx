@@ -44,10 +44,22 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
   // File size constants
   const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
   const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB
+  const MAX_TITLE_LIMIT = 75; // Character limit for title
+  const MAX_DESC_LIMIT = 300; // Character limit for description
+
+  // Character limit helper functions
+  const getCharLimitColor = (currentLength: number, maxLength: number) => {
+    const percentage = (currentLength / maxLength) * 100;
+    if (percentage >= 90) return "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50";
+    if (percentage >= 75) return "border-yellow-500/50 focus:border-yellow-500/50 focus:ring-yellow-500/50";
+    return "border-emerald-500/50 focus:border-emerald-500/50 focus:ring-emerald-500/50";
+  };
+
+
 
   useEffect(() => {
     if (editMode && editData) {
-git      // Map the edit data to form data structure
+      // Map the edit data to form data structure
       setFormData({
         title: editData.title || "",
         description: editData.description || "",
@@ -76,6 +88,14 @@ git      // Map the edit data to form data structure
   ) => {
     const target = e.target;
     const { name, value, type } = target;
+
+    // Check character limits for title and description
+    if (name === "title" && value.length > MAX_TITLE_LIMIT) {
+      return; // Prevent input if title character limit is exceeded
+    }
+    if (name === "description" && value.length > MAX_DESC_LIMIT) {
+      return; // Prevent input if description character limit is exceeded
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -268,7 +288,12 @@ git      // Map the edit data to form data structure
                     required
                     value={formData.title}
                     onChange={handleChange}
-                    className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-3 sm:p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50 text-sm sm:text-base"
+                    maxLength={MAX_TITLE_LIMIT}
+                    className={`w-full bg-slate-800/50 backdrop-blur-sm border rounded-xl p-3 sm:p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 transition-all duration-200 hover:border-slate-500/50 text-sm sm:text-base ${
+                      formData.title.length > 0 
+                        ? getCharLimitColor(formData.title.length, MAX_TITLE_LIMIT)
+                        : "border-slate-600/50 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                    }`}
                   />
                 </div>
 
@@ -283,7 +308,12 @@ git      // Map the edit data to form data structure
                     rows={3}
                     value={formData.description}
                     onChange={handleChange}
-                    className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-3 sm:p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50 resize-none text-sm sm:text-base"
+                    maxLength={MAX_DESC_LIMIT}
+                    className={`w-full bg-slate-800/50 backdrop-blur-sm border rounded-xl p-3 sm:p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 transition-all duration-200 hover:border-slate-500/50 resize-none text-sm sm:text-base ${
+                      formData.description.length > 0 
+                        ? getCharLimitColor(formData.description.length, MAX_DESC_LIMIT)
+                        : "border-slate-600/50 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                    }`}
                   />
                 </div>
 
