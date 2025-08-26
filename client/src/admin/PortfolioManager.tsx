@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import CreatePortfolioForm from "../components/admin/CreatePortfolioForm";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
-import { getPortfolioItems, deletePortfolioItem } from "../services/api";
+import { getPortfolioItems, deletePortfolioItem, getPortfolioItemById } from "../services/api";
 import AdminNavbar from "../components/admin/AdminNavbar";
 
 type PortfolioItem = {
@@ -21,6 +21,7 @@ type PortfolioItem = {
 type ModalState = {
   type: 'form' | 'video' | 'details' | null;
   data?: any;
+  editMode?: boolean;
 };
 
 const PortfolioManager = () => {
@@ -111,15 +112,15 @@ const PortfolioManager = () => {
 
   const goToPage = useCallback((page: number) => {
     setCurrentPage(page);
-    setModalState({ type: null }); // Close any open modals when changing pages
+    setModalState({ type: null, editMode: false }); // Close any open modals when changing pages
   }, []);
 
-  const openModal = useCallback((type: ModalState['type'], data?: any) => {
-    setModalState({ type, data });
+  const openModal = useCallback((type: ModalState['type'], data?: any, editMode?: boolean) => {
+    setModalState({ type, data, editMode });
   }, []);
 
   const closeModal = useCallback(() => {
-    setModalState({ type: null });
+    setModalState({ type: null, editMode: false });
   }, []);
 
   // Loading state with skeleton animation
@@ -198,7 +199,7 @@ const PortfolioManager = () => {
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
-                  onClick={() => openModal('form')}
+                  onClick={() => openModal('form', undefined, false)}
                   className="group bg-emerald-600/50 hover:bg-emerald-500/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-emerald-600/50 hover:border-emerald-500/50 flex items-center gap-1 sm:gap-2"
                   aria-label="Add new portfolio project"
                 >
@@ -245,7 +246,7 @@ const PortfolioManager = () => {
                   No portfolio items found.
                 </p>
                 <button
-                  onClick={() => openModal('form')}
+                  onClick={() => openModal('form', undefined, false)}
                   className="bg-emerald-600/50 hover:bg-emerald-500/50 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border border-emerald-600/50 hover:border-emerald-500/50"
                   aria-label="Create your first portfolio project"
                 >
@@ -325,6 +326,14 @@ const PortfolioManager = () => {
                           </button>
 
                           <button
+                            onClick={() => openModal('form', item, true)}
+                            className="px-3 py-1 text-xs rounded-lg bg-blue-600/50 hover:bg-blue-500/50 text-white transition-all duration-200 border border-blue-600/50 hover:border-blue-500/50"
+                            aria-label={`Edit ${item.title}`}
+                          >
+                            Edit
+                          </button>
+
+                          <button
                             onClick={() => deleteItem(item._id)}
                             className={`px-3 py-1 text-xs rounded-lg bg-red-600/50 hover:bg-red-500/50 text-white transition-all duration-200 border border-red-600/50 hover:border-red-500/50 ${
                               deletingId === item._id
@@ -393,13 +402,13 @@ const PortfolioManager = () => {
             </>
           )}
 
-          {/* Create Portfolio Form Modal */}
+          {/* Create/Edit Portfolio Form Modal */}
           {modalState.type === 'form' && (
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
               <div className="bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 w-full max-w-2xl max-h-[85vh] overflow-y-auto">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg sm:text-2xl font-bold text-white">
-                    Create New Portfolio Item
+                    {modalState.editMode ? "Edit Portfolio Item" : "Create New Portfolio Item"}
                   </h2>
                   <button
                     onClick={closeModal}
@@ -410,7 +419,13 @@ const PortfolioManager = () => {
                   </button>
                 </div>
                 <CreatePortfolioForm
+                  editMode={modalState.editMode}
+                  editData={modalState.data}
                   onCreated={() => {
+                    closeModal();
+                    fetchItems();
+                  }}
+                  onUpdated={() => {
                     closeModal();
                     fetchItems();
                   }}

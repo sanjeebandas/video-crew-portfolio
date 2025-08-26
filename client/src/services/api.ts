@@ -110,6 +110,44 @@ export const deletePortfolioItem = async (id: string) => {
   }
 };
 
+export const getPortfolioItemById = async (id: string) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await api.get(`/portfolio/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching portfolio item:", error);
+    throw error;
+  }
+};
+
+export const updatePortfolioItem = async (id: string, data: any) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await api.put(`/portfolio/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating portfolio item:", error);
+    throw error;
+  }
+};
+
 // Page Visit API functions
 export const incrementPageVisit = async () => {
   try {

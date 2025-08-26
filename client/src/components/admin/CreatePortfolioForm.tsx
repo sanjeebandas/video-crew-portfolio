@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { uploadImage, uploadVideo } from "../../services/upload";
 import api from "../../services/api";
 
 type Props = {
   onCreated?: () => void;
+  onUpdated?: () => void;
   onClose: () => void;
+  editMode?: boolean;
+  editData?: any;
 };
 
 type PortfolioFormData = {
@@ -30,7 +33,7 @@ const initialState: PortfolioFormData = {
   displayOrder: 0,
 };
 
-const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
+const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData }: Props) => {
   const [formData, setFormData] = useState<PortfolioFormData>(initialState);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
@@ -41,6 +44,30 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
   // File size constants
   const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
   const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB
+
+  useEffect(() => {
+    if (editMode && editData) {
+git      // Map the edit data to form data structure
+      setFormData({
+        title: editData.title || "",
+        description: editData.description || "",
+        category: editData.category || "",
+        client: editData.client || "",
+        thumbnailUrl: editData.thumbnailUrl || "",
+        videoUrl: editData.videoUrl || "",
+        featured: editData.featured || false,
+        displayOrder: editData.displayOrder || 0,
+      });
+      // If editing, set thumbnailFile and videoFile to null to allow new uploads
+      setThumbnailFile(null);
+      setVideoFile(null);
+    } else if (!editMode) {
+      // Reset form when not in edit mode
+      setFormData(initialState);
+      setThumbnailFile(null);
+      setVideoFile(null);
+    }
+  }, [editMode, editData]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -163,19 +190,32 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
       const media = await uploadMedia();
       const payload = { ...formData, ...media };
 
-      const response = await api.post("/portfolio", payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      let response;
+      if (editMode) {
+        // Update existing portfolio item
+        response = await api.put(`/portfolio/${editData._id}`, payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        toast.success("Portfolio updated!");
+        onUpdated?.();
+      } else {
+        // Create new portfolio item
+        response = await api.post("/portfolio", payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        toast.success("Portfolio created!");
+        onCreated?.();
+      }
 
-      // Trigger notification for new portfolio item
-      if (typeof window !== 'undefined' && (window as any).addPortfolioNotification) {
+      // Trigger notification for new portfolio item (only for new items)
+      if (!editMode && typeof window !== 'undefined' && (window as any).addPortfolioNotification) {
         (window as any).addPortfolioNotification(response.data);
       }
 
-      toast.success("Portfolio created!");
-      onCreated?.();
       setFormData(initialState);
       setThumbnailFile(null);
       setVideoFile(null);
@@ -198,10 +238,10 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
-                Create Portfolio Item
+                {editMode ? "Edit Portfolio Item" : "Create Portfolio Item"}
               </h2>
               <p className="text-slate-400 text-xs sm:text-sm mt-1">
-                Add a new project to your portfolio
+                {editMode ? "Modify your project details" : "Add a new project to your portfolio"}
               </p>
             </div>
           </div>
@@ -437,6 +477,34 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                     </div>
                   </div>
                 )}
+
+                {/* Show existing thumbnail in edit mode */}
+                {editMode && formData.thumbnailUrl && !thumbnailFile && (
+                  <div className="relative group animate-in slide-in-from-bottom-4 fade-in duration-300">
+                    <div className="bg-slate-700/30 rounded-xl p-3 sm:p-4 border border-slate-600/50">
+                      <img
+                        src={formData.thumbnailUrl}
+                        alt="Current Thumbnail"
+                        className="w-full max-w-xs rounded-lg border border-slate-600/50"
+                      />
+                      <div className="mt-2 sm:mt-3 flex items-center justify-between">
+                        <div className="flex-1">
+                          <span className="text-slate-300 text-xs sm:text-sm font-medium">
+                            Current Thumbnail
+                          </span>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-blue-400 text-xs font-medium">
+                              📷 Existing
+                            </span>
+                          </div>
+                        </div>
+                        <span className="text-slate-400 text-xs">
+                          Upload new image to replace
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Video Upload */}
@@ -551,6 +619,34 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                     </div>
                   </div>
                 )}
+
+                {/* Show existing video in edit mode */}
+                {editMode && formData.videoUrl && !videoFile && (
+                  <div className="relative group animate-in slide-in-from-bottom-4 fade-in duration-300">
+                    <div className="bg-slate-700/30 rounded-xl p-3 sm:p-4 border border-slate-600/50">
+                      <video
+                        src={formData.videoUrl}
+                        controls
+                        className="w-full max-w-xs rounded-lg border border-slate-600/50"
+                      />
+                      <div className="mt-2 sm:mt-3 flex items-center justify-between">
+                        <div className="flex-1">
+                          <span className="text-slate-300 text-xs sm:text-sm font-medium">
+                            Current Video
+                          </span>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-blue-400 text-xs font-medium">
+                              🎥 Existing
+                            </span>
+                          </div>
+                        </div>
+                        <span className="text-slate-400 text-xs">
+                          Upload new video to replace
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -575,12 +671,12 @@ const CreatePortfolioForm = ({ onCreated, onClose }: Props) => {
                 {loading ? (
                   <span className="flex items-center justify-center gap-2 sm:gap-3">
                     <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
-                    <span className="text-xs sm:text-sm">Creating Portfolio...</span>
+                    <span className="text-xs sm:text-sm">{editMode ? "Updating Portfolio..." : "Creating Portfolio..."}</span>
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-1 sm:gap-2">
-                    <span className="text-base sm:text-lg">🚀</span>
-                    <span className="text-xs sm:text-sm">Create Portfolio</span>
+                    <span className="text-base sm:text-lg">{editMode ? "💾" : "🚀"}</span>
+                    <span className="text-xs sm:text-sm">{editMode ? "Update Portfolio" : "Create Portfolio"}</span>
                   </span>
                 )}
               </button>
