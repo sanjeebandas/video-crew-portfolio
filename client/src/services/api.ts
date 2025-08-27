@@ -199,4 +199,63 @@ export const resetPageVisitsAPI = async () => {
   }
 };
 
+// Notification API functions
+export const getNotifications = async (page = 1, limit = 20) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.warn("No authentication token found for notifications request");
+      return { notifications: [], pagination: {}, unreadCount: 0 };
+    }
+
+    const response = await api.get(`/notifications?page=${page}&limit=${limit}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    return { notifications: [], pagination: {}, unreadCount: 0 };
+  }
+};
+
+export const markNotificationAsRead = async (id: string) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await api.patch(`/notifications/${id}/read`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error marking notification as read:", error);
+    throw error;
+  }
+};
+
+export const markAllNotificationsAsRead = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await api.patch("/notifications/mark-all-read", {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error marking all notifications as read:", error);
+    throw error;
+  }
+};
+
 export default api;

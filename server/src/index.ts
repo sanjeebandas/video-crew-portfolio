@@ -10,6 +10,7 @@ import authRoutes from "./routes/auth";
 import contactRoutes from "./routes/contact";
 import uploadRoutes from "./routes/upload";
 import pageVisitRoutes from "./routes/pageVisit";
+import notificationRoutes from "./routes/notifications";
 
 dotenv.config();
 
@@ -32,7 +33,7 @@ const corsOptions = {
     }
   },
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
@@ -51,6 +52,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/pagevisit", pageVisitRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 //  Serve static uploads
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));

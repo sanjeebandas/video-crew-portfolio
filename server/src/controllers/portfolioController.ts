@@ -1,10 +1,15 @@
 import { Request, Response } from "express";
 import Portfolio from "../models/Portfolio";
+import { createPortfolioNotification } from "./notification.controller";
 
 //Create new portfolio item
 export const createPortfolioItem = async (req: Request, res: Response) => {
   try {
     const newItem = await Portfolio.create(req.body);
+    
+    // Create notification for new portfolio item
+    await createPortfolioNotification("created", newItem);
+    
     res.status(201).json(newItem);
   } catch (error) {
     res.status(500).json({ message: "Error creating portfolio item", error });
@@ -47,6 +52,9 @@ export const updatePortfolioItem = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Portfolio item not found" });
     }
 
+    // Create notification for updated portfolio item
+    await createPortfolioNotification("updated", updatedItem);
+
     res.status(200).json(updatedItem);
   } catch (error) {
     res.status(500).json({ message: "Error updating item", error });
@@ -60,6 +68,9 @@ export const deletePortfolioItem = async (req: Request, res: Response) => {
     if (!deletedItem) {
       return res.status(404).json({ message: "Portfolio item not found" });
     }
+
+    // Create notification for deleted portfolio item
+    await createPortfolioNotification("deleted", deletedItem);
 
     res.status(200).json({ message: "Item deleted successfully" });
   } catch (error) {

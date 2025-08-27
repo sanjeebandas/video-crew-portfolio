@@ -210,10 +210,9 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
       const media = await uploadMedia();
       const payload = { ...formData, ...media };
 
-      let response;
       if (editMode) {
         // Update existing portfolio item
-        response = await api.put(`/portfolio/${editData._id}`, payload, {
+        await api.put(`/portfolio/${editData._id}`, payload, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -222,7 +221,7 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
         onUpdated?.();
       } else {
         // Create new portfolio item
-        response = await api.post("/portfolio", payload, {
+        await api.post("/portfolio", payload, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -231,10 +230,7 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
         onCreated?.();
       }
 
-      // Trigger notification for new portfolio item (only for new items)
-      if (!editMode && typeof window !== 'undefined' && (window as any).addPortfolioNotification) {
-        (window as any).addPortfolioNotification(response.data);
-      }
+      // Backend automatically creates notifications for portfolio operations
 
       setFormData(initialState);
       setThumbnailFile(null);

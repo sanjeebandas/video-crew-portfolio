@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import ContactInquiry from "../models/ContactInquiry";
 import { sendContactNotification, sendCustomerConfirmation } from "../services/emailService";
+import { createContactNotification } from "./notification.controller";
 
 //Submit a contact inquiry (Public)
 //POST /api/contact
@@ -47,6 +48,9 @@ export const submitContactForm = async (req: Request, res: Response) => {
       videoCount,
       runningTime,
     });
+
+    // Create notification for new contact inquiry
+    await createContactNotification("received", inquiry);
 
     // Send email notifications
     try {
@@ -136,6 +140,11 @@ export const updateInquiry = async (req: Request, res: Response) => {
 
     if (!updated) {
       return res.status(404).json({ message: "Inquiry not found" });
+    }
+
+    // Create notification for status update if status was changed
+    if (status) {
+      await createContactNotification("status_updated", updated);
     }
 
     res.status(200).json({

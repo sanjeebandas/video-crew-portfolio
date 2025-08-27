@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import PageVisit from "../models/PageVisit";
+import { checkPageVisitMilestones } from "./notification.controller";
 
 // Increment page visit count
 export const incrementPageVisit = async (req: Request, res: Response) => {
@@ -20,6 +21,9 @@ export const incrementPageVisit = async (req: Request, res: Response) => {
     }
     
     await pageVisit.save();
+    
+    // Check for page visit milestones and create notifications
+    await checkPageVisitMilestones();
     
     res.status(200).json({
       success: true,
@@ -47,6 +51,9 @@ export const getPageVisits = async (req: Request, res: Response) => {
         lastUpdated: null
       });
     }
+    
+    // Check for milestones when getting page visits (for initialization)
+    await checkPageVisitMilestones();
     
     res.status(200).json({
       success: true,
