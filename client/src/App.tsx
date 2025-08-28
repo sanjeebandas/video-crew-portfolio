@@ -3,6 +3,9 @@ import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { initGSAP } from "./utils/animations";
 import { incrementPageVisit } from "./services/api";
+import { pwaManager } from "./utils/pwa";
+import InstallPrompt from "./components/common/InstallPrompt";
+import OfflineIndicator from "./components/common/OfflineIndicator";
 
 // Public Pages
 import Home from "./pages/Home";
@@ -65,6 +68,10 @@ function LayoutWrapper() {
       </Routes>
 
       {!isAdminRoute && <Footer />}
+
+      {/* PWA Components */}
+      <InstallPrompt />
+      <OfflineIndicator />
 
       {/* Global Hot Toast Container */}
       <Toaster
