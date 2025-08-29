@@ -23,6 +23,7 @@ const allowedOrigins = [
   "https://videocrew-portfolio.vercel.app", // vercel deployed frontend
   "https://video-crew-portfolio.vercel.app", // new vercel deployment
   "https://*.vercel.app", // allow any vercel subdomain
+  "https://video-crew-portfolio-dll8ufo40-sanjeeban-das-projects.vercel.app",
 ];
 
 //  Dynamic CORS handling
