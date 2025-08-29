@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import { useEffect } from "react";
 
 interface SEOProps {
   title: string;
@@ -20,34 +20,63 @@ const SEO = ({
   const fullTitle = `${title} | 비디오크루`;
   const fullUrl = `${url}${window.location.pathname}`;
 
-  return (
-    <Helmet>
-      {/* Primary Meta Tags */}
-      <title>{fullTitle}</title>
-      <meta name="title" content={fullTitle} />
-      <meta name="description" content={description} />
-      <meta name="keywords" content={keywords} />
-      
-      {/* Open Graph / Facebook */}
-      <meta property="og:type" content={type} />
-      <meta property="og:url" content={fullUrl} />
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:site_name" content="비디오크루" />
-      <meta property="og:locale" content="ko_KR" />
-      
-      {/* Twitter */}
-      <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content={fullUrl} />
-      <meta property="twitter:title" content={fullTitle} />
-      <meta property="twitter:description" content={description} />
-      <meta property="twitter:image" content={image} />
-      
-      {/* Canonical URL */}
-      <link rel="canonical" href={fullUrl} />
-    </Helmet>
-  );
+  useEffect(() => {
+    // Update document title
+    document.title = fullTitle;
+    
+    // Update meta tags
+    const updateMetaTag = (name: string, content: string) => {
+      let meta = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement;
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.name = name;
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
+
+    const updatePropertyTag = (property: string, content: string) => {
+      let meta = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement;
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('property', property);
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
+
+    // Update meta tags
+    updateMetaTag('title', fullTitle);
+    updateMetaTag('description', description);
+    updateMetaTag('keywords', keywords);
+    
+    // Update Open Graph tags
+    updatePropertyTag('og:type', type);
+    updatePropertyTag('og:url', fullUrl);
+    updatePropertyTag('og:title', fullTitle);
+    updatePropertyTag('og:description', description);
+    updatePropertyTag('og:image', image);
+    updatePropertyTag('og:site_name', '비디오크루');
+    updatePropertyTag('og:locale', 'ko_KR');
+    
+    // Update Twitter tags
+    updatePropertyTag('twitter:card', 'summary_large_image');
+    updatePropertyTag('twitter:url', fullUrl);
+    updatePropertyTag('twitter:title', fullTitle);
+    updatePropertyTag('twitter:description', description);
+    updatePropertyTag('twitter:image', image);
+    
+    // Update canonical URL
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
+    }
+    canonical.href = fullUrl;
+  }, [title, description, keywords, image, url, type, fullTitle, fullUrl]);
+
+  return null; // This component doesn't render anything
 };
 
 export default SEO;
