@@ -20,10 +20,8 @@ const PORT = process.env.PORT || 5000;
 //  Allowed CORS origins (add more if needed)
 const allowedOrigins = [
   "http://localhost:5173", // local dev
-  "https://videocrew-portfolio.vercel.app", // vercel deployed frontend
-  "https://video-crew-portfolio.vercel.app", // new vercel deployment
   "https://*.vercel.app", // allow any vercel subdomain
-  "https://video-crew-portfolio-dll8ufo40-sanjeeban-das-projects.vercel.app",
+  "https://*.up.railway.app", // allow railway domains
 ];
 
 //  Dynamic CORS handling
