@@ -21,15 +21,15 @@ export const refreshGSAPAnimations = (selector?: string) => {
     if (selector) {
       window.gsap.set(selector, { clearProps: "all" });
     }
-    
+
     // Force ScrollTrigger to refresh
     if (ScrollTrigger) {
       ScrollTrigger.refresh();
     }
-    
+
     // Trigger a scroll event to re-evaluate animations
     setTimeout(() => {
-      const event = new Event('scroll');
+      const event = new Event("scroll");
       window.dispatchEvent(event);
     }, 50);
   }
@@ -86,7 +86,6 @@ export const ANIMATIONS = {
 const getResponsiveAnimationValues = () => {
   const isMobile = window.innerWidth < 640;
   const isTablet = window.innerWidth >= 640 && window.innerWidth < 1024;
-  const isDesktop = window.innerWidth >= 1024;
 
   return {
     slideDistance: isMobile ? 50 : isTablet ? 75 : 100,
@@ -103,12 +102,12 @@ export const useScrollAnimations = () => {
     options: any = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
-    
+
     return gsap.fromTo(
       elements,
-      { 
-        x: -responsiveValues.slideDistance, 
-        opacity: 0 
+      {
+        x: -responsiveValues.slideDistance,
+        opacity: 0,
       },
       {
         x: 0,
@@ -132,12 +131,12 @@ export const useScrollAnimations = () => {
     options: any = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
-    
+
     return gsap.fromTo(
       elements,
-      { 
-        x: responsiveValues.slideDistance, 
-        opacity: 0 
+      {
+        x: responsiveValues.slideDistance,
+        opacity: 0,
       },
       {
         x: 0,
@@ -161,12 +160,12 @@ export const useScrollAnimations = () => {
     options: any = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
-    
+
     return gsap.fromTo(
       elements,
-      { 
-        y: responsiveValues.fadeDistance, 
-        opacity: 0 
+      {
+        y: responsiveValues.fadeDistance,
+        opacity: 0,
       },
       {
         y: 0,
@@ -187,11 +186,11 @@ export const useScrollAnimations = () => {
 
   const stackIn = (
     elements: string | Element | Element[],
-    stagger: number = 0.15,
+
     options: any = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
-    
+
     return gsap.fromTo(
       elements,
       { ...ANIMATIONS.stackIn },
@@ -216,11 +215,11 @@ export const useScrollAnimations = () => {
 
   const staggerFadeIn = (
     elements: string | Element | Element[],
-    stagger: number = 0.1,
+
     options: any = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
-    
+
     return gsap.fromTo(
       elements,
       { opacity: 0, y: 30 },
@@ -250,7 +249,7 @@ export const useScrollAnimations = () => {
     // Adjust parallax speed for mobile devices
     const isMobile = window.innerWidth < 768;
     const adjustedSpeed = isMobile ? speed * 0.5 : speed;
-    
+
     return gsap.to(element, {
       yPercent: -50 * adjustedSpeed,
       ease: "none",
@@ -276,7 +275,7 @@ export const useScrollAnimations = () => {
 
 // Cleanup function for component unmount
 export const cleanupAnimations = () => {
-  ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+  ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
 };
 
 // Initialize GSAP with performance optimizations
@@ -295,7 +294,7 @@ export const initGSAP = () => {
 
   // Add responsive handling for window resize
   let resizeTimer: number;
-  window.addEventListener('resize', () => {
+  window.addEventListener("resize", () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       ScrollTrigger.refresh();

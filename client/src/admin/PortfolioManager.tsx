@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import CreatePortfolioForm from "../components/admin/CreatePortfolioForm";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
-import { getPortfolioItems, deletePortfolioItem, getPortfolioItemById } from "../services/api";
+import { getPortfolioItems, deletePortfolioItem} from "../services/api";
 import AdminNavbar from "../components/admin/AdminNavbar";
 
 type PortfolioItem = {

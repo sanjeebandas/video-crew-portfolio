@@ -62,7 +62,7 @@ const NotificationsRow = () => {
   const handleMarkAsRead = async (id: string) => {
     try {
       setMarkingAsRead(id);
-      const response = await markNotificationAsRead(id);
+      await markNotificationAsRead(id);
       
       // Update local state
       setNotifications(prev => 
@@ -86,7 +86,7 @@ const NotificationsRow = () => {
   const handleMarkAllAsRead = async () => {
     try {
       setMarkingAllAsRead(true);
-      const response = await markAllNotificationsAsRead();
+      await markAllNotificationsAsRead();
       
       // Update local state
       setNotifications(prev => 

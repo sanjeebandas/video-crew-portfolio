@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useScrollAnimations } from "../../utils/animations";
 
 const AboutHero = () => {
-  const { parallaxEffect, fadeInUp, staggerFadeIn } = useScrollAnimations();
+  const { parallaxEffect, fadeInUp } = useScrollAnimations();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Array of banner images for the carousel

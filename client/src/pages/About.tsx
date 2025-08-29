@@ -1,5 +1,9 @@
 import { useEffect, useRef } from "react";
-import { useScrollAnimations, cleanupAnimations, refreshGSAPAnimations } from "../utils/animations";
+import {
+  useScrollAnimations,
+  cleanupAnimations,
+  refreshGSAPAnimations,
+} from "../utils/animations";
 import AboutGrid from "../components/about/AboutGrid";
 import AboutHero from "../components/about/AboutHero";
 import AboutWorkCultureGrid from "../components/about/AboutWorkCultureGrid";
@@ -13,7 +17,6 @@ const About = () => {
     slideInFromRight,
     fadeInUp,
     staggerFadeIn,
-    stackIn,
     parallaxEffect,
   } = useScrollAnimations();
 
@@ -35,10 +38,10 @@ const About = () => {
       cleanupAnimations();
     };
   }, []);
-  
+
   return (
     <>
-      <SEO 
+      <SEO
         title="회사 소개"
         description="비디오크루는 스토리로 말하는 영상 콘텐츠를 제작하는 전문 회사입니다. 브랜드 스토리를 강력하고 인상적인 모습의 이야기로 만들어내는 우리만의 비전과 Core Value를 소개합니다."
         keywords="비디오크루, 회사소개, 영상제작회사, 브랜드스토리, Core Value, Work Culture, 영상콘텐츠제작"
@@ -48,7 +51,9 @@ const About = () => {
           <div className="max-w-[1248px] mx-auto flex flex-col md:flex-row justify-between items-start md:space-x-8 lg:space-x-12 space-y-10 md:space-y-0">
             {/* Left Title Block */}
             <div className="w-full md:flex-1 text-center md:text-left about-title-left">
-              <p className="text-sm text-gray-400 mb-2">Who we are, Video Crew</p>
+              <p className="text-sm text-gray-400 mb-2">
+                Who we are, Video Crew
+              </p>
               <h2 className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold leading-snug">
                 스토리로 말하는 영상 콘텐츠,
                 <br />
@@ -62,8 +67,8 @@ const About = () => {
               <div className="about-text-line">
                 우리는 영상이 단순히 기술적인 가치가 있다고 생각하지 않습니다.
                 우리에게는 각각 걸어온 하나의 경험을 나타냅니다. 비디오크루는,
-                브랜드 스토리를 강력하고 인상적인 모습의 이야기로 일련의 작업물을
-                거쳐 제작한 내용들이 우리가 가지고 있는 비전입니다.
+                브랜드 스토리를 강력하고 인상적인 모습의 이야기로 일련의
+                작업물을 거쳐 제작한 내용들이 우리가 가지고 있는 비전입니다.
               </div>
               <div className="about-text-line">
                 "모든 프로젝트에 가치를 담아" 고객과 함께 성장하는 파트너가

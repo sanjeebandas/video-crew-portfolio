@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { initGSAP } from "./utils/animations";
 import { incrementPageVisit } from "./services/api";
-import { pwaManager } from "./utils/pwa";
 import InstallPrompt from "./components/common/InstallPrompt";
 import OfflineIndicator from "./components/common/OfflineIndicator";
 

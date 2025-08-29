@@ -18,18 +18,17 @@ interface LazyImageProps {
   onImageLoad?: () => void; // New callback for when image is fully loaded
 }
 
-const LazyImage = ({ 
-  src, 
-  alt, 
-  className = "", 
+const LazyImage = ({
+  src,
+  alt,
+  className = "",
   placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E",
   onLoad,
   onError,
-  onImageLoad 
+  onImageLoad,
 }: LazyImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
-  const [hasError, setHasError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -52,7 +51,7 @@ const LazyImage = ({
       },
       {
         rootMargin: "50px",
-        threshold: 0.01
+        threshold: 0.01,
       }
     );
 
@@ -68,18 +67,17 @@ const LazyImage = ({
   const handleLoad = () => {
     setIsLoaded(true);
     onLoad?.();
-    
+
     // Trigger GSAP animations after image is loaded
     setTimeout(() => {
       onImageLoad?.();
-      
+
       // Refresh GSAP animations after lazy loading
       refreshGSAPAnimations();
     }, 100);
   };
 
   const handleError = () => {
-    setHasError(true);
     onError?.();
   };
 
@@ -88,7 +86,9 @@ const LazyImage = ({
       ref={imgRef}
       src={isInView ? src : placeholder}
       alt={alt}
-      className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+      className={`${className} ${
+        isLoaded ? "opacity-100" : "opacity-0"
+      } transition-opacity duration-300`}
       onLoad={handleLoad}
       onError={handleError}
       loading="lazy"
