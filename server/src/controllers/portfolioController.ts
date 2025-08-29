@@ -85,6 +85,7 @@ export const getPortfolioItemsByCategory = async (
 ) => {
   try {
     const koreanCategory = req.query.name as string;
+    console.log("Received category request:", koreanCategory);
 
     if (!koreanCategory) {
       return res.status(400).json({ message: "Category name is required" });
@@ -98,20 +99,29 @@ export const getPortfolioItemsByCategory = async (
     };
 
     const englishCategory = categoryMap[koreanCategory];
+    console.log("Mapped to English category:", englishCategory);
 
     if (!englishCategory) {
-      return res.status(404).json({ message: "Invalid category name" });
+      return res.status(404).json({ 
+        message: "Invalid category name", 
+        receivedCategory: koreanCategory,
+        availableCategories: Object.keys(categoryMap)
+      });
     }
 
     const items = await Portfolio.find({ category: englishCategory }).sort({
       displayOrder: 1,
     });
 
+    console.log(`Found ${items.length} items for category: ${englishCategory}`);
     res.status(200).json({ data: items });
   } catch (error) {
     console.error("Error fetching portfolio items by category:", error);
     res
       .status(500)
-      .json({ message: "Error fetching portfolio items by category", error });
+      .json({ 
+        message: "Error fetching portfolio items by category", 
+        error: process.env.NODE_ENV === 'development' ? error : 'Internal server error'
+      });
   }
 };

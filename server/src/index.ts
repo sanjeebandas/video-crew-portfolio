@@ -23,15 +23,22 @@ const allowedOrigins = [
   "https://*.vercel.app", // allow any vercel subdomain
   "https://*.up.railway.app", // allow railway domains
   "https://*.onrender.com", // allow render domains
-  "https://video-crew-portfolio-6xbi8br0n-sanjeeban-das-projects.vercel.app", // current vercel deployment
+  "https://video-crew-portfolio.onrender.com", // current render frontend
 ];
 
 //  Dynamic CORS handling
 const corsOptions = {
   origin: function (origin: string | undefined, callback: Function) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.some(allowed => {
+      if (allowed.includes('*')) {
+        const pattern = allowed.replace('*', '.*');
+        return new RegExp(pattern).test(origin);
+      }
+      return allowed === origin;
+    })) {
       callback(null, true);
     } else {
+      console.log(`CORS blocked origin: ${origin}`);
       callback(new Error("Not allowed by CORS"));
     }
   },
@@ -60,6 +67,15 @@ app.use("/api/notifications", notificationRoutes);
 //  Serve static uploads
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
+//  Error handling middleware
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('Error:', err);
+  res.status(500).json({ 
+    message: "Internal server error", 
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+  });
+});
+
 //  404 Fallback
 app.use((_req, res) => {
   res.status(404).json({ message: "API route not found" });
@@ -68,4 +84,5 @@ app.use((_req, res) => {
 //  Start server
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
+  console.log(`🌐 CORS enabled for origins:`, allowedOrigins);
 });
