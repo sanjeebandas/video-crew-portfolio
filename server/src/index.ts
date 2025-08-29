@@ -22,6 +22,7 @@ const allowedOrigins = [
   "http://localhost:5173", // local dev
   "https://*.vercel.app", // allow any vercel subdomain
   "https://*.up.railway.app", // allow railway domains
+  "https://*.onrender.com", // allow render domains
 ];
 
 //  Dynamic CORS handling
