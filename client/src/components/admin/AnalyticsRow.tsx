@@ -179,7 +179,7 @@ const AnalyticsRow = () => {
         }
       };
       silentRefresh();
-    }, 5000); // 5 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);

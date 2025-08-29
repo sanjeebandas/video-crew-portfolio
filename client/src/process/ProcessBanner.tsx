@@ -9,7 +9,7 @@ const ProcessBanner = () => {
     // Process banner animations
     slideInFromLeft(".process-banner-title");
     staggerFadeIn(".process-banner-text", 0.1);
-    parallaxEffect(".process-banner-image", 0.3);
+    parallaxEffect(".process-banner-image", 0.1);
   }, []);
 
   return (

@@ -40,3 +40,16 @@ export const loginAdmin = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+export const validateToken = async (req: Request, res: Response) => {
+  try {
+    // If middleware passed, token is valid
+    res.status(200).json({ 
+      success: true, 
+      message: "Token is valid",
+      user: req.user 
+    });
+  } catch (error) {
+    res.status(401).json({ success: false, message: "Invalid token" });
+  }
+};

@@ -285,7 +285,12 @@ const ContactManager = () => {
                               </div>
                               <div>
                                 <strong className="text-slate-300">Budget:</strong>
-                                <p className="text-slate-400 mt-1">{contact.budget || "Not specified"}</p>
+                                <p className="text-slate-400 mt-1">
+                                  {contact.budget 
+                                    ? `${contact.budget} million won` 
+                                    : "Not specified"
+                                  }
+                                </p>
                               </div>
                               <div>
                                 <strong className="text-slate-300">Preferred Date:</strong>

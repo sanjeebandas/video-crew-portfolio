@@ -1,5 +1,10 @@
 import { useEffect, useRef } from "react";
-import { useScrollAnimations, cleanupAnimations, refreshGSAPAnimations } from "../utils/animations";
+import { useNavigate } from "react-router-dom";
+import {
+  useScrollAnimations,
+  cleanupAnimations,
+  refreshGSAPAnimations,
+} from "../utils/animations";
 import HeroSection from "../components/home/HeroSection";
 import ServicesGrid from "../components/home/ServicesGrid";
 import PortfolioScroller from "../components/home/PortfolioScroller";
@@ -9,6 +14,7 @@ import LazyImage from "../components/common/LazyImage";
 
 const Home = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const {
     slideInFromLeft,
     slideInFromRight,
@@ -40,9 +46,13 @@ const Home = () => {
     };
   }, []);
 
+  const handlePortfolioClick = () => {
+    navigate("/portfolio");
+  };
+
   return (
     <>
-      <SEO 
+      <SEO
         title="홈"
         description="비디오크루는 전문적인 영상 제작 서비스를 제공합니다. 기업 홍보영상, 광고영상, 제품 소개영상 등 다양한 영상 콘텐츠를 제작합니다. 창의적인 스토리텔링과 고품질 영상으로 고객의 비즈니스를 성장시킵니다."
         keywords="영상제작, 비디오제작, 기업홍보영상, 광고영상, 제품소개영상, 스토리텔링, 영상편집, 촬영, 비디오크루"
@@ -66,14 +76,16 @@ const Home = () => {
             {/* Right Paragraph Block — responsive text sizing */}
             <div className="md:pl-28 w-full md:flex-1 text-sm xs:text-base sm:text-lg md:text-base lg:text-lg text-gray-300 leading-relaxed text-center md:text-right home-title-right">
               <div className="home-text-line">
-                비디오크루는 단순한 영상 제작을 넘어, 강력한 스토리텔링과 독창적인
+                비디오크루는 단순한 영상 제작을 넘어, 강력한 스토리텔링과
+                독창적인
               </div>
               <div className="home-text-line">
-                시각적 표현으로 고객의 메시지설명력을 높여주는 비디오 콘텐츠 전문
+                시각적 표현으로 고객의 메시지설명력을 높여주는 비디오 콘텐츠
+                전문
               </div>
               <div className="home-text-line">
-                그룹입니다. 기획부터 촬영, 편집, 그리고 최종 결과물에 이르기까지,
-                각
+                그룹입니다. 기획부터 촬영, 편집, 그리고 최종 결과물에
+                이르기까지, 각
               </div>
               <div className="home-text-line">
                 분야의 전문가들이 고객의 비전을 현실도 높은 영상으로 구현합니다.
@@ -104,12 +116,15 @@ const Home = () => {
         {/* Browse Portfolio Button */}
         <div className="w-full flex justify-center my-6 xs:my-8 sm:my-10 home-section-card relative z-20">
           <div className="max-w-[1248px] w-full flex justify-center">
-            <button className="bg-blue-600 hover:bg-blue-800 cursor-pointer text-white font-semibold py-2.5 xs:py-3 px-6 xs:px-8 rounded-full transition duration-300 text-sm xs:text-base relative z-10">
+            <button
+              onClick={handlePortfolioClick}
+              className="bg-blue-600 hover:bg-blue-800 cursor-pointer text-white font-semibold py-2.5 xs:py-3 px-6 xs:px-8 rounded-full transition duration-300 text-sm xs:text-base relative z-10"
+            >
               포트폴리오 둘러보기
             </button>
           </div>
         </div>
-        
+
         {/* Decorative Separator Image after PortfolioScroller */}
         <LazyImage
           src="/imgs/Image-1.webp"

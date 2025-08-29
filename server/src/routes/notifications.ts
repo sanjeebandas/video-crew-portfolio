@@ -4,12 +4,12 @@ import {
   markAsRead,
   markAllAsRead,
 } from "../controllers/notification.controller";
-import { authenticateAdmin } from "../middlewares/auth.middleware";
+import { authenticateToken } from "../middlewares/auth.middleware";
 
 const router = express.Router();
 
 // All notification routes require authentication
-router.use(authenticateAdmin);
+router.use(authenticateToken);
 
 // Get all notifications with pagination
 router.get("/", getNotifications);

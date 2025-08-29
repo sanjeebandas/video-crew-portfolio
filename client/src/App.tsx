@@ -24,6 +24,7 @@ import ContactManager from "./admin/ContactManager";
 import PortfolioManager from "./admin/PortfolioManager";
 import PrivateRoutes from "./routes/PrivateRoute";
 import EditPortfolioPage from "./pages/EditPortfolioPage";
+import AuthGuard from "./components/admin/AuthGuard";
 
 function LayoutWrapper() {
   const location = useLocation();
@@ -57,12 +58,12 @@ function LayoutWrapper() {
         {/* --------- ADMIN ROUTES --------- */}
         <Route path="/admin/login" element={<Login />} />
         <Route element={<PrivateRoutes />}>
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/contacts" element={<ContactManager />} />
-          <Route path="/admin/portfolio" element={<PortfolioManager />} />
+          <Route path="/admin/dashboard" element={<AuthGuard><Dashboard /></AuthGuard>} />
+          <Route path="/admin/contacts" element={<AuthGuard><ContactManager /></AuthGuard>} />
+          <Route path="/admin/portfolio" element={<AuthGuard><PortfolioManager /></AuthGuard>} />
           <Route
             path="/admin/portfolio/edit/:id"
-            element={<EditPortfolioPage />}
+            element={<AuthGuard><EditPortfolioPage /></AuthGuard>}
           />
         </Route>
       </Routes>

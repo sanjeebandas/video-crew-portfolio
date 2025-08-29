@@ -128,16 +128,16 @@ const ContactForm = () => {
                 backgroundSize: "1.5em 1.5em",
               }}
             >
-              <option value="">러닝 타임 (분량)</option>
-              <option value="30sec">30초</option>
-              <option value="1min">1분</option>
-              <option value="2-3min">2-3분</option>
-              <option value="5min">5분</option>
-              <option value="10min">10분</option>
-              <option value="15min">15분</option>
-              <option value="20min">20분</option>
-              <option value="30min">30분</option>
-              <option value="over30min">30분 이상</option>
+              <option value="" className="bg-gray-900 text-white hover:bg-gray-700">러닝 타임 (분량)</option>
+              <option value="30sec" className="bg-gray-900 text-white hover:bg-gray-700">30초</option>
+              <option value="1min" className="bg-gray-900 text-white hover:bg-gray-700">1분</option>
+              <option value="2-3min" className="bg-gray-900 text-white hover:bg-gray-700">2-3분</option>
+              <option value="5min" className="bg-gray-900 text-white hover:bg-gray-700">5분</option>
+              <option value="10min" className="bg-gray-900 text-white hover:bg-gray-700">10분</option>
+              <option value="15min" className="bg-gray-900 text-white hover:bg-gray-700">15분</option>
+              <option value="20min" className="bg-gray-900 text-white hover:bg-gray-700">20분</option>
+              <option value="30min" className="bg-gray-900 text-white hover:bg-gray-700">30분</option>
+              <option value="over30min" className="bg-gray-900 text-white hover:bg-gray-700">30분 이상</option>
             </select>
           </div>
         </div>
@@ -170,14 +170,14 @@ const ContactForm = () => {
                 backgroundSize: "1.5em 1.5em",
               }}
             >
-              <option value="">희망 예산 (리프하게 선택해주세요.)</option>
-              <option value="under-50">50만원 미만</option>
-              <option value="50-100">50만원 - 100만원</option>
-              <option value="100-200">100만원 - 200만원</option>
-              <option value="200-300">200만원 - 300만원</option>
-              <option value="300-500">300만원 - 500만원</option>
-              <option value="500-1000">500만원 - 1000만원</option>
-              <option value="over-1000">1000만원 이상</option>
+              <option value="" className="bg-gray-900 text-white hover:bg-gray-700">희망 예산 (리프하게 선택해주세요.)</option>
+              <option value="under-50" className="bg-gray-900 text-white hover:bg-gray-700">50만원 미만</option>
+              <option value="50-100" className="bg-gray-900 text-white hover:bg-gray-700">50만원 - 100만원</option>
+              <option value="100-200" className="bg-gray-900 text-white hover:bg-gray-700">100만원 - 200만원</option>
+              <option value="200-300" className="bg-gray-900 text-white hover:bg-gray-700">200만원 - 300만원</option>
+              <option value="300-500" className="bg-gray-900 text-white hover:bg-gray-700">300만원 - 500만원</option>
+              <option value="500-1000" className="bg-gray-900 text-white hover:bg-gray-700">500만원 - 1000만원</option>
+              <option value="over-1000" className="bg-gray-900 text-white hover:bg-gray-700">1000만원 이상</option>
             </select>
           </div>
         </div>
@@ -210,15 +210,15 @@ const ContactForm = () => {
                 backgroundSize: "1.5em 1.5em",
               }}
             >
-              <option value="">제작 목적</option>
-              <option value="corporate-promotion">기업 홍보</option>
-              <option value="product-introduction">제품 소개</option>
-              <option value="education-training">교육/연수</option>
-              <option value="event-coverage">행사 영상</option>
-              <option value="marketing">마케팅</option>
-              <option value="brand-story">브랜드 스토리</option>
-              <option value="recruitment">채용</option>
-              <option value="other">기타</option>
+              <option value="" className="bg-gray-900 text-white hover:bg-gray-700">제작 목적</option>
+              <option value="corporate-promotion" className="bg-gray-900 text-white hover:bg-gray-700">기업 홍보</option>
+              <option value="product-introduction" className="bg-gray-900 text-white hover:bg-gray-700">제품 소개</option>
+              <option value="education-training" className="bg-gray-900 text-white hover:bg-gray-700">교육/연수</option>
+              <option value="event-coverage" className="bg-gray-900 text-white hover:bg-gray-700">행사 영상</option>
+              <option value="marketing" className="bg-gray-900 text-white hover:bg-gray-700">마케팅</option>
+              <option value="brand-story" className="bg-gray-900 text-white hover:bg-gray-700">브랜드 스토리</option>
+              <option value="recruitment" className="bg-gray-900 text-white hover:bg-gray-700">채용</option>
+              <option value="other" className="bg-gray-900 text-white hover:bg-gray-700">기타</option>
             </select>
           </div>
         </div>
@@ -251,16 +251,16 @@ const ContactForm = () => {
                 backgroundSize: "1.5em 1.5em",
               }}
             >
-              <option value="">영상을 어디에 업로드 할 예정인가요?</option>
-              <option value="youtube">유튜브</option>
-              <option value="website">홈페이지</option>
-              <option value="instagram">인스타그램</option>
-              <option value="facebook">페이스북</option>
-              <option value="tiktok">틱톡</option>
-              <option value="linkedin">링크드인</option>
-              <option value="tv-broadcast">TV 방송</option>
-              <option value="offline-event">오프라인 행사</option>
-              <option value="multiple">여러 플랫폼</option>
+              <option value="" className="bg-gray-900 text-white hover:bg-gray-700">영상을 어디에 업로드 할 예정인가요?</option>
+              <option value="youtube" className="bg-gray-900 text-white hover:bg-gray-700">유튜브</option>
+              <option value="website" className="bg-gray-900 text-white hover:bg-gray-700">홈페이지</option>
+              <option value="instagram" className="bg-gray-900 text-white hover:bg-gray-700">인스타그램</option>
+              <option value="facebook" className="bg-gray-900 text-white hover:bg-gray-700">페이스북</option>
+              <option value="tiktok" className="bg-gray-900 text-white hover:bg-gray-700">틱톡</option>
+              <option value="linkedin" className="bg-gray-900 text-white hover:bg-gray-700">링크드인</option>
+              <option value="tv-broadcast" className="bg-gray-900 text-white hover:bg-gray-700">TV 방송</option>
+              <option value="offline-event" className="bg-gray-900 text-white hover:bg-gray-700">오프라인 행사</option>
+              <option value="multiple" className="bg-gray-900 text-white hover:bg-gray-700">여러 플랫폼</option>
             </select>
           </div>
         </div>

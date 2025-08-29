@@ -15,7 +15,7 @@ interface DecodedToken extends JwtPayload {
   email: string;
 }
 
-export const authenticateAdmin = (
+export const authenticateToken = (
   req: Request,
   res: Response,
   next: NextFunction

@@ -7,12 +7,12 @@ import {
   updatePortfolioItem,
   deletePortfolioItem,
 } from "../controllers/portfolioController";
-import { authenticateAdmin } from "../middlewares/auth.middleware";
+import { authenticateToken } from "../middlewares/auth.middleware";
 
 const router = express.Router();
 
 // @route   POST /api/portfolio
-router.post("/", authenticateAdmin, createPortfolioItem);
+router.post("/", authenticateToken, createPortfolioItem);
 
 // @route   GET /api/portfolio/category?name=광고·홍보 영상
 router.get("/category", getPortfolioItemsByCategory);
@@ -24,9 +24,9 @@ router.get("/", getAllPortfolioItems);
 router.get("/:id", getPortfolioItemById);
 
 // @route   PUT /api/portfolio/:id
-router.put("/:id", authenticateAdmin, updatePortfolioItem);
+router.put("/:id", authenticateToken, updatePortfolioItem);
 
 // @route   DELETE /api/portfolio/:id
-router.delete("/:id", authenticateAdmin, deletePortfolioItem);
+router.delete("/:id", authenticateToken, deletePortfolioItem);
 
 export default router;

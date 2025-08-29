@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { Resend } from 'resend';
+import { Resend } from "resend";
 
 // Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY || "");
@@ -24,11 +24,10 @@ interface ContactFormData {
 
 export const sendContactNotification = async (contactData: ContactFormData) => {
   try {
-    // Debug: Check if API key is loaded
-    console.log("🔍 Debug: Resend API Key loaded:", process.env.RESEND_API_KEY ? "Yes" : "No");
-    
     // Clean subject line - remove platform info
-    const cleanSubject = contactData.subject.replace(/• Platform:.*$/, '').trim();
+    const cleanSubject = contactData.subject
+      .replace(/• Platform:.*$/, "")
+      .trim();
 
     const htmlContent = `
       <!DOCTYPE html>
@@ -121,36 +120,31 @@ export const sendContactNotification = async (contactData: ContactFormData) => {
       </html>
     `;
 
-    console.log("🔍 Debug: Attempting to send admin notification email...");
-    
     const result = await resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: 'sanjeeban@learning-crew.com',
+      from: "onboarding@resend.dev",
+      to: "sanjeeban@learning-crew.com",
       subject: `New Contact Form: ${contactData.name} - ${cleanSubject}`,
       html: htmlContent,
-      replyTo: contactData.email
+      replyTo: contactData.email,
     });
 
-    console.log("✅ Contact notification email sent successfully");
-    console.log("🔍 Debug: Email result:", result);
     return result;
   } catch (error) {
     console.error("❌ Error sending contact notification email:", error);
-    console.error("🔍 Debug: Full error details:", JSON.stringify(error, null, 2));
     throw error;
   }
 };
 
-export const sendCustomerConfirmation = async (contactData: ContactFormData) => {
+export const sendCustomerConfirmation = async (
+  contactData: ContactFormData
+) => {
   try {
-    console.log("🔍 Debug: Attempting to send customer confirmation email...");
-    
     // Check if we're in development/testing mode
-    const isTestMode = process.env.NODE_ENV === 'development' || contactData.email.includes('@resend.dev');
-    
+    const isTestMode =
+      process.env.NODE_ENV === "development" ||
+      contactData.email.includes("@resend.dev");
+
     if (isTestMode) {
-      console.log("🔍 Debug: Test mode detected - sending customer confirmation to admin email instead");
-      
       // In test mode, send the customer confirmation to admin email for testing
       const htmlContent = `
         <!DOCTYPE html>
@@ -211,20 +205,16 @@ export const sendCustomerConfirmation = async (contactData: ContactFormData) => 
       `;
 
       const result = await resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: 'sanjeeban@learning-crew.com',
+        from: "onboarding@resend.dev",
+        to: "sanjeeban@learning-crew.com",
         subject: `[TEST] Customer Confirmation for ${contactData.name} - ${contactData.email}`,
         html: htmlContent,
-        replyTo: 'sanjeeban@learning-crew.com'
+        replyTo: "sanjeeban@learning-crew.com",
       });
 
-      console.log("✅ Test customer confirmation email sent to admin successfully");
-      console.log("🔍 Debug: Test customer email result:", result);
       return result;
     } else {
       // Production mode - this will work once you verify a domain
-      console.log("🔍 Debug: Production mode - attempting to send to customer email");
-      
       const htmlContent = `
         <!DOCTYPE html>
         <html>
@@ -279,20 +269,18 @@ export const sendCustomerConfirmation = async (contactData: ContactFormData) => 
       `;
 
       const result = await resend.emails.send({
-        from: 'onboarding@resend.dev',
+        from: "onboarding@resend.dev",
         to: contactData.email,
-        subject: "Thank you for contacting Video Crew - We'll be in touch soon!",
+        subject:
+          "Thank you for contacting Video Crew - We'll be in touch soon!",
         html: htmlContent,
-        replyTo: 'sanjeeban@learning-crew.com'
+        replyTo: "sanjeeban@learning-crew.com",
       });
 
-      console.log("✅ Customer confirmation email sent successfully");
-      console.log("🔍 Debug: Customer email result:", result);
       return result;
     }
   } catch (error) {
     console.error("❌ Error sending customer confirmation email:", error);
-    console.error("🔍 Debug: Full customer email error details:", JSON.stringify(error, null, 2));
     throw error;
   }
 };
