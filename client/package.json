@@ -8,8 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-icons": "node scripts/generate-icons.js",
-    "install": "npm install --legacy-peer-deps"
+    "generate-icons": "node scripts/generate-icons.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
