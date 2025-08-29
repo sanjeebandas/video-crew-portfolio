@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "generate-icons": "node scripts/generate-icons.js"
-  },
+     "scripts": {
+     "dev": "vite",
+     "build": "tsc -b && vite build",
+     "lint": "eslint .",
+     "preview": "vite preview",
+     "generate-icons": "node scripts/generate-icons.js",
+     "install-deps": "npm install --legacy-peer-deps"
+   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
     "axios": "^1.11.0",
@@ -35,7 +36,7 @@
     "sharp": "^0.33.5",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
-    "vite": "^7.0.4",
-    "vite-plugin-pwa": "^0.19.8"
+         "vite": "^7.0.4",
+     "vite-plugin-pwa": "^1.0.3"
   }
 }
