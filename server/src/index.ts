@@ -23,6 +23,7 @@ const allowedOrigins = [
   "https://*.vercel.app", // allow any vercel subdomain
   "https://*.up.railway.app", // allow railway domains
   "https://*.onrender.com", // allow render domains
+  "https://video-crew-portfolio-6xbi8br0n-sanjeeban-das-projects.vercel.app", // current vercel deployment
 ];
 
 //  Dynamic CORS handling
