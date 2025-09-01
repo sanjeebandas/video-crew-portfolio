@@ -3,7 +3,7 @@ import { getToken } from "../utils/helpers";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api",
-  withCredentials: true,
+  withCredentials: false, // Changed to false to avoid CORS preflight issues
 });
 
 // Contact API functions

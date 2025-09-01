@@ -28,7 +28,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         headers: { Authorization: `Bearer ${token}` }
       });
       return true;
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Token validation failed:", error);
+      // Log more details for debugging
+      if (error.response) {
+        console.error("Response status:", error.response.status);
+        console.error("Response data:", error.response.data);
+      } else if (error.request) {
+        console.error("Request failed:", error.request);
+      } else {
+        console.error("Error message:", error.message);
+      }
       // Token is invalid or expired
       logout();
       return false;

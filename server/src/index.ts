@@ -20,29 +20,36 @@ const PORT = process.env.PORT || 5000;
 //  Allowed CORS origins (add more if needed)
 const allowedOrigins = [
   "http://localhost:5173", // local dev
-  "https://*.vercel.app", // allow any vercel subdomain
-  "https://*.up.railway.app", // allow railway domains
   "https://*.onrender.com", // allow render domains
   "https://video-crew-portfolio.onrender.com", // current render frontend
+  "https://videocrewbackend.up.railway.app", // your backend domain
 ];
 
 //  Dynamic CORS handling
 const corsOptions = {
   origin: function (origin: string | undefined, callback: Function) {
+    console.log(`CORS check for origin: ${origin}`);
+    
     if (!origin || allowedOrigins.some(allowed => {
       if (allowed.includes('*')) {
         const pattern = allowed.replace('*', '.*');
-        return new RegExp(pattern).test(origin);
+        const isMatch = new RegExp(pattern).test(origin);
+        console.log(`Pattern ${pattern} matches ${origin}: ${isMatch}`);
+        return isMatch;
       }
-      return allowed === origin;
+      const isMatch = allowed === origin;
+      console.log(`Exact match ${allowed} === ${origin}: ${isMatch}`);
+      return isMatch;
     })) {
+      console.log(`CORS allowed for origin: ${origin}`);
       callback(null, true);
     } else {
       console.log(`CORS blocked origin: ${origin}`);
+      console.log(`Allowed origins:`, allowedOrigins);
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true,
+  credentials: false, // Changed to false to match frontend
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
@@ -64,6 +71,15 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/pagevisit", pageVisitRoutes);
 app.use("/api/notifications", notificationRoutes);
 
+// Debug endpoint to test CORS
+app.get("/api/test-cors", (req, res) => {
+  res.json({ 
+    message: "CORS test successful", 
+    origin: req.headers.origin,
+    timestamp: new Date().toISOString()
+  });
+});
+
 //  Serve static uploads
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
@@ -76,9 +92,14 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
-//  404 Fallback
-app.use((_req, res) => {
+//  404 Fallback for API routes
+app.use("/api/*", (_req, res) => {
   res.status(404).json({ message: "API route not found" });
+});
+
+// Final catch-all for any other routes
+app.use("*", (_req, res) => {
+  res.status(404).json({ message: "Route not found" });
 });
 
 //  Start server
