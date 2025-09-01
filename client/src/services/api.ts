@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getToken } from "../utils/helpers";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api",
@@ -8,7 +9,7 @@ const api = axios.create({
 // Contact API functions
 export const getContacts = async () => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       console.warn("No authentication token found for contacts request");
       return [];
@@ -29,7 +30,7 @@ export const getContacts = async () => {
 
 export const updateContactStatus = async (id: string, status: string) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       throw new Error("No authentication token found");
     }
@@ -52,7 +53,7 @@ export const updateContactStatus = async (id: string, status: string) => {
 
 export const deleteContact = async (id: string) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       throw new Error("No authentication token found");
     }
@@ -72,7 +73,7 @@ export const deleteContact = async (id: string) => {
 // Portfolio API functions
 export const getPortfolioItems = async () => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       console.warn("No authentication token found for portfolio request");
       return [];
@@ -93,7 +94,7 @@ export const getPortfolioItems = async () => {
 
 export const deletePortfolioItem = async (id: string) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       throw new Error("No authentication token found");
     }
@@ -112,7 +113,7 @@ export const deletePortfolioItem = async (id: string) => {
 
 export const getPortfolioItemById = async (id: string) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       throw new Error("No authentication token found");
     }
@@ -131,7 +132,7 @@ export const getPortfolioItemById = async (id: string) => {
 
 export const updatePortfolioItem = async (id: string, data: any) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       throw new Error("No authentication token found");
     }
@@ -162,7 +163,7 @@ export const incrementPageVisit = async () => {
 
 export const getPageVisitsFromAPI = async () => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       console.warn("No authentication token found for page visits request");
       return 0;
@@ -182,7 +183,7 @@ export const getPageVisitsFromAPI = async () => {
 
 export const resetPageVisitsAPI = async () => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       throw new Error("No authentication token found");
     }
@@ -202,7 +203,7 @@ export const resetPageVisitsAPI = async () => {
 // Notification API functions
 export const getNotifications = async (page = 1, limit = 20) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       console.warn("No authentication token found for notifications request");
       return { notifications: [], pagination: {}, unreadCount: 0 };
@@ -222,7 +223,7 @@ export const getNotifications = async (page = 1, limit = 20) => {
 
 export const markNotificationAsRead = async (id: string) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       throw new Error("No authentication token found");
     }
@@ -241,7 +242,7 @@ export const markNotificationAsRead = async (id: string) => {
 
 export const markAllNotificationsAsRead = async () => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       throw new Error("No authentication token found");
     }

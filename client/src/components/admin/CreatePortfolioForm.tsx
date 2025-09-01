@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { uploadImage, uploadVideo } from "../../services/upload";
 import api from "../../services/api";
+import { getToken } from "../../utils/helpers";
 
 type Props = {
   onCreated?: () => void;
@@ -177,7 +178,7 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
 
   const uploadMedia = async () => {
     const uploaded: Partial<PortfolioFormData> = {};
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) throw new Error("Not authenticated. Please log in again.");
 
     // Validate files before upload
@@ -204,7 +205,7 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const token = localStorage.getItem("token");
+    const token = getToken();
 
     try {
       const media = await uploadMedia();

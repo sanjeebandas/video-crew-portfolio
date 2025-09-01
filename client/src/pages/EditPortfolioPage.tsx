@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../services/api";
 import { uploadImage, uploadVideo } from "../services/upload";
+import { getToken } from "../utils/helpers";
 
 type PortfolioFormData = {
   title: string;
@@ -101,7 +102,7 @@ const EditPortfolioPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    const token = localStorage.getItem("token");
+    const token = getToken();
 
     try {
       const media = await uploadMedia();

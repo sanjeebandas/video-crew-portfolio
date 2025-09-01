@@ -1,9 +1,10 @@
 // src/services/upload.ts
 import api from "./api";
+import { getToken } from "../utils/helpers";
 
 export const uploadImage = async (file: File): Promise<string> => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) throw new Error("Unauthorized: No token found");
 
     const formData = new FormData();
@@ -24,7 +25,7 @@ export const uploadImage = async (file: File): Promise<string> => {
 
 export const uploadVideo = async (file: File): Promise<string> => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) throw new Error("Unauthorized: No token found");
 
     const formData = new FormData();

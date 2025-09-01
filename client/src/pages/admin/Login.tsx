@@ -22,7 +22,8 @@ const Login = () => {
       const res = await login(email, password);
       const token = res.data.token;
 
-      localStorage.setItem("token", token);
+      //localStorage.setItem("token", token);
+      localStorage.setItem("admin_token", token);
       authLogin(token);
       toast.success("Logged in successfully!");
       navigate("/admin/dashboard");
