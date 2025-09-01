@@ -20,9 +20,8 @@ const PORT = process.env.PORT || 5000;
 //  Allowed CORS origins (add more if needed)
 const allowedOrigins = [
   "http://localhost:5173", // local dev
-  "https://*.onrender.com", // allow render domains
   "https://video-crew-portfolio.onrender.com", // current render frontend
-  "https://videocrewbackend.up.railway.app", // your backend domain
+  "https://video-crew-portfolio-backend.onrender.com", // your backend domain
 ];
 
 //  Dynamic CORS handling
@@ -30,17 +29,7 @@ const corsOptions = {
   origin: function (origin: string | undefined, callback: Function) {
     console.log(`CORS check for origin: ${origin}`);
     
-    if (!origin || allowedOrigins.some(allowed => {
-      if (allowed.includes('*')) {
-        const pattern = allowed.replace('*', '.*');
-        const isMatch = new RegExp(pattern).test(origin);
-        console.log(`Pattern ${pattern} matches ${origin}: ${isMatch}`);
-        return isMatch;
-      }
-      const isMatch = allowed === origin;
-      console.log(`Exact match ${allowed} === ${origin}: ${isMatch}`);
-      return isMatch;
-    })) {
+    if (!origin || allowedOrigins.includes(origin)) {
       console.log(`CORS allowed for origin: ${origin}`);
       callback(null, true);
     } else {
@@ -92,13 +81,8 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
-//  404 Fallback for API routes
-app.use("/api/*", (_req, res) => {
-  res.status(404).json({ message: "API route not found" });
-});
-
-// Final catch-all for any other routes
-app.use("*", (_req, res) => {
+//  404 Fallback for all routes
+app.use((_req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
