@@ -30,15 +30,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return true;
     } catch (error: any) {
       console.error("Token validation failed:", error);
-      // Log more details for debugging
-      if (error.response) {
-        console.error("Response status:", error.response.status);
-        console.error("Response data:", error.response.data);
-      } else if (error.request) {
-        console.error("Request failed:", error.request);
-      } else {
-        console.error("Error message:", error.message);
-      }
       // Token is invalid or expired
       logout();
       return false;
@@ -47,24 +38,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const initializeAuth = async () => {
-      try {
-        console.log("🔐 Initializing authentication...");
-        const token = getToken();
-        console.log("📋 Token found:", token ? "Yes" : "No");
-        
-        if (token) {
-          console.log("🔍 Validating token...");
-          const isValid = await validateToken();
-          console.log("✅ Token validation result:", isValid);
-          setIsAuthenticated(isValid);
-        } else {
-          console.log("❌ No token found, user not authenticated");
-        }
-      } catch (error) {
-        console.error("🚨 Auth initialization error:", error);
-      } finally {
-        setIsLoading(false);
+      const token = getToken();
+      if (token) {
+        const isValid = await validateToken();
+        setIsAuthenticated(isValid);
       }
+      setIsLoading(false);
     };
 
     initializeAuth();
