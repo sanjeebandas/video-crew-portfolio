@@ -47,12 +47,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const initializeAuth = async () => {
-      const token = getToken();
-      if (token) {
-        const isValid = await validateToken();
-        setIsAuthenticated(isValid);
+      try {
+        console.log("🔐 Initializing authentication...");
+        const token = getToken();
+        console.log("📋 Token found:", token ? "Yes" : "No");
+        
+        if (token) {
+          console.log("🔍 Validating token...");
+          const isValid = await validateToken();
+          console.log("✅ Token validation result:", isValid);
+          setIsAuthenticated(isValid);
+        } else {
+          console.log("❌ No token found, user not authenticated");
+        }
+      } catch (error) {
+        console.error("🚨 Auth initialization error:", error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     initializeAuth();

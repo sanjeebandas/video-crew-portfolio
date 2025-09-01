@@ -13,16 +13,24 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
 
   useEffect(() => {
     const checkAuth = async () => {
+      console.log("🛡️ AuthGuard checking authentication...");
+      console.log("📊 Auth state:", { isAuthenticated, isLoading });
+      
       if (!isLoading) {
         if (!isAuthenticated) {
+          console.log("❌ User not authenticated, redirecting to login");
           toast.error("Please log in to access admin panel");
           navigate("/admin/login");
           return;
         }
 
         // Validate token on every admin page load
+        console.log("🔍 Validating token in AuthGuard...");
         const isValid = await validateToken();
+        console.log("✅ Token validation result in AuthGuard:", isValid);
+        
         if (!isValid) {
+          console.log("❌ Token invalid, redirecting to login");
           toast.error("Session expired. Please log in again");
           navigate("/admin/login");
         }

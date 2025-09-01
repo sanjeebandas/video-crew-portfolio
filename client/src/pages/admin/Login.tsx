@@ -19,15 +19,22 @@ const Login = () => {
     setLoading(true);
 
     try {
+      console.log("🔐 Attempting login...");
       const res = await login(email, password);
       const token = res.data.token;
+      console.log("🎫 Login successful, token received");
 
       //localStorage.setItem("token", token);
       localStorage.setItem("admin_token", token);
+      console.log("💾 Token saved to localStorage");
+      
       authLogin(token);
+      console.log("✅ Auth context updated");
+      
       toast.success("Logged in successfully!");
       navigate("/admin/dashboard");
     } catch (err: any) {
+      console.error("❌ Login failed:", err);
       toast.error(
         err?.response?.data?.message ||
           err?.message ||
