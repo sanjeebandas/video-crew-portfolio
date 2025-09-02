@@ -18,25 +18,25 @@ const PortfolioBanner = ({
   // Initial animations on mount
   useEffect(() => {
     if (containerRef.current) {
-      // Banner entrance animation
+      // Optimized banner entrance animation with shorter delays
       const tl = gsap.timeline();
 
       tl.fromTo(
         containerRef.current,
         { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" } // Reduced from 0.8s to 0.5s
       )
         .fromTo(
           ".portfolio-subtitle",
           { opacity: 0, y: 20 },
-          { opacity: 0.6, y: 0, duration: 0.6, ease: "power2.out" },
-          "-=0.4"
+          { opacity: 0.6, y: 0, duration: 0.4, ease: "power2.out" }, // Reduced from 0.6s to 0.4s
+          "-=0.3" // Reduced overlap for faster flow
         )
         .fromTo(
           ".portfolio-title",
           { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-          "-=0.3"
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, // Reduced from 0.8s to 0.5s
+          "-=0.2" // Reduced overlap for faster flow
         )
         .fromTo(
           ".portfolio-button",
@@ -45,11 +45,11 @@ const PortfolioBanner = ({
             opacity: 1,
             y: 0,
             scale: 1,
-            duration: 0.6,
-            stagger: 0.1,
+            duration: 0.4, // Reduced from 0.6s to 0.4s
+            stagger: 0.06, // Reduced from 0.1s to 0.06s
             ease: "back.out(1.7)",
           },
-          "-=0.2"
+          "-=0.1" // Reduced overlap for faster flow
         );
     }
 
@@ -89,7 +89,7 @@ const PortfolioBanner = ({
         // Reset scale for other buttons
         gsap.to(btn, {
           scale: 1,
-          duration: 0.15,
+          duration: 0.12, // Reduced from 0.15s to 0.12s
           ease: "power2.out",
         });
 
@@ -103,7 +103,7 @@ const PortfolioBanner = ({
         if (otherOverlay) {
           gsap.to(otherOverlay, {
             opacity: 0,
-            duration: 0.15,
+            duration: 0.12, // Reduced from 0.15s to 0.12s
             ease: "power2.out",
           });
         }
@@ -111,7 +111,7 @@ const PortfolioBanner = ({
         if (otherActiveOverlay) {
           gsap.to(otherActiveOverlay, {
             opacity: 0,
-            duration: 0.15,
+            duration: 0.12, // Reduced from 0.15s to 0.12s
             ease: "power2.out",
           });
         }
@@ -119,7 +119,7 @@ const PortfolioBanner = ({
         if (otherText) {
           gsap.to(otherText, {
             textShadow: "none",
-            duration: 0.15,
+            duration: 0.12, // Reduced from 0.15s to 0.12s
             ease: "power2.out",
           });
         }
@@ -128,7 +128,7 @@ const PortfolioBanner = ({
 
     gsap.to(button, {
       scale: 1.04,
-      duration: 0.25,
+      duration: 0.2, // Reduced from 0.25s to 0.2s
       ease: "power2.out",
     });
 
@@ -136,7 +136,7 @@ const PortfolioBanner = ({
     if (overlay) {
       gsap.to(overlay, {
         opacity: 1,
-        duration: 0.25,
+        duration: 0.2, // Reduced from 0.25s to 0.2s
         ease: "power2.out",
       });
     }
@@ -146,7 +146,7 @@ const PortfolioBanner = ({
     if (text) {
       gsap.to(text, {
         textShadow: "0 0 12px rgba(255,255,255,0.5)",
-        duration: 0.2,
+        duration: 0.15, // Reduced from 0.2s to 0.15s
         ease: "power2.out",
       });
     }
@@ -164,7 +164,7 @@ const PortfolioBanner = ({
     // Reset scale animation with faster, smoother timing
     gsap.to(button, {
       scale: 1,
-      duration: 0.25,
+      duration: 0.2, // Reduced from 0.25s to 0.2s
       ease: "power2.out",
     });
 
@@ -173,7 +173,7 @@ const PortfolioBanner = ({
     if (overlay) {
       gsap.to(overlay, {
         opacity: 0,
-        duration: 0.2,
+        duration: 0.15, // Reduced from 0.2s to 0.15s
         ease: "power2.out",
       });
     }
@@ -182,7 +182,7 @@ const PortfolioBanner = ({
     if (text) {
       gsap.to(text, {
         textShadow: "none",
-        duration: 0.2,
+        duration: 0.15, // Reduced from 0.2s to 0.15s
         ease: "power2.out",
       });
     }
@@ -199,7 +199,7 @@ const PortfolioBanner = ({
         // Reduced pop-up click effect to prevent overlap
         gsap.to(btn, {
           scale: 1.08,
-          duration: 0.12,
+          duration: 0.1, // Reduced from 0.12s to 0.1s
           ease: "back.out(1.7)",
           yoyo: true,
           repeat: 1,
@@ -210,7 +210,7 @@ const PortfolioBanner = ({
         if (text) {
           gsap.to(text, {
             textShadow: "0 0 20px rgba(0,0,0,0.8)",
-            duration: 0.12,
+            duration: 0.1, // Reduced from 0.12s to 0.1s
             ease: "power2.out",
             yoyo: true,
             repeat: 1,

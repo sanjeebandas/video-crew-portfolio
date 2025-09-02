@@ -84,8 +84,8 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
           opacity: 1, 
           y: 0, 
           scale: 1,
-          duration: 0.6,
-          stagger: 0.1,
+          duration: 0.4, // Reduced from 0.6s to 0.4s
+          stagger: 0.06, // Reduced from 0.1s to 0.06s
           ease: "power2.out",
           delay: delay
         }
@@ -112,12 +112,12 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
           opacity: 1, 
           y: 0, 
           scale: 1,
-          duration: 0.5,
-          stagger: 0.08,
+          duration: 0.35, // Reduced from 0.5s to 0.35s
+          stagger: 0.05, // Reduced from 0.08s to 0.05s
           ease: "power2.out"
         }
       );
-    }, 100);
+    }, 60); // Reduced from 100ms to 60ms
   };
 
   const hasMoreItems = visibleItems.length < allItems.length;

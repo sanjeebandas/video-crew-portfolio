@@ -25,19 +25,19 @@ const Home = () => {
   } = useScrollAnimations();
 
   useEffect(() => {
-    // Add a small delay to ensure lazy loading doesn't interfere with initial animations
+    // Reduced delay for faster animations while maintaining lazy loading compatibility
     const timer = setTimeout(() => {
       // Home page scroll animations
       slideInFromLeft(".home-title-left");
       slideInFromRight(".home-title-right");
       fadeInUp(".home-subtitle");
-      staggerFadeIn(".home-text-line", 0.1);
-      stackIn(".home-section-card", 0.2);
+      staggerFadeIn(".home-text-line", 0.06); // Reduced stagger delay
+      stackIn(".home-section-card", 0.1); // Reduced stagger delay
       parallaxEffect(".home-parallax-bg", 0.3);
 
       // Trusted companies section animations
-      slideInFromLeft(".trusted-companies-title", 0.2);
-    }, 200);
+      slideInFromLeft(".trusted-companies-title", 0.1); // Reduced stagger delay
+    }, 120); // Reduced from 200ms to 120ms
 
     // Cleanup on unmount
     return () => {

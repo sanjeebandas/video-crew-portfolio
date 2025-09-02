@@ -27,7 +27,7 @@ const ContactBanner = ({
         </div>
 
         {/* Right side - Text */}
-        <div className="lg:col-span-2 bg-black text-white p-8 lg:p-12 flex flex-col justify-center">
+        <div className="lg:col-span-2 bg-black text-white p-8 lg:p-12 flex flex-col">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6 contact-title">{title}</h1>
           <div className="contact-text-line text-white/45 text-sm leading-relaxed mb-12">
             {description}

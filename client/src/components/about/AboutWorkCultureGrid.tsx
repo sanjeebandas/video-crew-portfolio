@@ -28,17 +28,26 @@ const AboutWorkCultureGrid = () => {
   const { stackIn, staggerFadeIn } = useScrollAnimations();
 
   useEffect(() => {
-    // Work culture grid animations
-    stackIn(".work-culture-card", 0.1); // Desktop cards
-    staggerFadeIn(".work-culture-mobile-card", 0.2); // Mobile cards
-    staggerFadeIn(".work-culture-tablet-card", 0.2); // Tablet cards
-    staggerFadeIn(".work-culture-ipad-card", 0.2); // iPad Pro cards
+    // Reduced delay for faster animations while maintaining lazy loading compatibility
+    const timer = setTimeout(() => {
+      // Work culture grid animations - optimized for mobile scroll performance
+      stackIn(".work-culture-card", 0.06); // Reduced from 0.1s to 0.06s for faster desktop
+      
+      // Mobile-optimized animations with faster stagger for smoother scroll experience
+      staggerFadeIn(".work-culture-mobile-card", 0.06); // Reduced from 0.2s to 0.06s for snappier mobile
+      staggerFadeIn(".work-culture-tablet-card", 0.06); // Reduced from 0.2s to 0.06s for smoother tablet
+      staggerFadeIn(".work-culture-ipad-card", 0.06); // Reduced from 0.2s to 0.06s for consistent timing
 
-    // Animate inner texts with their respective cards
-    staggerFadeIn(".work-culture-text", 0.1); // Desktop text elements
-    staggerFadeIn(".work-culture-mobile-text", 0.2); // Mobile text elements
-    staggerFadeIn(".work-culture-tablet-text", 0.2); // Tablet text elements
-    staggerFadeIn(".work-culture-ipad-text", 0.2); // iPad Pro text elements
+      // Text animations with unified faster timing for better mobile performance
+      staggerFadeIn(".work-culture-text", 0.06); // Reduced from 0.1s to 0.06s
+      staggerFadeIn(".work-culture-mobile-text", 0.06); // Reduced from 0.2s to 0.06s for smoother mobile
+      staggerFadeIn(".work-culture-tablet-text", 0.06); // Reduced from 0.2s to 0.06s
+      staggerFadeIn(".work-culture-ipad-text", 0.06); // Reduced from 0.2s to 0.06s
+    }, 120); // Added 120ms delay for lazy loading compatibility
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   return (

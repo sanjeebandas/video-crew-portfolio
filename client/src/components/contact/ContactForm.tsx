@@ -1,8 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { useScrollAnimations } from "../../utils/animations";
 import api from "../../services/api";
 
 const ContactForm = () => {
+  const { slideInFromLeft, staggerFadeIn, fadeInUp } = useScrollAnimations();
+
+  useEffect(() => {
+    // Reduced delay for faster animations while maintaining lazy loading compatibility
+    const timer = setTimeout(() => {
+      // Contact form animations - optimized for smooth user experience
+      slideInFromLeft(".contact-title");
+      staggerFadeIn(".contact-form-row", 0.06); // Fast stagger for form rows
+      fadeInUp(".contact-submit-btn");
+    }, 120); // Reduced from 200ms to 120ms
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
   const [formData, setFormData] = useState({
     namePosition: "",
     email: "",

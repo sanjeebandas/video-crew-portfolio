@@ -69,12 +69,12 @@ const LazyImage = ({
     onLoad?.();
 
     // Trigger GSAP animations after image is loaded
+    // Reduced delay for faster animations
     setTimeout(() => {
       onImageLoad?.();
 
-      // Refresh GSAP animations after lazy loading
       refreshGSAPAnimations();
-    }, 100);
+    }, 60); // Reduced from 100ms to 60ms for faster animations
   };
 
   const handleError = () => {
@@ -88,7 +88,7 @@ const LazyImage = ({
       alt={alt}
       className={`${className} ${
         isLoaded ? "opacity-100" : "opacity-0"
-      } transition-opacity duration-300`}
+      } transition-opacity duration-200`} // Reduced from 300ms to 200ms
       onLoad={handleLoad}
       onError={handleError}
       loading="lazy"

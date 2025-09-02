@@ -5,7 +5,13 @@ const WhyVideoCrewBoxes = () => {
   const { staggerFadeIn } = useScrollAnimations();
 
   useEffect(() => {
-    staggerFadeIn(".diff-why-box", 0.2);
+    const timer = setTimeout(() => {
+      staggerFadeIn(".diff-why-box", 0.06);
+    }, 120);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
   const items = [
     {
@@ -30,13 +36,13 @@ const WhyVideoCrewBoxes = () => {
           {items.map((item, index) => (
             <div
               key={index}
-              className="diff-why-box bg-[#0A0A0A] w-full md:w-[397px] h-[192px] border border-neutral-800 p-6 hover:border-blue-400/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-out group cursor-pointer"
+              className="diff-why-box bg-[#0A0A0A] w-full md:w-[397px] min-h-[192px] border border-neutral-800 p-6 hover:border-blue-400/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-out group cursor-pointer"
             >
-              <div className="w-[95%]">
-                <h3 className="text-base md:text-md font-semibold mb-2 leading-snug group-hover:text-blue-400 transition-colors duration-300 ease-out">
+              <div className="w-full text-center md:text-left flex flex-col justify-start h-full">
+                <h3 className="text-base md:text-md font-semibold mb-2 leading-snug group-hover:text-blue-400 transition-colors duration-300 ease-out line-clamp-2">
                   {item.title}
                 </h3>
-                <p className="text-sm md:text-base font-medium opacity-70 leading-relaxed group-hover:opacity-90 group-hover:text-gray-200 transition-all duration-300 ease-out">
+                <p className="text-sm md:text-base font-medium opacity-70 leading-relaxed group-hover:opacity-90 group-hover:text-gray-200 transition-all duration-300 ease-out line-clamp-3">
                   {item.description}
                 </p>
               </div>

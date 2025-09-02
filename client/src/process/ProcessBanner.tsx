@@ -7,9 +7,15 @@ const ProcessBanner = () => {
 
   useEffect(() => {
     // Process banner animations
-    slideInFromLeft(".process-banner-title");
-    staggerFadeIn(".process-banner-text", 0.1);
-    parallaxEffect(".process-banner-image", 0.1);
+    const timer = setTimeout(() => {
+      slideInFromLeft(".process-banner-title");
+      staggerFadeIn(".process-banner-text", 0.1);
+      parallaxEffect(".process-banner-image", 0.1);
+    }, 120);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   return (

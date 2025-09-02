@@ -9,17 +9,17 @@ const Contact = () => {
   const { slideInFromLeft, fadeInUp, staggerFadeIn, stackIn, parallaxEffect } = useScrollAnimations();
 
   useEffect(() => {
-    // Add a small delay to ensure lazy loading doesn't interfere with initial animations
+    // Reduced delay for faster animations while maintaining lazy loading compatibility
     const timer = setTimeout(() => {
       // Contact page scroll animations
       slideInFromLeft(".contact-title");
-      staggerFadeIn(".contact-text-line", 0.1);
+      staggerFadeIn(".contact-text-line", 0.06); // Reduced stagger delay
       fadeInUp(".contact-info-section");
-      staggerFadeIn(".contact-info-item", 0.2);
+      staggerFadeIn(".contact-info-item", 0.1); // Reduced stagger delay
       parallaxEffect(".contact-image", 0.3);
-      stackIn(".contact-form-row", 0.1);
+      stackIn(".contact-form-row", 0.06); // Reduced stagger delay
       fadeInUp(".contact-submit-btn");
-    }, 200);
+    }, 120); // Reduced from 200ms to 120ms
 
     // Cleanup on unmount
     return () => {
