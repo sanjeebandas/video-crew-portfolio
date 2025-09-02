@@ -11,6 +11,7 @@ import PortfolioScroller from "../components/home/PortfolioScroller";
 import BackgroundBanner from "../components/home/BackgroundBanner";
 import SEO from "../components/common/SEO";
 import LazyImage from "../components/common/LazyImage";
+import InfiniteScroller from "../components/common/InfiniteScroller";
 
 const Home = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -144,18 +145,7 @@ const Home = () => {
           </h2>
         </div>
 
-        {/* Full-Width Separator Image */}
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mt-12 xs:mt-14 md:mt-16 mb-8 xs:mb-10 md:mb-12">
-          <LazyImage
-            src="/imgs/Frame 430.webp"
-            alt="비디오크루 신뢰할 수 있는 기업들 섹션 구분 디자인 이미지"
-            className="w-full h-auto object-cover home-parallax-bg"
-            onImageLoad={() => {
-              // Re-trigger parallax animations after image loads
-              refreshGSAPAnimations(".home-parallax-bg");
-            }}
-          />
-        </div>
+        <InfiniteScroller />
 
         <div className="home-section-card">
           <BackgroundBanner />
