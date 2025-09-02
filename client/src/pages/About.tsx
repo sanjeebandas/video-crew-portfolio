@@ -9,6 +9,7 @@ import AboutHero from "../components/about/AboutHero";
 import AboutWorkCultureGrid from "../components/about/AboutWorkCultureGrid";
 import SEO from "../components/common/SEO";
 import LazyImage from "../components/common/LazyImage";
+import InfiniteScroller from "../components/common/InfiniteScroller";
 
 const About = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -80,19 +81,7 @@ const About = () => {
 
         {/* HeroSection of About Page */}
         <AboutHero />
-        <div className="w-full bg-black overflow-hidden">
-          <div className="max-w-[1248px] mx-auto px-6 md:px-4 lg:px-0 mt-4 sm:mt-6 md:mt-6 lg:mt-8">
-            <LazyImage
-              src="/imgs/Frame 430.webp"
-              alt="비디오크루 회사 소개 섹션 구분 디자인 이미지"
-              className="w-full h-auto object-cover transform scale-[1.5] sm:scale-100 transition-transform duration-300 about-separator"
-              onImageLoad={() => {
-                // Re-trigger separator animations after image loads
-                refreshGSAPAnimations(".about-separator");
-              }}
-            />
-          </div>
-        </div>
+        <InfiniteScroller />
 
         {/* Decorative Centered Separator Image */}
         <div className="w-full mt-4 sm:mt-6 md:mt-6 lg:mt-8 md:-mt-8 lg:-mt-10">

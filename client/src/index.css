@@ -8,6 +8,26 @@ body {
   height: 100%;
   font-family: "Montserrat", sans-serif;
 }
+/* Company Logos Infinite Scroll Bar */
+@keyframes company-scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.company-scroll-track {
+  display: flex;
+  width: max-content; /* ensures track takes full width */
+}
+
+.company-animate-scroll-left {
+  animation: company-scroll-left 30s linear infinite;
+}
+
+/* Company Logos Infinite Scroll Bar End */
 
 @keyframes scrollLeft {
   0% {
@@ -48,7 +68,7 @@ body {
   .animate-scroll-left {
     animation: scrollLeft 30s linear infinite;
   }
-  
+
   /* Responsive scroll animation speeds */
   @media (max-width: 639px) {
     .animate-scroll-left,
@@ -56,21 +76,21 @@ body {
       animation-duration: 25s;
     }
   }
-  
+
   @media (min-width: 640px) and (max-width: 1023px) {
     .animate-scroll-left,
     .animate-scroll-right {
       animation-duration: 30s;
     }
   }
-  
+
   @media (min-width: 1024px) {
     .animate-scroll-left,
     .animate-scroll-right {
       animation-duration: 40s;
     }
   }
-  
+
   /* Custom range slider styles */
   input[type="range"] {
     -webkit-appearance: none;
@@ -78,13 +98,13 @@ body {
     background: transparent;
     cursor: pointer;
   }
-  
+
   input[type="range"]::-webkit-slider-track {
     background: rgba(255, 255, 255, 0.3);
     height: 4px;
     border-radius: 2px;
   }
-  
+
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
@@ -96,14 +116,14 @@ body {
     box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
     border: 2px solid white;
   }
-  
+
   input[type="range"]::-moz-range-track {
     background: rgba(255, 255, 255, 0.3);
     height: 4px;
     border-radius: 2px;
     border: none;
   }
-  
+
   input[type="range"]::-moz-range-thumb {
     height: 12px;
     width: 12px;
@@ -113,229 +133,229 @@ body {
     border: 2px solid white;
     box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
   }
-  
+
   /* Responsive text utilities */
   .text-responsive-xs {
     font-size: 0.75rem; /* text-xs */
   }
-  
+
   @media (min-width: 475px) {
     .text-responsive-xs {
       font-size: 0.875rem; /* text-sm */
     }
   }
-  
+
   @media (min-width: 640px) {
     .text-responsive-xs {
       font-size: 1rem; /* text-base */
     }
   }
-  
+
   .text-responsive-sm {
     font-size: 0.875rem; /* text-sm */
   }
-  
+
   @media (min-width: 475px) {
     .text-responsive-sm {
       font-size: 1rem; /* text-base */
     }
   }
-  
+
   @media (min-width: 640px) {
     .text-responsive-sm {
       font-size: 1.125rem; /* text-lg */
     }
   }
-  
+
   .text-responsive-base {
     font-size: 1rem; /* text-base */
   }
-  
+
   @media (min-width: 475px) {
     .text-responsive-base {
       font-size: 1.125rem; /* text-lg */
     }
   }
-  
+
   @media (min-width: 640px) {
     .text-responsive-base {
       font-size: 1.25rem; /* text-xl */
     }
   }
-  
+
   .text-responsive-lg {
     font-size: 1.125rem; /* text-lg */
   }
-  
+
   @media (min-width: 475px) {
     .text-responsive-lg {
       font-size: 1.25rem; /* text-xl */
     }
   }
-  
+
   @media (min-width: 640px) {
     .text-responsive-lg {
       font-size: 1.5rem; /* text-2xl */
     }
   }
-  
+
   .text-responsive-xl {
     font-size: 1.25rem; /* text-xl */
   }
-  
+
   @media (min-width: 475px) {
     .text-responsive-xl {
       font-size: 1.5rem; /* text-2xl */
     }
   }
-  
+
   @media (min-width: 640px) {
     .text-responsive-xl {
       font-size: 1.875rem; /* text-3xl */
     }
   }
-  
+
   /* Responsive spacing utilities */
   .space-responsive-xs {
     margin-top: 0.5rem; /* space-y-2 */
   }
-  
+
   @media (min-width: 475px) {
     .space-responsive-xs {
       margin-top: 0.75rem; /* space-y-3 */
     }
   }
-  
+
   @media (min-width: 640px) {
     .space-responsive-xs {
       margin-top: 1rem; /* space-y-4 */
     }
   }
-  
+
   .space-responsive-sm {
     margin-top: 1rem; /* space-y-4 */
   }
-  
+
   @media (min-width: 475px) {
     .space-responsive-sm {
       margin-top: 1.5rem; /* space-y-6 */
     }
   }
-  
+
   @media (min-width: 640px) {
     .space-responsive-sm {
       margin-top: 2rem; /* space-y-8 */
     }
   }
-  
+
   .space-responsive-md {
     margin-top: 1.5rem; /* space-y-6 */
   }
-  
+
   @media (min-width: 475px) {
     .space-responsive-md {
       margin-top: 2rem; /* space-y-8 */
     }
   }
-  
+
   @media (min-width: 640px) {
     .space-responsive-md {
       margin-top: 2.5rem; /* space-y-10 */
     }
   }
-  
+
   /* Responsive padding utilities */
   .p-responsive-xs {
     padding: 0.5rem; /* p-2 */
   }
-  
+
   @media (min-width: 475px) {
     .p-responsive-xs {
       padding: 0.75rem; /* p-3 */
     }
   }
-  
+
   @media (min-width: 640px) {
     .p-responsive-xs {
       padding: 1rem; /* p-4 */
     }
   }
-  
+
   .p-responsive-sm {
     padding: 0.75rem; /* p-3 */
   }
-  
+
   @media (min-width: 475px) {
     .p-responsive-sm {
       padding: 1rem; /* p-4 */
     }
   }
-  
+
   @media (min-width: 640px) {
     .p-responsive-sm {
       padding: 1.5rem; /* p-6 */
     }
   }
-  
+
   .p-responsive-md {
     padding: 1rem; /* p-4 */
   }
-  
+
   @media (min-width: 475px) {
     .p-responsive-md {
       padding: 1.5rem; /* p-6 */
     }
   }
-  
+
   @media (min-width: 640px) {
     .p-responsive-md {
       padding: 2rem; /* p-8 */
     }
   }
-  
+
   /* Responsive margin utilities */
   .m-responsive-xs {
     margin: 0.5rem; /* m-2 */
   }
-  
+
   @media (min-width: 475px) {
     .m-responsive-xs {
       margin: 0.75rem; /* m-3 */
     }
   }
-  
+
   @media (min-width: 640px) {
     .m-responsive-xs {
       margin: 1rem; /* m-4 */
     }
   }
-  
+
   .m-responsive-sm {
     margin: 0.75rem; /* m-3 */
   }
-  
+
   @media (min-width: 475px) {
     .m-responsive-sm {
       margin: 1rem; /* m-4 */
     }
   }
-  
+
   @media (min-width: 640px) {
     .m-responsive-sm {
       margin: 1.5rem; /* m-6 */
     }
   }
-  
+
   .m-responsive-md {
     margin: 1rem; /* m-4 */
   }
-  
+
   @media (min-width: 475px) {
     .m-responsive-md {
       margin: 1.5rem; /* m-6 */
     }
   }
-  
+
   @media (min-width: 640px) {
     .m-responsive-md {
       margin: 2rem; /* m-8 */
