@@ -69,7 +69,7 @@ const Process = () => {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    // Add a small delay to ensure lazy loading doesn't interfere with initial animations
+    // Reduced delay for faster animations while maintaining lazy loading compatibility
     const timer = setTimeout(() => {
       // Process page scroll animations - alternating left/right fade-in
       const processSteps = document.querySelectorAll(".process-step");
@@ -85,12 +85,12 @@ const Process = () => {
             {
               x: 0,
               opacity: 1,
-              duration: 1.5,
+              duration: 0.8, // Reduced from 1.5s to 0.8s
               ease: "power2.out",
               scrollTrigger: {
                 trigger: step,
-                start: "top 90%",
-                end: "bottom 10%",
+                start: "top 85%", // More aggressive trigger
+                end: "bottom 15%",
                 toggleActions: "play none none reverse",
               },
             }
@@ -102,19 +102,19 @@ const Process = () => {
             {
               x: 0,
               opacity: 1,
-              duration: 1.5,
+              duration: 0.8, // Reduced from 1.5s to 0.8s
               ease: "power2.out",
               scrollTrigger: {
                 trigger: step,
-                start: "top 90%",
-                end: "bottom 10%",
+                start: "top 85%", // More aggressive trigger
+                end: "bottom 15%",
                 toggleActions: "play none none reverse",
               },
             }
           );
         }
       });
-    }, 200);
+    }, 120); // Reduced from 200ms to 120ms
 
     // Cleanup on unmount
     return () => {

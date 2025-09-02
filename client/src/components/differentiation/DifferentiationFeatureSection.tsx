@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useScrollAnimations } from "../../utils/animations";
+
 type FeatureProps = {
   number: string;
   title: string;
@@ -13,12 +16,26 @@ const DifferentiationFeatureSection = ({
   imageUrl,
   reverse = false,
 }: FeatureProps) => {
+  const { stackIn } = useScrollAnimations();
+
+  useEffect(() => {
+    // Reduced delay for faster animations while maintaining lazy loading compatibility
+    const timer = setTimeout(() => {
+      // Simple stackIn animation for the feature section
+      stackIn(".diff-feature-section", 0.06);
+    }, 120);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
   return (
     <section className="w-full bg-black text-white py-12">
       <div
         className={`max-w-[1248px] mx-auto px-4 sm:px-6 md:px-0 flex flex-col md:flex-row items-center ${
           reverse ? "md:flex-row-reverse" : ""
-        } gap-8`}
+        } gap-8 diff-feature-section`}
       >
         {/* Text Block */}
         <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left relative group">

@@ -24,8 +24,13 @@ const AboutGrid = () => {
   const { stackIn } = useScrollAnimations();
 
   useEffect(() => {
-    // About grid animations - stack effect for cards
-    stackIn(".about-card", 0.1);
+    const timer = setTimeout(() => {
+      stackIn(".about-card", 0.06);
+    }, 120);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   return (

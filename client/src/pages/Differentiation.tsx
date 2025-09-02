@@ -11,14 +11,14 @@ const Differentiation = () => {
   const { slideInFromLeft, slideInFromRight, staggerFadeIn, stackIn } = useScrollAnimations();
 
   useEffect(() => {
-    // Add a small delay to ensure lazy loading doesn't interfere with initial animations
+    // Reduced delay for faster animations while maintaining lazy loading compatibility
     const timer = setTimeout(() => {
       // Differentiation page scroll animations
       slideInFromLeft(".diff-title-left");
       slideInFromRight(".diff-title-right");
-      staggerFadeIn(".diff-text-line", 0.1);
-      stackIn(".diff-feature-section", 0.4);
-    }, 200);
+      staggerFadeIn(".diff-text-line", 0.06); // Reduced stagger delay
+      stackIn(".diff-feature-section", 0.2); // Reduced stagger delay
+    }, 120); // Reduced from 200ms to 120ms
 
     // Cleanup on unmount
     return () => {

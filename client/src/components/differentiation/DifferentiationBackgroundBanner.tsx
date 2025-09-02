@@ -8,8 +8,14 @@ const DifferentiationBackgroundBanner = () => {
 
   useEffect(() => {
     // Background banner animations
-    slideInFromLeft(".diff-banner-title");
-    fadeInUp(".diff-banner-button");
+    const timer = setTimeout(() => {
+      slideInFromLeft(".diff-banner-title");
+      fadeInUp(".diff-banner-button");
+    }, 120);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   const handleContactClick = () => {
@@ -27,7 +33,7 @@ const DifferentiationBackgroundBanner = () => {
           <br />
           비디오크루와 함께하세요!
         </h2>
-        <button 
+        <button
           onClick={handleContactClick}
           className="diff-banner-button bg-blue-600 hover:bg-blue-800 hover:scale-110 hover:shadow-lg transition-all duration-300 ease-out px-6 py-2 rounded-full text-sm font-semibold cursor-pointer"
         >

@@ -28,26 +28,27 @@ export const refreshGSAPAnimations = (selector?: string) => {
     }
 
     // Trigger a scroll event to re-evaluate animations
+    // Reduced delay for faster animations
     setTimeout(() => {
       const event = new Event("scroll");
       window.dispatchEvent(event);
-    }, 50);
+    }, 30); // Reduced from 50ms to 30ms
   }
 };
 
-// Animation configurations with responsive considerations
+// Enhanced animation configurations with shorter delays
 export const ANIMATION_CONFIG = {
-  duration: 0.8,
+  duration: 0.5, // Reduced from 0.8s to 0.5s
   ease: "power2.out",
-  stagger: 0.1,
+  stagger: 0.06, // Reduced from 0.1s to 0.06s
   scrollTrigger: {
-    start: "top 80%",
-    end: "bottom 20%",
+    start: "top 85%", // Slightly more aggressive trigger
+    end: "bottom 15%",
     toggleActions: "play none none reverse",
   },
 };
 
-// Responsive animation presets
+// Responsive animation presets with faster timing
 export const ANIMATIONS = {
   slideInLeft: {
     x: -100,
@@ -78,7 +79,7 @@ export const ANIMATIONS = {
     opacity: 0,
     scale: 0.9,
     duration: ANIMATION_CONFIG.duration,
-    ease: "back.out(1.7)",
+    ease: "back.out(1.4)", // Slightly faster back ease
   },
 };
 
@@ -90,8 +91,8 @@ const getResponsiveAnimationValues = () => {
   return {
     slideDistance: isMobile ? 50 : isTablet ? 75 : 100,
     fadeDistance: isMobile ? 30 : isTablet ? 40 : 50,
-    staggerDelay: isMobile ? 0.05 : isTablet ? 0.08 : 0.1,
-    duration: isMobile ? 0.6 : isTablet ? 0.7 : 0.8,
+    staggerDelay: isMobile ? 0.03 : isTablet ? 0.05 : 0.06, // Faster stagger delays
+    duration: isMobile ? 0.4 : isTablet ? 0.45 : 0.5, // Faster durations
   };
 };
 
@@ -186,7 +187,6 @@ export const useScrollAnimations = () => {
 
   const stackIn = (
     elements: string | Element | Element[],
-
     options: any = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
@@ -200,7 +200,7 @@ export const useScrollAnimations = () => {
         scale: 1,
         stagger: responsiveValues.staggerDelay,
         duration: responsiveValues.duration,
-        ease: "back.out(1.7)",
+        ease: "back.out(1.4)", // Faster back ease
         ...options,
         scrollTrigger: {
           trigger: elements,
@@ -215,7 +215,6 @@ export const useScrollAnimations = () => {
 
   const staggerFadeIn = (
     elements: string | Element | Element[],
-
     options: any = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
@@ -232,8 +231,8 @@ export const useScrollAnimations = () => {
         ...options,
         scrollTrigger: {
           trigger: elements,
-          start: "top 85%",
-          end: "bottom 15%",
+          start: "top 90%",
+          end: "bottom 10%",
           toggleActions: "play none none reverse",
           ...options.scrollTrigger,
         },
@@ -280,10 +279,10 @@ export const cleanupAnimations = () => {
 
 // Initialize GSAP with performance optimizations
 export const initGSAP = () => {
-  // Set GSAP defaults for better performance
+  // Set GSAP defaults for better performance with faster animations
   gsap.defaults({
     ease: "power2.out",
-    duration: 0.8,
+    duration: 0.5, // Reduced from 0.8s to 0.5s
   });
 
   // Optimize ScrollTrigger for responsive devices
@@ -298,6 +297,6 @@ export const initGSAP = () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 250);
+    }, 200); // Reduced from 250ms to 200ms
   });
 };
