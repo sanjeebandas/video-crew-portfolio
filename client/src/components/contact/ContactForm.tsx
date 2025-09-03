@@ -37,6 +37,67 @@ const ContactForm = () => {
     agreeToTerms: false,
   });
 
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
+
+  // Validation functions
+  const validateName = (name: string): boolean => {
+    if (!name.trim()) return false;
+    // Must contain at least one letter, can have numbers, no special characters
+    const nameRegex = /^(?=.*[a-zA-Z가-힣])[a-zA-Z가-힣0-9\s]+$/;
+    return nameRegex.test(name.trim());
+  };
+
+  const validateEmail = (email: string): boolean => {
+    if (!email.trim()) return false;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email.trim());
+  };
+
+  const validateContact = (contact: string): boolean => {
+    if (!contact.trim()) return false;
+    // Allows +, numbers, spaces, hyphens, parentheses
+    const contactRegex = /^[\+]?[0-9\s\-\(\)]+$/;
+    return contactRegex.test(contact.trim());
+  };
+
+  const validateVideoCount = (count: string): boolean => {
+    if (!count.trim()) return true; // Optional field
+    return /^\d+$/.test(count.trim());
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: {[key: string]: string} = {};
+
+    // Name validation
+    if (!formData.namePosition.trim()) {
+      newErrors.namePosition = "성함/직책을 입력해주세요.";
+    } else if (!validateName(formData.namePosition)) {
+      newErrors.namePosition = "성함/직책은 한글, 영문, 숫자를 포함할 수 있지만 특수문자는 사용할 수 없습니다.";
+    }
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = "이메일 주소를 입력해주세요.";
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = "올바른 이메일 형식을 입력해주세요.";
+    }
+
+    // Contact validation
+    if (!formData.contact.trim()) {
+      newErrors.contact = "연락처를 입력해주세요.";
+    } else if (!validateContact(formData.contact)) {
+      newErrors.contact = "연락처는 숫자와 +, -, 공백, 괄호만 사용할 수 있습니다.";
+    }
+
+    // Video count validation
+    if (formData.videoCount.trim() && !validateVideoCount(formData.videoCount)) {
+      newErrors.videoCount = "영상 제작 편수는 숫자만 입력해주세요.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -48,10 +109,20 @@ const ContactForm = () => {
       [name]:
         type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }));
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("입력 정보를 확인해주세요.");
+      return;
+    }
 
     if (!formData.agreeToTerms) {
       toast.error("개인정보 수집 및 이용에 동의해주세요.");
@@ -103,6 +174,8 @@ const ContactForm = () => {
         additionalInfo: "",
         agreeToTerms: false,
       });
+
+      setErrors({});
     } catch (err: any) {
       toast.error("제출에 실패했습니다. 다시 시도해주세요.");
       console.error("Submission error:", err.response?.data || err.message);
@@ -124,11 +197,18 @@ const ContactForm = () => {
             <input
               type="text"
               name="namePosition"
-              placeholder="성함 / 직책"
+              placeholder=" 김영수 대표, John Smith CEO, 홍길동 123"
               value={formData.namePosition}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
+              className={`w-full px-4 py-3 bg-transparent border text-white placeholder-gray-400 focus:outline-none transition-colors duration-300 ease-out ${
+                errors.namePosition 
+                  ? 'border-red-500 focus:border-red-400' 
+                  : 'border-gray-600 focus:border-gray-400 hover:border-blue-400/50'
+              }`}
             />
+            {errors.namePosition && (
+              <p className="text-red-400 text-sm mt-1">{errors.namePosition}</p>
+            )}
           </div>
 
           {/* Running Time */}
@@ -166,11 +246,18 @@ const ContactForm = () => {
             <input
               type="email"
               name="email"
-              placeholder="이메일 주소"
+              placeholder="example@company.com"
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
+              className={`w-full px-4 py-3 bg-transparent border text-white placeholder-gray-400 focus:outline-none transition-colors duration-300 ease-out ${
+                errors.email 
+                  ? 'border-red-500 focus:border-red-400' 
+                  : 'border-gray-600 focus:border-gray-400 hover:border-blue-400/50'
+              }`}
             />
+            {errors.email && (
+              <p className="text-red-400 text-sm mt-1">{errors.email}</p>
+            )}
           </div>
 
           {/* Budget */}
@@ -206,11 +293,18 @@ const ContactForm = () => {
             <input
               type="tel"
               name="contact"
-              placeholder="연락처"
+              placeholder=" +82 10-1234-5678, 010-1234-5678"
               value={formData.contact}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
+              className={`w-full px-4 py-3 bg-transparent border text-white placeholder-gray-400 focus:outline-none transition-colors duration-300 ease-out ${
+                errors.contact 
+                  ? 'border-red-500 focus:border-red-400' 
+                  : 'border-gray-600 focus:border-gray-400 hover:border-blue-400/50'
+              }`}
             />
+            {errors.contact && (
+              <p className="text-red-400 text-sm mt-1">{errors.contact}</p>
+            )}
           </div>
 
           {/* Production Purpose */}
@@ -289,11 +383,18 @@ const ContactForm = () => {
             <input
               type="text"
               name="videoCount"
-              placeholder="영상 제작 편수"
+              placeholder=" 5 (숫자만 입력)"
               value={formData.videoCount}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
+              className={`w-full px-4 py-3 bg-transparent border text-white placeholder-gray-400 focus:outline-none transition-colors duration-300 ease-out ${
+                errors.videoCount 
+                  ? 'border-red-500 focus:border-red-400' 
+                  : 'border-gray-600 focus:border-gray-400 hover:border-blue-400/50'
+              }`}
             />
+            {errors.videoCount && (
+              <p className="text-red-400 text-sm mt-1">{errors.videoCount}</p>
+            )}
           </div>
 
           {/* Reference Videos */}
@@ -316,7 +417,7 @@ const ContactForm = () => {
             <input
               type="text"
               name="deliveryDate"
-              placeholder="희망 영상 납품 일시"
+              placeholder=" 2024년 3월 15일, 3월 말, ASAP"
               value={formData.deliveryDate}
               onChange={handleInputChange}
               className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"

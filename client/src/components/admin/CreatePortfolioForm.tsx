@@ -41,6 +41,7 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
   const [loading, setLoading] = useState(false);
   const [thumbnailError, setThumbnailError] = useState<string | null>(null);
   const [videoError, setVideoError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
 
   // File size constants
   const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -56,7 +57,32 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
     return "border-emerald-500/50 focus:border-emerald-500/50 focus:ring-emerald-500/50";
   };
 
+  // Validation functions
+  const validateName = (name: string): boolean => {
+    if (!name.trim()) return false;
+    // Must contain at least one letter, can have numbers, no special characters
+    const nameRegex = /^(?=.*[a-zA-Z가-힣])[a-zA-Z가-힣0-9\s]+$/;
+    return nameRegex.test(name.trim());
+  };
 
+  const validateForm = (): boolean => {
+    const newErrors: {[key: string]: string} = {};
+
+    // Title validation
+    if (!formData.title.trim()) {
+      newErrors.title = "프로젝트 제목을 입력해주세요.";
+    } else if (!validateName(formData.title)) {
+      newErrors.title = "프로젝트 제목은 한글, 영문, 숫자를 포함할 수 있지만 특수문자는 사용할 수 없습니다.";
+    }
+
+    // Client name validation (optional field)
+    if (formData.client && formData.client.trim() && !validateName(formData.client)) {
+      newErrors.client = "클라이언트명은 한글, 영문, 숫자를 포함할 수 있지만 특수문자는 사용할 수 없습니다.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   useEffect(() => {
     if (editMode && editData) {
@@ -80,6 +106,8 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
       setThumbnailFile(null);
       setVideoFile(null);
     }
+    // Clear errors when form data changes
+    setErrors({});
   }, [editMode, editData]);
 
   const handleChange = (
@@ -107,6 +135,11 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
           ? Math.max(0, Number(value))
           : value,
     }));
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: "" }));
+    }
   };
 
   // File validation functions
@@ -204,6 +237,12 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      toast.error("입력 정보를 확인해주세요.");
+      return;
+    }
+
     setLoading(true);
     const token = getToken();
 
@@ -236,6 +275,7 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
       setFormData(initialState);
       setThumbnailFile(null);
       setVideoFile(null);
+      setErrors({});
       onClose();
     } catch (err: any) {
       toast.error(
@@ -287,11 +327,16 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
                     onChange={handleChange}
                     maxLength={MAX_TITLE_LIMIT}
                     className={`w-full bg-slate-800/50 backdrop-blur-sm border rounded-xl p-3 sm:p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 transition-all duration-200 hover:border-slate-500/50 text-sm sm:text-base ${
-                      formData.title.length > 0 
-                        ? getCharLimitColor(formData.title.length, MAX_TITLE_LIMIT)
-                        : "border-slate-600/50 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                      errors.title 
+                        ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50'
+                        : formData.title.length > 0 
+                          ? getCharLimitColor(formData.title.length, MAX_TITLE_LIMIT)
+                          : "border-slate-600/50 focus:ring-emerald-500/50 focus:border-emerald-500/50"
                     }`}
                   />
+                  {errors.title && (
+                    <p className="text-red-400 text-sm mt-1">{errors.title}</p>
+                  )}
                 </div>
 
                 <div>
@@ -346,8 +391,15 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
                       placeholder="Optional"
                       value={formData.client}
                       onChange={handleChange}
-                      className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-3 sm:p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200 hover:border-slate-500/50 text-sm sm:text-base"
+                      className={`w-full bg-slate-800/50 backdrop-blur-sm border rounded-xl p-3 sm:p-4 placeholder-slate-400 text-white focus:outline-none focus:ring-2 transition-all duration-200 hover:border-slate-500/50 text-sm sm:text-base ${
+                        errors.client 
+                          ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50'
+                          : "border-slate-600/50 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                      }`}
                     />
+                    {errors.client && (
+                      <p className="text-red-400 text-sm mt-1">{errors.client}</p>
+                    )}
                   </div>
                 </div>
 
