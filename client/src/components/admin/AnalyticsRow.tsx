@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   getContacts,
   getPortfolioItems,
   getPageVisitsFromAPI,
   resetPageVisitsAPI,
 } from "../../services/api";
+import toast from "react-hot-toast";
 
 interface AnalyticsData {
   contacts: number;
@@ -15,33 +16,51 @@ interface AnalyticsData {
   visitsChange: number;
 }
 
+interface AnalyticsState {
+  data: AnalyticsData;
+  loading: boolean;
+  error: string | null;
+  lastUpdate: Date | null;
+  consecutiveFailures: number;
+  isRetrying: boolean;
+}
+
 const AnalyticsRow = () => {
-  const [analytics, setAnalytics] = useState<AnalyticsData>({
+  const [state, setState] = useState<AnalyticsState>({
+    data: {
     contacts: 0,
     portfolioItems: 0,
     pageVisits: 0,
     contactsChange: 0,
     portfolioChange: 0,
     visitsChange: 0,
+    },
+    loading: true,
+    error: null,
+    lastUpdate: null,
+    consecutiveFailures: 0,
+    isRetrying: false,
   });
-  const [loading, setLoading] = useState(true);
 
-  const loadAnalytics = async () => {
+  // Retry configuration
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY = 2000; // 2 seconds
+  const FAILURE_THRESHOLD = 3; // Show error after 3 consecutive failures
+
+  // Extract common analytics logic to avoid duplication
+  const fetchAnalyticsData = useCallback(async (): Promise<AnalyticsData> => {
     try {
-      setLoading(true);
-
-      // Fetch real data from your API
-      const [contactsResponse, portfolioResponse] = await Promise.all([
+      // Fetch real data from API
+      const [contactsResponse, portfolioResponse, currentVisits] =
+        await Promise.all([
         getContacts(),
         getPortfolioItems(),
+          getPageVisitsFromAPI(),
       ]);
 
       // Get current counts
       const currentContacts = contactsResponse?.length || 0;
       const currentPortfolioItems = portfolioResponse?.length || 0;
-
-      // Get page visits from API
-      const currentVisits = await getPageVisitsFromAPI();
 
       // Get previous data from localStorage for comparison
       const previousData = localStorage.getItem("analyticsData");
@@ -73,12 +92,10 @@ const AnalyticsRow = () => {
         contacts: currentContacts,
         portfolioItems: currentPortfolioItems,
         pageVisits: currentVisits,
-        contactsChange: Math.round(contactsChange * 10) / 10, // Round to 1 decimal
+        contactsChange: Math.round(contactsChange * 10) / 10,
         portfolioChange: Math.round(portfolioChange * 10) / 10,
         visitsChange: Math.round(visitsChange * 10) / 10,
       };
-
-      setAnalytics(newAnalytics);
 
       // Store current data for next comparison
       localStorage.setItem(
@@ -89,100 +106,107 @@ const AnalyticsRow = () => {
           pageVisits: currentVisits,
         })
       );
+
+      return newAnalytics;
     } catch (error) {
-      console.error("Error loading analytics:", error);
-      // Don't fallback to mock data - show real zeros if API fails
-      setAnalytics({
-        contacts: 0,
-        portfolioItems: 0,
-        pageVisits: 0,
-        contactsChange: 0,
-        portfolioChange: 0,
-        visitsChange: 0,
-      });
-    } finally {
-      setLoading(false);
+      console.error("Error fetching analytics data:", error);
+      throw error;
     }
-  };
+  }, []);
+
+  // Load analytics with retry mechanism
+  const loadAnalytics = useCallback(
+    async (isRetry: boolean = false) => {
+      try {
+        if (!isRetry) {
+          setState((prev) => ({ ...prev, loading: true, error: null }));
+        }
+
+        const newAnalytics = await fetchAnalyticsData();
+
+        setState((prev) => ({
+          ...prev,
+          data: newAnalytics,
+          loading: false,
+          error: null,
+          lastUpdate: new Date(),
+          consecutiveFailures: 0,
+          isRetrying: false,
+        }));
+
+        // Clear any error toasts on success
+        toast.dismiss("analytics-error");
+      } catch (error) {
+        console.error("Error loading analytics:", error);
+
+        const newFailureCount = state.consecutiveFailures + 1;
+
+        setState((prev) => ({
+          ...prev,
+          loading: false,
+          error: "Failed to load analytics data",
+          consecutiveFailures: newFailureCount,
+          isRetrying: false,
+        }));
+
+        // Only show error notification after multiple consecutive failures
+        if (newFailureCount >= FAILURE_THRESHOLD) {
+          toast.error(
+            "Analytics data failed to load. Retrying automatically...",
+            { id: "analytics-error", duration: 4000 }
+          );
+        }
+
+        // Auto-retry with exponential backoff
+        if (newFailureCount <= MAX_RETRIES) {
+          setState((prev) => ({ ...prev, isRetrying: true }));
+
+          setTimeout(() => {
+            loadAnalytics(true);
+          }, RETRY_DELAY * newFailureCount);
+        }
+      }
+    },
+    [fetchAnalyticsData, state.consecutiveFailures]
+  );
+
+  // Silent refresh for real-time updates
+  const silentRefresh = useCallback(async () => {
+    try {
+      const newAnalytics = await fetchAnalyticsData();
+
+      setState((prev) => ({
+        ...prev,
+        data: newAnalytics,
+        lastUpdate: new Date(),
+        consecutiveFailures: 0, // Reset on successful silent refresh
+      }));
+        } catch (error) {
+          console.error("Silent analytics refresh failed:", error);
+
+      // Increment failure count but don't show user notification for silent failures
+      setState((prev) => ({
+        ...prev,
+        consecutiveFailures: prev.consecutiveFailures + 1,
+      }));
+    }
+  }, [fetchAnalyticsData]);
+
+  // Manual refresh with user feedback
+  const handleManualRefresh = useCallback(async () => {
+    toast.loading("Refreshing analytics...", { id: "manual-refresh" });
+    await loadAnalytics();
+    toast.success("Analytics refreshed!", { id: "manual-refresh" });
+  }, [loadAnalytics]);
 
   useEffect(() => {
     loadAnalytics();
 
-    // Silent auto-refresh every 5 seconds using the same logic as manual refresh
-    const interval = setInterval(() => {
-      // Use the same loadAnalytics function for consistency
-      const silentRefresh = async () => {
-        try {
-          // Fetch real data from your API
-          const [contactsResponse, portfolioResponse] = await Promise.all([
-            getContacts(),
-            getPortfolioItems(),
-          ]);
-
-          // Get current counts
-          const currentContacts = contactsResponse?.length || 0;
-          const currentPortfolioItems = portfolioResponse?.length || 0;
-
-          // Get page visits from API
-          const currentVisits = await getPageVisitsFromAPI();
-
-          // Get previous data from localStorage for comparison
-          const previousData = localStorage.getItem("analyticsData");
-          const previous = previousData
-            ? JSON.parse(previousData)
-            : {
-                contacts: 0,
-                portfolioItems: 0,
-                pageVisits: 0,
-              };
-
-          // Calculate percentage changes
-          const contactsChange =
-            previous.contacts > 0
-              ? ((currentContacts - previous.contacts) / previous.contacts) *
-                100
-              : 0;
-          const portfolioChange =
-            previous.portfolioItems > 0
-              ? ((currentPortfolioItems - previous.portfolioItems) /
-                  previous.portfolioItems) *
-                100
-              : 0;
-          const visitsChange =
-            previous.pageVisits > 0
-              ? ((currentVisits - previous.pageVisits) / previous.pageVisits) *
-                100
-              : 0;
-
-          const newAnalytics = {
-            contacts: currentContacts,
-            portfolioItems: currentPortfolioItems,
-            pageVisits: currentVisits,
-            contactsChange: Math.round(contactsChange * 10) / 10,
-            portfolioChange: Math.round(portfolioChange * 10) / 10,
-            visitsChange: Math.round(visitsChange * 10) / 10,
-          };
-
-          setAnalytics(newAnalytics);
-
-          // Store current data for next comparison
-          localStorage.setItem(
-            "analyticsData",
-            JSON.stringify({
-              contacts: currentContacts,
-              portfolioItems: currentPortfolioItems,
-              pageVisits: currentVisits,
-            })
-          );
-        } catch (error) {
-          console.error("Silent analytics refresh failed:", error);
-        }
-      };
-      silentRefresh();
-    }, 5000);
+    // Silent auto-refresh every 5 seconds for real-time updates
+    const interval = setInterval(silentRefresh, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [loadAnalytics, silentRefresh]);
 
   const getChangeColor = (change: number) => {
     return change >= 0 ? "text-emerald-500" : "text-red-500";
@@ -192,7 +216,42 @@ const AnalyticsRow = () => {
     return change >= 0 ? "↗" : "↘";
   };
 
-  if (loading) {
+  // Error boundary fallback - prevent dashboard crashes
+  if (state.error && state.consecutiveFailures > MAX_RETRIES) {
+    return (
+      <div className="mb-6 sm:mb-8">
+        <div className="mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 flex items-center gap-2 sm:gap-3">
+            <span className="w-1 h-6 sm:h-8 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></span>
+            Analytics Overview
+          </h2>
+        </div>
+
+        <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6 text-center">
+          <div className="text-red-400 mb-4">
+            <span className="text-2xl">⚠️</span>
+            <p className="mt-2">Analytics data is temporarily unavailable</p>
+          </div>
+          <div className="space-y-3">
+            <p className="text-slate-300 text-sm">
+              Last update:{" "}
+              {state.lastUpdate
+                ? state.lastUpdate.toLocaleTimeString()
+                : "Never"}
+            </p>
+            <button
+              onClick={() => loadAnalytics()}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+            >
+              🔄 Retry Now
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (state.loading) {
     return (
       <div className="mb-6 sm:mb-8">
         {/* Analytics Header */}
@@ -242,18 +301,26 @@ const AnalyticsRow = () => {
           </h2>
           <p className="text-slate-400 text-xs sm:text-sm">
             Real-time metrics and performance indicators
+            {state.lastUpdate && (
+              <span className="block text-xs text-slate-500 mt-1">
+                Last updated: {state.lastUpdate.toLocaleTimeString()}
+              </span>
+            )}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <button
-            onClick={() => {
-              loadAnalytics();
-            }}
-            className="bg-slate-700/50 hover:bg-slate-600/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50 flex items-center gap-1 sm:gap-2"
+            onClick={handleManualRefresh}
+            disabled={state.isRetrying}
+            className="bg-slate-700/50 hover:bg-slate-600/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50 flex items-center gap-1 sm:gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span>🔄</span>
-            <span className="hidden sm:inline">Refresh Analytics</span>
-            <span className="sm:hidden">Refresh</span>
+            <span>{state.isRetrying ? "⏳" : "🔄"}</span>
+            <span className="hidden sm:inline">
+              {state.isRetrying ? "Retrying..." : "Refresh Analytics"}
+            </span>
+            <span className="sm:hidden">
+              {state.isRetrying ? "Retrying..." : "Refresh"}
+            </span>
           </button>
 
           <button
@@ -261,8 +328,10 @@ const AnalyticsRow = () => {
               try {
                 await resetPageVisitsAPI();
                 loadAnalytics();
+                toast.success("Page visits reset successfully!");
               } catch (error) {
                 console.error("Failed to reset page visits:", error);
+                toast.error("Failed to reset page visits");
               }
             }}
             className="bg-red-600/50 hover:bg-red-500/50 text-white px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-red-600/50 hover:border-red-500/50 flex items-center gap-1 sm:gap-2"
@@ -274,6 +343,16 @@ const AnalyticsRow = () => {
           </button>
         </div>
       </div>
+
+      {/* Error indicator for consecutive failures */}
+      {state.consecutiveFailures > 0 &&
+        state.consecutiveFailures < FAILURE_THRESHOLD && (
+          <div className="mb-4 p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+            <p className="text-yellow-400 text-sm text-center">
+              ⚠️ Some analytics data may be outdated. Retrying automatically...
+            </p>
+          </div>
+        )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Contacts Analytics */}
@@ -289,17 +368,17 @@ const AnalyticsRow = () => {
               </div>
               <div
                 className={`text-xs sm:text-sm font-bold px-2 sm:px-3 py-1 rounded-full ${getChangeColor(
-                  analytics.contactsChange
+                  state.data.contactsChange
                 )} bg-slate-600/50 backdrop-blur-sm border border-slate-500/30`}
               >
                 <span className="flex items-center gap-1">
-                  {getChangeIcon(analytics.contactsChange)}
-                  {Math.abs(analytics.contactsChange)}%
+                  {getChangeIcon(state.data.contactsChange)}
+                  {Math.abs(state.data.contactsChange)}%
                 </span>
               </div>
             </div>
             <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2">
-              {analytics.contacts}
+              {state.data.contacts}
             </h3>
             <p className="text-slate-300 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
               Total Contacts
@@ -308,7 +387,7 @@ const AnalyticsRow = () => {
               <div
                 className="bg-gradient-to-r from-orange-500/60 to-red-500/60 h-2 sm:h-3 rounded-full transition-all duration-1000 shadow-lg"
                 style={{
-                  width: `${Math.min((analytics.contacts / 50) * 100, 100)}%`,
+                  width: `${Math.min((state.data.contacts / 50) * 100, 100)}%`,
                 }}
               ></div>
             </div>
@@ -328,17 +407,17 @@ const AnalyticsRow = () => {
               </div>
               <div
                 className={`text-xs sm:text-sm font-bold px-2 sm:px-3 py-1 rounded-full ${getChangeColor(
-                  analytics.portfolioChange
+                  state.data.portfolioChange
                 )} bg-slate-600/50 backdrop-blur-sm border border-slate-500/30`}
               >
                 <span className="flex items-center gap-1">
-                  {getChangeIcon(analytics.portfolioChange)}
-                  {Math.abs(analytics.portfolioChange)}%
+                  {getChangeIcon(state.data.portfolioChange)}
+                  {Math.abs(state.data.portfolioChange)}%
                 </span>
               </div>
             </div>
             <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2">
-              {analytics.portfolioItems}
+              {state.data.portfolioItems}
             </h3>
             <p className="text-slate-300 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
               Portfolio Items
@@ -348,7 +427,7 @@ const AnalyticsRow = () => {
                 className="bg-gradient-to-r from-emerald-500/60 to-teal-500/60 h-2 sm:h-3 rounded-full transition-all duration-1000 shadow-lg"
                 style={{
                   width: `${Math.min(
-                    (analytics.portfolioItems / 20) * 100,
+                    (state.data.portfolioItems / 20) * 100,
                     100
                   )}%`,
                 }}
@@ -370,17 +449,17 @@ const AnalyticsRow = () => {
               </div>
               <div
                 className={`text-xs sm:text-sm font-bold px-2 sm:px-3 py-1 rounded-full ${getChangeColor(
-                  analytics.visitsChange
+                  state.data.visitsChange
                 )} bg-slate-600/50 backdrop-blur-sm border border-slate-500/30`}
               >
                 <span className="flex items-center gap-1">
-                  {getChangeIcon(analytics.visitsChange)}
-                  {Math.abs(analytics.visitsChange)}%
+                  {getChangeIcon(state.data.visitsChange)}
+                  {Math.abs(state.data.visitsChange)}%
                 </span>
               </div>
             </div>
             <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2">
-              {analytics.pageVisits.toLocaleString()}
+              {state.data.pageVisits.toLocaleString()}
             </h3>
             <p className="text-slate-300 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
               Page Visits
@@ -390,7 +469,7 @@ const AnalyticsRow = () => {
                 className="bg-gradient-to-r from-blue-500/60 to-purple-500/60 h-2 sm:h-3 rounded-full transition-all duration-1000 shadow-lg"
                 style={{
                   width: `${Math.min(
-                    (analytics.pageVisits / 2000) * 100,
+                    (state.data.pageVisits / 2000) * 100,
                     100
                   )}%`,
                 }}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -27,26 +27,77 @@ type Contact = {
   createdAt: string;
 };
 
+type ErrorState = {
+  message: string;
+  type: 'fetch' | 'update' | 'delete' | 'network' | 'unknown';
+  retryable: boolean;
+};
+
 const ContactManager = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorState | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+  const [isRetrying, setIsRetrying] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const [isOffline, setIsOffline] = useState(false);
+  
   const navigate = useNavigate();
   const { logout } = useAuth();
+
+  // Retry configuration
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY = 2000; // 2 seconds
+
+  // Network status detection
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+      if (error?.type === 'network') {
+        setError(null);
+        fetchContacts(); // Auto-retry when coming back online
+      }
+    };
+
+    const handleOffline = () => {
+      setIsOffline(true);
+      if (!error) {
+        setError({
+          message: "You're currently offline. Some features may be unavailable.",
+          type: 'network',
+          retryable: true
+        });
+      }
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    // Check initial network status
+    setIsOffline(!navigator.onLine);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [error]);
 
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully!");
   };
 
-  const fetchContacts = async () => {
-    setLoading(true);
+  const fetchContacts = useCallback(async (isRetry: boolean = false) => {
     try {
+      if (!isRetry) {
+        setLoading(true);
+        setError(null);
+      }
+
       const contacts = await getContacts();
       if (Array.isArray(contacts)) {
         // Remove duplicates based on _id
@@ -54,19 +105,75 @@ const ContactManager = () => {
           index === self.findIndex(c => c._id === contact._id)
         );
         setContacts(uniqueContacts);
+        setRetryCount(0); // Reset retry count on success
       } else {
         console.error("Contacts data is not an array:", contacts);
         setContacts([]);
-        setError("Invalid data format received from server.");
+        setError({
+          message: "Invalid data format received from server. Please contact support.",
+          type: 'fetch',
+          retryable: true
+        });
       }
-      setError("");
-    } catch (error) {
-      setError("Failed to fetch contacts.");
-      toast.error("❌ Failed to fetch contacts.");
+    } catch (error: any) {
+      console.error("Error fetching contacts:", error);
+      
+      let errorMessage = "Failed to fetch contacts.";
+      let errorType: ErrorState['type'] = 'fetch';
+      let retryable = true;
+
+      // Determine specific error type and message
+      if (error?.response?.status === 401) {
+        errorMessage = "Authentication expired. Please log in again.";
+        errorType = 'fetch';
+        retryable = false;
+      } else if (error?.response?.status === 403) {
+        errorMessage = "Access denied. You don't have permission to view contacts.";
+        errorType = 'fetch';
+        retryable = false;
+      } else if (error?.response?.status === 404) {
+        errorMessage = "Contact service not found. Please contact support.";
+        errorType = 'fetch';
+        retryable = true;
+      } else if (error?.response?.status >= 500) {
+        errorMessage = "Server error. Our team has been notified.";
+        errorType = 'fetch';
+        retryable = true;
+      } else if (error?.message?.includes('Network Error') || error?.code === 'NETWORK_ERROR') {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+        errorType = 'network';
+        retryable = true;
+      } else if (error?.message?.includes('timeout')) {
+        errorMessage = "Request timed out. Please try again.";
+        errorType = 'fetch';
+        retryable = true;
+      }
+
+      setError({
+        message: errorMessage,
+        type: errorType,
+        retryable
+      });
+
+      // Auto-retry for retryable errors
+      if (retryable && retryCount < MAX_RETRIES) {
+        const newRetryCount = retryCount + 1;
+        setRetryCount(newRetryCount);
+        
+        if (newRetryCount <= MAX_RETRIES) {
+          setIsRetrying(true);
+          toast.error(`Retrying... (${newRetryCount}/${MAX_RETRIES})`, { id: 'refresh-contacts' });
+          
+          setTimeout(() => {
+            fetchContacts(true);
+          }, RETRY_DELAY * newRetryCount);
+        }
+      }
     } finally {
       setLoading(false);
+      setIsRetrying(false);
     }
-  };
+  }, [retryCount]);
 
   const updateStatus = async (id: string, newStatus: Contact["status"]) => {
     if (!newStatus) return;
@@ -77,9 +184,25 @@ const ContactManager = () => {
       setContacts((prev) =>
         prev.map((c) => (c._id === id ? { ...c, status: newStatus } : c))
       );
-      toast.success("✅ Inquiry status updated!");
-    } catch (error) {
-      toast.error("❌ Failed to update status.");
+      toast.success("✅ Inquiry status updated successfully!");
+    } catch (error: any) {
+      console.error("Update status error:", error);
+      
+      let errorMessage = "Failed to update status.";
+      
+      if (error?.response?.status === 401) {
+        errorMessage = "Authentication expired. Please log in again.";
+      } else if (error?.response?.status === 403) {
+        errorMessage = "Access denied. You don't have permission to update this inquiry.";
+      } else if (error?.response?.status === 404) {
+        errorMessage = "Inquiry not found. It may have been deleted.";
+      } else if (error?.response?.status >= 500) {
+        errorMessage = "Server error. Please try again later.";
+      } else if (error?.message?.includes('Network Error')) {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+      }
+      
+      toast.error(`❌ ${errorMessage}`);
     } finally {
       setUpdatingId(null);
     }
@@ -87,7 +210,7 @@ const ContactManager = () => {
 
   const deleteContactHandler = async (id: string) => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this inquiry?"
+      "Are you sure you want to delete this inquiry? This action cannot be undone."
     );
     if (!confirmed) return;
 
@@ -95,9 +218,25 @@ const ContactManager = () => {
       setDeletingId(id);
       await deleteContact(id);
       setContacts((prev) => prev.filter((c) => c._id !== id));
-      toast.success("🗑️ Inquiry deleted.");
-    } catch (error) {
-      toast.error("❌ Failed to delete inquiry.");
+      toast.success("🗑️ Inquiry deleted successfully!");
+    } catch (error: any) {
+      console.error("Delete error:", error);
+      
+      let errorMessage = "Failed to delete inquiry.";
+      
+      if (error?.response?.status === 401) {
+        errorMessage = "Authentication expired. Please log in again.";
+      } else if (error?.response?.status === 403) {
+        errorMessage = "Access denied. You don't have permission to delete this inquiry.";
+      } else if (error?.response?.status === 404) {
+        errorMessage = "Inquiry not found. It may have been already deleted.";
+      } else if (error?.response?.status >= 500) {
+        errorMessage = "Server error. Please try again later.";
+      } else if (error?.message?.includes('Network Error')) {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+      }
+      
+      toast.error(`❌ ${errorMessage}`);
     } finally {
       setDeletingId(null);
     }
@@ -120,9 +259,55 @@ const ContactManager = () => {
     setExpandedIds([]); // Close all expanded items when changing pages
   };
 
+  // Error boundary fallback - prevent dashboard crashes
+  if (error && !error.retryable && retryCount >= MAX_RETRIES) {
+    return (
+      <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen">
+        <AdminNavbar />
+        <div className="md:ml-64 p-3 sm:p-4 md:p-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-6 sm:mb-8">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xs sm:text-sm">VC</span>
+                </div>
+                <span className="text-slate-400 text-xs sm:text-sm font-medium">Video Crew</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-2">
+                Contact Inquiries
+              </h1>
+            </div>
+
+            <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6 text-center">
+              <div className="text-red-400 mb-4">
+                <span className="text-2xl">⚠️</span>
+                <p className="mt-2">Contact Manager is temporarily unavailable</p>
+              </div>
+              <div className="space-y-3">
+                <p className="text-slate-300 text-sm">
+                  {error.message}
+                </p>
+                <button
+                  onClick={() => {
+                    setRetryCount(0);
+                    setError(null);
+                    fetchContacts();
+                  }}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  🔄 Try Again
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [fetchContacts]);
 
   return (
     <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen">
@@ -148,8 +333,42 @@ const ContactManager = () => {
                 <p className="text-slate-400 text-sm sm:text-base">
                   Manage and respond to customer inquiries
                 </p>
+                {/* Network Status Indicator */}
+                {isOffline && (
+                  <div className="mt-2 flex items-center gap-2 text-yellow-400 text-xs">
+                    <span>📡</span>
+                    <span>You're currently offline</span>
+                  </div>
+                )}
+                {/* Retry Status */}
+                {isRetrying && (
+                  <div className="mt-2 flex items-center gap-2 text-blue-400 text-xs">
+                    <span>⏳</span>
+                    <span>Retrying... ({retryCount}/{MAX_RETRIES})</span>
+                  </div>
+                )}
               </div>
               <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => {
+                    toast.loading("Refreshing contacts...", { id: 'refresh-contacts' });
+                    fetchContacts().finally(() => {
+                      toast.success("Contacts refreshed!", { id: 'refresh-contacts' });
+                    });
+                  }}
+                  disabled={loading || isRetrying}
+                  className="group bg-blue-600/50 hover:bg-blue-500/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-blue-600/50 hover:border-blue-500/50 flex items-center gap-1 sm:gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Refresh contacts"
+                >
+                  <span>{loading || isRetrying ? "⏳" : "🔄"}</span>
+                  <span className="hidden sm:inline">
+                    {loading || isRetrying ? "Refreshing..." : "Refresh"}
+                  </span>
+                  <span className="sm:hidden">
+                    {loading || isRetrying ? "Refreshing..." : "Refresh"}
+                  </span>
+                </button>
+
                 <button
                   onClick={() => navigate("/admin/dashboard")}
                   className="group bg-slate-700/50 hover:bg-slate-600/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50 flex items-center gap-1 sm:gap-2"
@@ -172,7 +391,7 @@ const ContactManager = () => {
           </div>
 
           {/* Content */}
-          {loading ? (
+          {loading && !isRetrying ? (
             <div className="bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-6">
               <div className="flex items-center justify-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
@@ -181,7 +400,20 @@ const ContactManager = () => {
             </div>
           ) : error ? (
             <div className="bg-gradient-to-br from-red-900/30 to-red-800/30 backdrop-blur-sm border border-red-700/50 rounded-xl sm:rounded-2xl p-6">
-              <p className="text-red-400 text-center">{error}</p>
+              <p className="text-red-400 text-center">{error.message}</p>
+              {error.retryable && (
+                <button
+                  onClick={() => fetchContacts()}
+                  className="mt-4 px-4 py-2 bg-red-600/50 hover:bg-red-500/50 text-white rounded-lg text-sm transition-all duration-200"
+                >
+                  Retry
+                </button>
+              )}
+              {isOffline && (
+                <p className="mt-2 text-red-400 text-sm">
+                  You are currently offline. Please check your connection.
+                </p>
+              )}
             </div>
           ) : !Array.isArray(contacts) || contacts.length === 0 ? (
             <div className="bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-6">
@@ -255,7 +487,7 @@ const ContactManager = () => {
                                 )
                               }
                               className="border border-slate-600/50 rounded-lg px-3 py-2 bg-slate-800/50 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-                              disabled={updatingId === contact._id}
+                              disabled={updatingId === contact._id || isOffline}
                             >
                               <option value="new">New</option>
                               <option value="processing">Processing</option>
@@ -265,11 +497,20 @@ const ContactManager = () => {
                             <button
                               onClick={() => toggleExpand(contact._id)}
                               className="px-3 py-2 text-sm rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50"
+                              disabled={isOffline}
                             >
                               {isExpanded ? "Hide Details" : "View Details"}
                             </button>
                           </div>
                         </div>
+
+                        {/* Loading indicator for status update */}
+                        {updatingId === contact._id && (
+                          <div className="mt-2 flex items-center gap-2 text-blue-400 text-xs">
+                            <span className="animate-spin">⏳</span>
+                            <span>Updating status...</span>
+                          </div>
+                        )}
 
                         {isExpanded && (
                           <div className="mt-4 pt-4 border-t border-slate-600/30">
@@ -371,10 +612,16 @@ const ContactManager = () => {
                                     ? "opacity-50 pointer-events-none"
                                     : ""
                                 }`}
+                                disabled={isOffline || deletingId === contact._id}
                               >
-                                {deletingId === contact._id
-                                  ? "Deleting..."
-                                  : "🗑️ Delete Inquiry"}
+                                {deletingId === contact._id ? (
+                                  <span className="flex items-center gap-1">
+                                    <span className="animate-spin">⏳</span>
+                                    Deleting...
+                                  </span>
+                                ) : (
+                                  "🗑️ Delete Inquiry"
+                                )}
                               </button>
                             </div>
                           </div>

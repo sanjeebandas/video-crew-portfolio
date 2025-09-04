@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useScrollAnimations } from "../../utils/animations";
 
 type FeatureProps = {
@@ -17,6 +17,11 @@ const DifferentiationFeatureSection = ({
   reverse = false,
 }: FeatureProps) => {
   const { stackIn } = useScrollAnimations();
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
 
   useEffect(() => {
     // Reduced delay for faster animations while maintaining lazy loading compatibility
@@ -50,11 +55,25 @@ const DifferentiationFeatureSection = ({
 
         {/* Image Block */}
         <div className="w-full md:w-1/2 group hover:scale-105 transition-transform duration-500 ease-out cursor-pointer">
-          <img
-            src={imageUrl}
-            alt={title}
-            className="w-full h-auto rounded-md object-cover"
-          />
+          {!imageError ? (
+            <img
+              src={imageUrl}
+              alt={title}
+              className="w-full h-auto rounded-md object-cover"
+              onError={handleImageError}
+            />
+          ) : (
+            <div className="w-full h-[300px] bg-gray-800 flex items-center justify-center rounded-md">
+              <div className="text-center text-white">
+                <div className="w-16 h-16 mx-auto mb-3 bg-gray-600 rounded-full flex items-center justify-center">
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <p className="text-sm text-gray-400">이미지를 불러올 수 없습니다</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

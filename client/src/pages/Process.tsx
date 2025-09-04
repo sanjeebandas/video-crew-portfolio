@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ProcessBanner from "../process/ProcessBanner";
 import ProcessStep from "../process/ProcessStep";
 import SEO from "../components/common/SEO";
+import ErrorBoundary from "../components/common/ErrorBoundary";
 
 const processSteps = [
   {
@@ -135,21 +136,39 @@ const Process = () => {
         className="bg-black text-white relative overflow-hidden"
       >
         <ProcessBanner />
-        <div className="max-w-[1248px] mx-auto px-4 py-12 md:py-20 xl:py-32 flex flex-col gap-20 md:gap-28 xl:gap-32">
-          {processSteps.map((step, index) => (
-            <div key={step.id} className="process-step">
-              <ProcessStep
-                id={step.id}
-                title={step.title}
-                subtitle={step.subtitle}
-                description={step.description}
-                image={step.image}
-                reverse={index % 2 !== 0}
-                offsetY={step.offsetY}
-              />
-            </div>
-          ))}
-        </div>
+        <ErrorBoundary
+          onError={(error, errorInfo) => {
+            console.error('Process page error:', error, errorInfo);
+          }}
+        >
+          <div className="max-w-[1248px] mx-auto px-4 py-12 md:py-20 xl:py-32 flex flex-col gap-20 md:gap-28 xl:gap-32">
+            {processSteps.map((step, index) => (
+              <ErrorBoundary
+                key={step.id}
+                fallback={
+                  <div className="min-h-[300px] flex items-center justify-center">
+                    <div className="text-center text-white">
+                      <h3 className="text-lg font-semibold mb-2">프로세스 단계 {step.id}을 불러올 수 없습니다</h3>
+                      <p className="text-gray-400">페이지를 새로고침해주세요.</p>
+                    </div>
+                  </div>
+                }
+              >
+                <div className="process-step">
+                  <ProcessStep
+                    id={step.id}
+                    title={step.title}
+                    subtitle={step.subtitle}
+                    description={step.description}
+                    image={step.image}
+                    reverse={index % 2 !== 0}
+                    offsetY={step.offsetY}
+                  />
+                </div>
+              </ErrorBoundary>
+            ))}
+          </div>
+        </ErrorBoundary>
       </div>
     </>
   );

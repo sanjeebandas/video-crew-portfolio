@@ -2,25 +2,14 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { useScrollAnimations } from "../../utils/animations";
 import api from "../../services/api";
+import { useContactErrorHandler } from "../../hooks/useContactErrorHandler";
+import { useFormPersistence } from "../../hooks/useFormPersistence";
 
 const ContactForm = () => {
   const { slideInFromLeft, staggerFadeIn, fadeInUp } = useScrollAnimations();
 
-  useEffect(() => {
-    // Reduced delay for faster animations while maintaining lazy loading compatibility
-    const timer = setTimeout(() => {
-      // Contact form animations - optimized for smooth user experience
-      slideInFromLeft(".contact-title");
-      staggerFadeIn(".contact-form-row", 0.06); // Fast stagger for form rows
-      fadeInUp(".contact-submit-btn");
-    }, 120); // Reduced from 200ms to 120ms
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
-
-  const [formData, setFormData] = useState({
+  // Initial form data
+  const initialFormData = {
     namePosition: "",
     email: "",
     contact: "",
@@ -35,9 +24,34 @@ const ContactForm = () => {
     websiteLinks: "",
     additionalInfo: "",
     agreeToTerms: false,
+  };
+
+  // Form persistence and error handling
+  const { formData, updateFormData, clearFormData } = useFormPersistence('contact-form', initialFormData);
+  const { errorState, handleError, clearError, retry, canRetry } = useContactErrorHandler({
+    maxRetries: 2,
+    retryDelay: 1000,
+    onRetry: () => {
+      console.log('Retrying contact form submission...');
+    }
   });
 
   const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    // Reduced delay for faster animations while maintaining lazy loading compatibility
+    const timer = setTimeout(() => {
+      // Contact form animations - optimized for smooth user experience
+      slideInFromLeft(".contact-title");
+      staggerFadeIn(".contact-form-row", 0.06); // Fast stagger for form rows
+      fadeInUp(".contact-submit-btn");
+    }, 120); // Reduced from 200ms to 120ms
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   // Validation functions
   const validateName = (name: string): boolean => {
@@ -104,15 +118,21 @@ const ContactForm = () => {
     >
   ) => {
     const { name, value, type } = e.target;
-    setFormData((prev) => ({
+    const newValue = type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+    
+    updateFormData((prev) => ({
       ...prev,
-      [name]:
-        type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+      [name]: newValue,
     }));
 
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: "" }));
+    }
+
+    // Clear submission error when user makes changes
+    if (errorState.hasError) {
+      clearError();
     }
   };
 
@@ -128,6 +148,9 @@ const ContactForm = () => {
       toast.error("개인정보 수집 및 이용에 동의해주세요.");
       return;
     }
+
+    setIsSubmitting(true);
+    clearError();
 
     try {
       const payload = {
@@ -147,8 +170,8 @@ const ContactForm = () => {
         videoCount: formData.videoCount,
         runningTime: formData.runningTime,
         status: "new",
-        submittedAt: new Date().toISOString(), // optional, in case you want to track manually
-        source: "website", // optional: to help identify the origin
+        submittedAt: new Date().toISOString(),
+        source: "website",
       };
 
       const loadingToast = toast.loading("제출 중입니다...");
@@ -158,28 +181,47 @@ const ContactForm = () => {
       toast.dismiss(loadingToast);
       toast.success("문의가 성공적으로 제출되었습니다!");
 
-      setFormData({
-        namePosition: "",
-        email: "",
-        contact: "",
-        companyChannel: "",
-        videoCount: "",
-        deliveryDate: "",
-        runningTime: "",
-        budget: "",
-        productionPurpose: "",
-        uploadPlatform: "",
-        referenceVideos: "",
-        websiteLinks: "",
-        additionalInfo: "",
-        agreeToTerms: false,
-      });
-
+      // Clear form data and localStorage on successful submission
+      clearFormData();
       setErrors({});
     } catch (err: any) {
-      toast.error("제출에 실패했습니다. 다시 시도해주세요.");
+      toast.dismiss();
+      handleError(err);
       console.error("Submission error:", err.response?.data || err.message);
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  // Retry function for failed submissions
+  const handleRetry = async () => {
+    await retry(async () => {
+      const payload = {
+        name: formData.namePosition,
+        email: formData.email,
+        phone: formData.contact,
+        company: formData.companyChannel,
+        budget: formData.budget,
+        preferredDate: formData.deliveryDate,
+        service: formData.productionPurpose,
+        subject: `${formData.videoCount} Videos • ${formData.runningTime} Runtime • Platform: ${formData.uploadPlatform}`,
+        message: formData.additionalInfo || "No additional information provided",
+        referenceVideos: formData.referenceVideos,
+        websiteLinks: formData.websiteLinks,
+        productionPurpose: formData.productionPurpose,
+        uploadPlatform: formData.uploadPlatform,
+        videoCount: formData.videoCount,
+        runningTime: formData.runningTime,
+        status: "new",
+        submittedAt: new Date().toISOString(),
+        source: "website",
+      };
+
+      await api.post('/contact', payload);
+      toast.success("문의가 성공적으로 제출되었습니다!");
+      clearFormData();
+      setErrors({});
+    });
   };
 
   return (
@@ -188,6 +230,33 @@ const ContactForm = () => {
       <h1 className="text-white text-4xl font-bold text-center mb-12 contact-title">
         Contact Us
       </h1>
+
+      {/* Error Display */}
+      {errorState.hasError && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-red-800 font-medium">{errorState.error}</p>
+              </div>
+            </div>
+            {canRetry && (
+              <button
+                type="button"
+                onClick={handleRetry}
+                className="ml-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+              >
+                다시 시도
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Row 1 */}
@@ -479,9 +548,21 @@ const ContactForm = () => {
         <div className="flex justify-center pt-6">
           <button
             type="submit"
-            className="px-12 py-3 bg-blue-600 hover:bg-blue-700 hover:scale-105 cursor-pointer hover:shadow-lg text-white font-medium rounded-full transition-all duration-300 ease-out contact-submit-btn"
+            disabled={isSubmitting}
+            className={`px-12 py-3 font-medium rounded-full transition-all duration-300 ease-out contact-submit-btn ${
+              isSubmitting
+                ? 'bg-gray-600 cursor-not-allowed opacity-70'
+                : 'bg-blue-600 hover:bg-blue-700 hover:scale-105 cursor-pointer hover:shadow-lg'
+            } text-white`}
           >
-            제출하기
+            {isSubmitting ? (
+              <div className="flex items-center">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                제출 중...
+              </div>
+            ) : (
+              '제출하기'
+            )}
           </button>
         </div>
       </form>

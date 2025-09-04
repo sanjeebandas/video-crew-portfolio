@@ -4,6 +4,8 @@ import LazyImage from "../common/LazyImage";
 
 const HeroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageLoadStates, setImageLoadStates] = useState<boolean[]>([]);
+  const [imageErrors, setImageErrors] = useState<boolean[]>([]);
   const heroRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
 
@@ -14,6 +16,12 @@ const HeroSection = () => {
     "/imgs/Banner-Image3.webp",
     "/imgs/Banner-Image4.webp",
   ];
+
+  // Initialize image load states
+  useEffect(() => {
+    setImageLoadStates(new Array(bannerImages.length).fill(false));
+    setImageErrors(new Array(bannerImages.length).fill(false));
+  }, [bannerImages.length]);
 
   // Array of text content for each carousel slide
   const carouselContent = [
@@ -114,6 +122,22 @@ const HeroSection = () => {
     setCurrentImageIndex(index);
   };
 
+  const handleImageLoad = (index: number) => {
+    setImageLoadStates(prev => {
+      const newStates = [...prev];
+      newStates[index] = true;
+      return newStates;
+    });
+  };
+
+  const handleImageError = (index: number) => {
+    setImageErrors(prev => {
+      const newErrors = [...prev];
+      newErrors[index] = true;
+      return newErrors;
+    });
+  };
+
   return (
     <section
       ref={heroRef}
@@ -127,13 +151,40 @@ const HeroSection = () => {
             index === currentImageIndex ? "opacity-100 z-10" : "opacity-0 z-0"
           }`}
         >
-          <LazyImage
-            src={image}
-            alt={`비디오크루 배너 이미지 ${index + 1} - ${
-              carouselContent[index].title
-            }`}
-            className="absolute top-0 left-0 w-full h-full object-cover object-[center_30%] sm:object-[center_25%] md:object-top -translate-y-2 xs:-translate-y-3 sm:-translate-y-4 md:-translate-y-5"
-          />
+          {/* Loading state */}
+          {!imageLoadStates[index] && !imageErrors[index] && (
+            <div className="absolute top-0 left-0 w-full h-full bg-gray-800 flex items-center justify-center">
+              <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
+          
+          {/* Error state */}
+          {imageErrors[index] && (
+            <div className="absolute top-0 left-0 w-full h-full bg-gray-800 flex items-center justify-center">
+              <div className="text-center text-white">
+                <div className="w-12 h-12 mx-auto mb-2 bg-gray-600 rounded-full flex items-center justify-center">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <p className="text-sm text-gray-400">이미지를 불러올 수 없습니다</p>
+              </div>
+            </div>
+          )}
+          
+          {/* Image */}
+          {!imageErrors[index] && (
+            <LazyImage
+              src={image}
+              alt={`비디오크루 배너 이미지 ${index + 1} - ${
+                carouselContent[index].title
+              }`}
+              className="absolute top-0 left-0 w-full h-full object-cover object-[center_30%] sm:object-[center_25%] md:object-top -translate-y-2 xs:-translate-y-3 sm:-translate-y-4 md:-translate-y-5"
+              onLoad={() => handleImageLoad(index)}
+              onError={() => handleImageError(index)}
+            />
+          )}
+          
           {/* Dark overlay for better text readability */}
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
