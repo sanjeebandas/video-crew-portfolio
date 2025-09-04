@@ -1,9 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../services/api";
 import { uploadImage, uploadVideo } from "../services/upload";
 import { getToken } from "../utils/helpers";
+
+type ErrorState = {
+  message: string;
+  type: 'fetch' | 'upload' | 'api' | 'network' | 'validation' | 'unknown';
+  retryable: boolean;
+  component?: string;
+};
 
 type PortfolioFormData = {
   title: string;
@@ -42,6 +49,78 @@ const EditPortfolioPage = () => {
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
+  
+  // Robust error handling states
+  const [error, setError] = useState<ErrorState | null>(null);
+  const [isRetrying, setIsRetrying] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const [isOffline, setIsOffline] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<{thumbnail: number, video: number}>({thumbnail: 0, video: 0});
+  const [isUploading, setIsUploading] = useState(false);
+
+  // Retry configuration
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY = 2000; // 2 seconds
+
+  // Network status detection
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+      if (error?.type === 'network') {
+        setError(null);
+        // Auto-retry when coming back online
+        if (retryCount < MAX_RETRIES) {
+          handleRetry();
+        }
+      }
+    };
+
+    const handleOffline = () => {
+      setIsOffline(true);
+      if (!error) {
+        setError({
+          message: "You're currently offline. File uploads and form submission are unavailable.",
+          type: 'network',
+          retryable: true
+        });
+      }
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    // Check initial network status
+    setIsOffline(!navigator.onLine);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [error, retryCount]);
+
+  // Retry handler
+  const handleRetry = useCallback(async () => {
+    if (retryCount >= MAX_RETRIES) return;
+
+    try {
+      setIsRetrying(true);
+      const newRetryCount = retryCount + 1;
+      setRetryCount(newRetryCount);
+
+      // Clear errors and retry
+      setError(null);
+
+      // Simulate retry delay
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * newRetryCount));
+
+      // Reset retry count on success
+      setRetryCount(0);
+    } catch (error) {
+      console.error("Retry failed:", error);
+    } finally {
+      setIsRetrying(false);
+    }
+  }, [retryCount]);
 
   // Validation functions
   const validateName = (name: string): boolean => {
@@ -73,6 +152,8 @@ const EditPortfolioPage = () => {
   useEffect(() => {
     const fetchItem = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const res = await api.get(`/portfolio/${id}`);
         const data = res.data;
 
@@ -86,16 +167,74 @@ const EditPortfolioPage = () => {
           featured: data.featured || false,
           displayOrder: data.displayOrder || 0,
         });
-      } catch (err) {
-        toast.error("Failed to fetch portfolio item.");
-        navigate("/admin/portfolio");
+        setRetryCount(0); // Reset retry count on success
+      } catch (err: any) {
+        console.error("Fetch error:", err);
+        
+        let errorMessage = "Failed to fetch portfolio item.";
+        let errorType: ErrorState['type'] = 'fetch';
+        let retryable = true;
+
+        // Determine specific error type and message
+        if (err?.response?.status === 401) {
+          errorMessage = "Authentication expired. Please log in again.";
+          errorType = 'fetch';
+          retryable = false;
+        } else if (err?.response?.status === 403) {
+          errorMessage = "Access denied. You don't have permission to view this portfolio item.";
+          errorType = 'fetch';
+          retryable = false;
+        } else if (err?.response?.status === 404) {
+          errorMessage = "Portfolio item not found. It may have been deleted.";
+          errorType = 'fetch';
+          retryable = false;
+        } else if (err?.response?.status >= 500) {
+          errorMessage = "Server error. Our team has been notified.";
+          errorType = 'fetch';
+          retryable = true;
+        } else if (err?.message?.includes('Network Error') || err?.code === 'NETWORK_ERROR') {
+          errorMessage = "Network connection failed. Please check your internet connection.";
+          errorType = 'network';
+          retryable = true;
+        } else if (err?.message?.includes('timeout')) {
+          errorMessage = "Request timed out. Please try again.";
+          errorType = 'fetch';
+          retryable = true;
+        }
+
+        setError({
+          message: errorMessage,
+          type: errorType,
+          retryable
+        });
+
+        // Auto-retry for retryable errors
+        if (retryable && retryCount < MAX_RETRIES) {
+          const newRetryCount = retryCount + 1;
+          setRetryCount(newRetryCount);
+          
+          if (newRetryCount <= MAX_RETRIES) {
+            setIsRetrying(true);
+            toast.error(`Retrying... (${newRetryCount}/${MAX_RETRIES})`);
+            
+            setTimeout(() => {
+              fetchItem();
+            }, RETRY_DELAY * newRetryCount);
+          }
+        } else if (!retryable) {
+          // Navigate back for non-retryable errors
+          setTimeout(() => {
+            navigate("/admin/portfolio");
+          }, 3000);
+        }
       } finally {
         setLoading(false);
+        setIsRetrying(false);
       }
     };
 
     if (id) fetchItem();
-  }, [id, navigate]);
+  }, [id, navigate, retryCount]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -123,13 +262,75 @@ const EditPortfolioPage = () => {
 
   const uploadMedia = async () => {
     const uploaded: Partial<PortfolioFormData> = {};
-    if (thumbnailFile) {
-      uploaded.thumbnailUrl = await uploadImage(thumbnailFile);
+    const token = getToken();
+    if (!token) {
+      throw new Error("Not authenticated. Please log in again.");
     }
-    if (videoFile) {
-      uploaded.videoUrl = await uploadVideo(videoFile);
+
+    try {
+      setIsUploading(true);
+      setUploadProgress({thumbnail: 0, video: 0});
+
+      // Upload thumbnail with progress tracking
+      if (thumbnailFile) {
+        setUploadProgress(prev => ({...prev, thumbnail: 10}));
+        uploaded.thumbnailUrl = await uploadImage(thumbnailFile);
+        setUploadProgress(prev => ({...prev, thumbnail: 100}));
+      }
+
+      // Upload video with progress tracking
+      if (videoFile) {
+        setUploadProgress(prev => ({...prev, video: 10}));
+        uploaded.videoUrl = await uploadVideo(videoFile);
+        setUploadProgress(prev => ({...prev, video: 100}));
+      }
+
+      return uploaded;
+    } catch (uploadErr: any) {
+      console.error("Upload error:", uploadErr);
+      
+      let errorMessage = "Failed to upload media files.";
+      let errorType: ErrorState['type'] = 'upload';
+      let retryable = true;
+
+      // Determine specific error type and message
+      if (uploadErr?.response?.status === 401) {
+        errorMessage = "Authentication expired. Please log in again.";
+        errorType = 'api';
+        retryable = false;
+      } else if (uploadErr?.response?.status === 403) {
+        errorMessage = "Access denied. You don't have permission to upload files.";
+        errorType = 'api';
+        retryable = false;
+      } else if (uploadErr?.response?.status === 413) {
+        errorMessage = "File too large. Please reduce file size and try again.";
+        errorType = 'upload';
+        retryable = true;
+      } else if (uploadErr?.response?.status >= 500) {
+        errorMessage = "Server error during upload. Please try again.";
+        errorType = 'upload';
+        retryable = true;
+      } else if (uploadErr?.message?.includes('Network Error') || uploadErr?.code === 'NETWORK_ERROR') {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+        errorType = 'network';
+        retryable = true;
+      } else if (uploadErr?.message?.includes('timeout')) {
+        errorMessage = "Upload timed out. Please try again.";
+        errorType = 'upload';
+        retryable = true;
+      }
+
+      setError({
+        message: errorMessage,
+        type: errorType,
+        retryable
+      });
+
+      throw uploadErr;
+    } finally {
+      setIsUploading(false);
+      setUploadProgress({thumbnail: 0, video: 0});
     }
-    return uploaded;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -140,7 +341,13 @@ const EditPortfolioPage = () => {
       return;
     }
 
+    if (isOffline) {
+      toast.error("You're currently offline. Please check your connection.");
+      return;
+    }
+
     setSaving(true);
+    setError(null);
     const token = getToken();
 
     try {
@@ -151,14 +358,108 @@ const EditPortfolioPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      toast.success("Portfolio updated!");
+      toast.success("Portfolio updated successfully!");
+      setRetryCount(0); // Reset retry count on success
       navigate("/admin/portfolio");
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Update failed.");
+      console.error("Submit error:", err);
+      
+      let errorMessage = "Failed to update portfolio.";
+      let errorType: ErrorState['type'] = 'api';
+      let retryable = true;
+
+      // Determine specific error type and message
+      if (err?.response?.status === 401) {
+        errorMessage = "Authentication expired. Please log in again.";
+        errorType = 'api';
+        retryable = false;
+      } else if (err?.response?.status === 403) {
+        errorMessage = "Access denied. You don't have permission to update this portfolio item.";
+        errorType = 'api';
+        retryable = false;
+      } else if (err?.response?.status === 404) {
+        errorMessage = "Portfolio item not found. It may have been deleted.";
+        errorType = 'api';
+        retryable = false;
+      } else if (err?.response?.status >= 500) {
+        errorMessage = "Server error. Our team has been notified.";
+        errorType = 'api';
+        retryable = true;
+      } else if (err?.message?.includes('Network Error') || err?.code === 'NETWORK_ERROR') {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+        errorType = 'network';
+        retryable = true;
+      } else if (err?.message?.includes('timeout')) {
+        errorMessage = "Request timed out. Please try again.";
+        errorType = 'api';
+        retryable = true;
+      }
+
+      setError({
+        message: errorMessage,
+        type: errorType,
+        retryable
+      });
+
+      // Auto-retry for retryable errors
+      if (retryable && retryCount < MAX_RETRIES) {
+        const newRetryCount = retryCount + 1;
+        setRetryCount(newRetryCount);
+        
+        if (newRetryCount <= MAX_RETRIES) {
+          setIsRetrying(true);
+          toast.error(`Retrying... (${newRetryCount}/${MAX_RETRIES})`);
+          
+          setTimeout(() => {
+            handleSubmit(e);
+          }, RETRY_DELAY * newRetryCount);
+        }
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setSaving(false);
+      setIsRetrying(false);
     }
   };
+
+  // Error boundary fallback - prevent page crashes
+  if (error && !error.retryable && retryCount >= MAX_RETRIES) {
+    return (
+      <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen p-4 md:p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6 text-center">
+            <div className="text-red-400 mb-4">
+              <span className="text-2xl">⚠️</span>
+              <p className="mt-2">Edit Portfolio page is temporarily unavailable</p>
+            </div>
+            <div className="space-y-3">
+              <p className="text-slate-300 text-sm">
+                {error.message}
+              </p>
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={() => {
+                    setRetryCount(0);
+                    setError(null);
+                  }}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  🔄 Try Again
+                </button>
+                <button
+                  onClick={() => navigate("/admin/portfolio")}
+                  className="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  ← Back to Portfolio
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -207,11 +508,88 @@ const EditPortfolioPage = () => {
             <p className="text-slate-400 text-sm mt-1">
               Update your project details
             </p>
+            
+            {/* Network Status Indicator */}
+            {isOffline && (
+              <div className="mt-2 flex items-center gap-2 text-yellow-400 text-xs">
+                <span>📡</span>
+                <span>You're currently offline</span>
+              </div>
+            )}
+            
+            {/* Retry Status */}
+            {isRetrying && (
+              <div className="mt-2 flex items-center gap-2 text-blue-400 text-xs">
+                <span>⏳</span>
+                <span>Retrying... ({retryCount}/{MAX_RETRIES})</span>
+              </div>
+            )}
           </div>
         </div>
 
         {/*Form Container */}
         <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden">
+          {/* Error Display */}
+          {error && (
+            <div className="p-6 pb-0">
+              <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-red-400">
+                    <span>⚠️</span>
+                    <span className="text-sm">{error.message}</span>
+                  </div>
+                  {error.retryable && (
+                    <button
+                      onClick={handleRetry}
+                      disabled={isRetrying}
+                      className="text-red-400 hover:text-red-300 text-xs font-medium transition-colors"
+                    >
+                      {isRetrying ? "Retrying..." : "Retry"}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Upload Progress */}
+          {isUploading && (
+            <div className="p-6 pb-0">
+              <div className="bg-blue-900/20 border border-blue-500/30 rounded-xl p-4">
+                <div className="flex items-center gap-2 text-blue-400 mb-2">
+                  <span>⏳</span>
+                  <span className="text-sm">Uploading files...</span>
+                </div>
+                <div className="space-y-2">
+                  {thumbnailFile && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-slate-300">Thumbnail:</span>
+                      <div className="flex-1 bg-slate-700 rounded-full h-2">
+                        <div 
+                          className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${uploadProgress.thumbnail}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-xs text-slate-400">{uploadProgress.thumbnail}%</span>
+                    </div>
+                  )}
+                  {videoFile && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-slate-300">Video:</span>
+                      <div className="flex-1 bg-slate-700 rounded-full h-2">
+                        <div 
+                          className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${uploadProgress.video}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-xs text-slate-400">{uploadProgress.video}%</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             {/* Basic Information Section */}
             <div className="bg-slate-700/20 backdrop-blur-sm border border-slate-600/30 rounded-2xl p-6 space-y-5">
@@ -504,17 +882,22 @@ const EditPortfolioPage = () => {
               </button>
               <button
                 type="submit"
-                disabled={saving}
+                disabled={saving || isOffline || isRetrying}
                 className={`flex-1 px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg ${
-                  saving
+                  saving || isOffline || isRetrying
                     ? "bg-slate-600/50 text-slate-400 cursor-not-allowed border border-slate-600/50"
                     : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105"
                 }`}
               >
-                {saving ? (
+                {saving || isRetrying ? (
                   <span className="flex items-center justify-center gap-3">
                     <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
-                    Updating Portfolio...
+                    {isRetrying ? "Retrying..." : "Updating Portfolio..."}
+                  </span>
+                ) : isOffline ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="text-lg">📡</span>
+                    Offline - Cannot Save
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-2">

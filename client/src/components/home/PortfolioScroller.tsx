@@ -9,13 +9,18 @@ const images = [
   "/imgs/Group 48.webp",
 ];
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useScrollAnimations } from "../../utils/animations";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const PortfolioScroller = () => {
   const { slideInFromLeft, staggerFadeIn } = useScrollAnimations();
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
+
+  const handleImageError = (src: string) => {
+    setImageErrors(prev => new Set([...prev, src]));
+  };
 
   useEffect(() => {
     // Register ScrollTrigger plugin
@@ -88,24 +93,60 @@ const PortfolioScroller = () => {
         {/* Row 1 - Left to Right */}
         <div className="portfolio-row-1 flex gap-2 xs:gap-3 sm:gap-4 animate-scroll-left px-4 xs:px-6 sm:px-0 opacity-0">
           {[...images, ...images].map((src, i) => (
-            <img
+            <div
               key={`row1-${i}`}
-              src={src}
-              alt={`scroll-1-${i}`}
-              className="w-[180px] xs:w-[200px] sm:w-[220px] md:w-[280px] lg:w-[320px] xl:w-[360px] h-[110px] xs:h-[120px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[201px] object-cover rounded-md flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer"
-            />
+              className="w-[180px] xs:w-[200px] sm:w-[220px] md:w-[280px] lg:w-[320px] xl:w-[360px] h-[110px] xs:h-[120px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[201px] rounded-md flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer overflow-hidden"
+            >
+              {!imageErrors.has(src) ? (
+                <img
+                  src={src}
+                  alt={`scroll-1-${i}`}
+                  className="w-full h-full object-cover"
+                  onError={() => handleImageError(src)}
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <div className="w-8 h-8 mx-auto mb-1 bg-gray-600 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <p className="text-xs text-gray-400">이미지 로드 실패</p>
+                  </div>
+                </div>
+              )}
+            </div>
           ))}
         </div>
 
         {/* Row 2 - Right to Left */}
         <div className="portfolio-row-2 flex gap-2 xs:gap-3 sm:gap-4 animate-scroll-right px-4 xs:px-6 sm:px-0 opacity-0">
           {[...images, ...images].map((src, i) => (
-            <img
+            <div
               key={`row2-${i}`}
-              src={src}
-              alt={`scroll-2-${i}`}
-              className="w-[180px] xs:w-[200px] sm:w-[220px] md:w-[280px] lg:w-[320px] xl:w-[360px] h-[110px] xs:h-[120px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[201px] object-cover rounded-md flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer"
-            />
+              className="w-[180px] xs:w-[200px] sm:w-[220px] md:w-[280px] lg:w-[320px] xl:w-[360px] h-[110px] xs:h-[120px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[201px] rounded-md flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer overflow-hidden"
+            >
+              {!imageErrors.has(src) ? (
+                <img
+                  src={src}
+                  alt={`scroll-2-${i}`}
+                  className="w-full h-full object-cover"
+                  onError={() => handleImageError(src)}
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <div className="w-8 h-8 mx-auto mb-1 bg-gray-600 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <p className="text-xs text-gray-400">이미지 로드 실패</p>
+                  </div>
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>

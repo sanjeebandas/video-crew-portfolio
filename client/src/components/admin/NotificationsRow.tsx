@@ -52,9 +52,27 @@ const NotificationsRow = () => {
       setNotifications(response.notifications);
       setUnreadCount(response.unreadCount);
       setLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error loading notifications:", error);
-      setError("Failed to load notifications");
+      
+      let errorMessage = "Failed to load notifications";
+      
+      // Determine specific error type and message
+      if (error?.response?.status === 401) {
+        errorMessage = "Authentication expired. Please log in again.";
+      } else if (error?.response?.status === 403) {
+        errorMessage = "Access denied. You don't have permission to view notifications.";
+      } else if (error?.response?.status === 404) {
+        errorMessage = "Notification service not found. Please contact support.";
+      } else if (error?.response?.status >= 500) {
+        errorMessage = "Server error. Our team has been notified.";
+      } else if (error?.message?.includes('Network Error') || error?.code === 'NETWORK_ERROR') {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+      } else if (error?.message?.includes('timeout')) {
+        errorMessage = "Request timed out. Please try again.";
+      }
+      
+      setError(errorMessage);
       setLoading(false);
     }
   };
@@ -74,10 +92,24 @@ const NotificationsRow = () => {
       );
       
       setUnreadCount(prev => Math.max(0, prev - 1));
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error marking notification as read:", error);
-      // Could add toast notification here instead of alert
-      console.warn("Failed to mark notification as read. Please try again.");
+      
+      let errorMessage = "Failed to mark notification as read";
+      
+      if (error?.response?.status === 401) {
+        errorMessage = "Authentication expired. Please log in again.";
+      } else if (error?.response?.status === 403) {
+        errorMessage = "Access denied. You don't have permission to update this notification.";
+      } else if (error?.response?.status === 404) {
+        errorMessage = "Notification not found. It may have been deleted.";
+      } else if (error?.response?.status >= 500) {
+        errorMessage = "Server error. Please try again later.";
+      } else if (error?.message?.includes('Network Error')) {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+      }
+      
+      console.warn(errorMessage);
     } finally {
       setMarkingAsRead(null);
     }
@@ -94,10 +126,24 @@ const NotificationsRow = () => {
       );
       
       setUnreadCount(0);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error marking all notifications as read:", error);
-      // Could add toast notification here instead of alert
-      console.warn("Failed to mark all notifications as read. Please try again.");
+      
+      let errorMessage = "Failed to mark all notifications as read";
+      
+      if (error?.response?.status === 401) {
+        errorMessage = "Authentication expired. Please log in again.";
+      } else if (error?.response?.status === 403) {
+        errorMessage = "Access denied. You don't have permission to update notifications.";
+      } else if (error?.response?.status === 404) {
+        errorMessage = "Notification service not found. Please contact support.";
+      } else if (error?.response?.status >= 500) {
+        errorMessage = "Server error. Please try again later.";
+      } else if (error?.message?.includes('Network Error')) {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+      }
+      
+      console.warn(errorMessage);
     } finally {
       setMarkingAllAsRead(false);
     }

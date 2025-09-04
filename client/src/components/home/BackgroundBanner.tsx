@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useScrollAnimations } from "../../utils/animations";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -12,6 +12,7 @@ const stats = [
 
 const BackgroundBanner = () => {
   const { staggerFadeIn } = useScrollAnimations();
+  const [backgroundImageError, setBackgroundImageError] = useState(false);
 
   useEffect(() => {
     // Register ScrollTrigger plugin
@@ -59,9 +60,20 @@ const BackgroundBanner = () => {
 
   return (
     <section
-      className="mt-16 xs:mt-20 sm:mt-24 relative w-full h-auto py-8 xs:py-10 bg-cover bg-center flex items-center justify-center text-white"
-      style={{ backgroundImage: "url('/imgs/Frame.webp')" }}
+      className={`mt-16 xs:mt-20 sm:mt-24 relative w-full h-auto py-8 xs:py-10 flex items-center justify-center text-white ${
+        !backgroundImageError ? 'bg-cover bg-center' : 'bg-gray-900'
+      }`}
+      style={!backgroundImageError ? { backgroundImage: "url('/imgs/Frame.webp')" } : {}}
     >
+      {/* Background image error handling */}
+      {!backgroundImageError && (
+        <img
+          src="/imgs/Frame.webp"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover opacity-0"
+          onError={() => setBackgroundImageError(true)}
+        />
+      )}
       <div className="w-full max-w-[1248px] px-4 xs:px-6 md:px-8 lg:px-6 flex flex-col sm:flex-row justify-between items-center text-center gap-y-6 xs:gap-y-8">
         {stats.map((stat, i) => (
           <div

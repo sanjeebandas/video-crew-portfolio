@@ -24,25 +24,76 @@ type ModalState = {
   editMode?: boolean;
 };
 
+type ErrorState = {
+  message: string;
+  type: 'fetch' | 'delete' | 'network' | 'unknown';
+  retryable: boolean;
+};
+
 const PortfolioManager = () => {
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorState | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
   const [modalState, setModalState] = useState<ModalState>({ type: null });
+  const [isRetrying, setIsRetrying] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const [isOffline, setIsOffline] = useState(false);
 
   const navigate = useNavigate();
   const { logout } = useAuth();
+
+  // Retry configuration
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY = 2000; // 2 seconds
+
+  // Network status detection
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+      if (error?.type === 'network') {
+        setError(null);
+        fetchItems(); // Auto-retry when coming back online
+      }
+    };
+
+    const handleOffline = () => {
+      setIsOffline(true);
+      if (!error) {
+        setError({
+          message: "You're currently offline. Some features may be unavailable.",
+          type: 'network',
+          retryable: true
+        });
+      }
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    // Check initial network status
+    setIsOffline(!navigator.onLine);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [error]);
 
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully!");
   };
 
-  const fetchItems = useCallback(async () => {
+  const fetchItems = useCallback(async (isRetry: boolean = false) => {
     try {
+      if (!isRetry) {
+        setLoading(true);
+        setError(null);
+      }
+
       const data = await getPortfolioItems();
 
       // Ensure data is an array
@@ -52,10 +103,15 @@ const PortfolioManager = () => {
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
         setItems(sorted);
+        setRetryCount(0); // Reset retry count on success
       } else {
         console.error("Portfolio data is not an array:", data);
         setItems([]);
-        setError("Invalid data format received from server.");
+        setError({
+          message: "Invalid data format received from server. Please contact support.",
+          type: 'fetch',
+          retryable: true
+        });
       }
 
       // Trigger notification refresh to check for new items
@@ -65,12 +121,65 @@ const PortfolioManager = () => {
       ) {
         (window as any).refreshNotifications();
       }
-    } catch (err) {
-      setError("Failed to load portfolio items.");
+    } catch (err: any) {
+      console.error("Error fetching portfolio items:", err);
+      
+      let errorMessage = "Failed to load portfolio items.";
+      let errorType: ErrorState['type'] = 'fetch';
+      let retryable = true;
+
+      // Determine specific error type and message
+      if (err?.response?.status === 401) {
+        errorMessage = "Authentication expired. Please log in again.";
+        errorType = 'fetch';
+        retryable = false;
+      } else if (err?.response?.status === 403) {
+        errorMessage = "Access denied. You don't have permission to view portfolio items.";
+        errorType = 'fetch';
+        retryable = false;
+      } else if (err?.response?.status === 404) {
+        errorMessage = "Portfolio service not found. Please contact support.";
+        errorType = 'fetch';
+        retryable = true;
+      } else if (err?.response?.status >= 500) {
+        errorMessage = "Server error. Our team has been notified.";
+        errorType = 'fetch';
+        retryable = true;
+      } else if (err?.message?.includes('Network Error') || err?.code === 'NETWORK_ERROR') {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+        errorType = 'network';
+        retryable = true;
+      } else if (err?.message?.includes('timeout')) {
+        errorMessage = "Request timed out. Please try again.";
+        errorType = 'fetch';
+        retryable = true;
+      }
+
+      setError({
+        message: errorMessage,
+        type: errorType,
+        retryable
+      });
+
+      // Auto-retry for retryable errors
+      if (retryable && retryCount < MAX_RETRIES) {
+        const newRetryCount = retryCount + 1;
+        setRetryCount(newRetryCount);
+        
+        if (newRetryCount <= MAX_RETRIES) {
+          setIsRetrying(true);
+          toast.error(`Retrying... (${newRetryCount}/${MAX_RETRIES})`);
+          
+          setTimeout(() => {
+            fetchItems(true);
+          }, RETRY_DELAY * newRetryCount);
+        }
+      }
     } finally {
       setLoading(false);
+      setIsRetrying(false);
     }
-  }, []);
+  }, [retryCount]);
 
   useEffect(() => {
     fetchItems();
@@ -78,7 +187,7 @@ const PortfolioManager = () => {
 
   const deleteItem = async (id: string) => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this portfolio item?"
+      "Are you sure you want to delete this portfolio item? This action cannot be undone."
     );
     if (!confirmed) return;
 
@@ -86,10 +195,25 @@ const PortfolioManager = () => {
       setDeletingId(id);
       await deletePortfolioItem(id);
       setItems((prev) => prev.filter((item) => item._id !== id));
-      toast.success("🗑️ Portfolio item deleted.");
-    } catch (error) {
-      console.error(error);
-      toast.error("❌ Failed to delete portfolio item.");
+      toast.success("🗑️ Portfolio item deleted successfully!");
+    } catch (error: any) {
+      console.error("Delete error:", error);
+      
+      let errorMessage = "Failed to delete portfolio item.";
+      
+      if (error?.response?.status === 401) {
+        errorMessage = "Authentication expired. Please log in again.";
+      } else if (error?.response?.status === 403) {
+        errorMessage = "Access denied. You don't have permission to delete this item.";
+      } else if (error?.response?.status === 404) {
+        errorMessage = "Portfolio item not found. It may have been already deleted.";
+      } else if (error?.response?.status >= 500) {
+        errorMessage = "Server error. Please try again later.";
+      } else if (error?.message?.includes('Network Error')) {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+      }
+      
+      toast.error(`❌ ${errorMessage}`);
     } finally {
       setDeletingId(null);
     }
@@ -122,6 +246,56 @@ const PortfolioManager = () => {
   const closeModal = useCallback(() => {
     setModalState({ type: null, editMode: false });
   }, []);
+
+  // Error boundary fallback - prevent dashboard crashes
+  if (error && !error.retryable && retryCount >= MAX_RETRIES) {
+    return (
+      <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen">
+        <AdminNavbar />
+        <div className="md:ml-64 p-3 sm:p-4 md:p-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-6 sm:mb-8">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xs sm:text-sm">
+                    VC
+                  </span>
+                </div>
+                <span className="text-slate-400 text-xs sm:text-sm font-medium">
+                  Video Crew
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-2">
+                Portfolio Manager
+              </h1>
+            </div>
+
+            <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6 text-center">
+              <div className="text-red-400 mb-4">
+                <span className="text-2xl">⚠️</span>
+                <p className="mt-2">Portfolio Manager is temporarily unavailable</p>
+              </div>
+              <div className="space-y-3">
+                <p className="text-slate-300 text-sm">
+                  {error.message}
+                </p>
+                <button
+                  onClick={() => {
+                    setRetryCount(0);
+                    setError(null);
+                    fetchItems();
+                  }}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  🔄 Try Again
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Loading state with skeleton animation
   if (loading) {
@@ -178,16 +352,7 @@ const PortfolioManager = () => {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-6 sm:mb-8">
-            <div className="flex items-center gap-2 sm:gap-3 mb-2">
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs sm:text-sm">
-                  VC
-                </span>
-              </div>
-              <span className="text-slate-400 text-xs sm:text-sm font-medium">
-                Video Crew
-              </span>
-            </div>
+            
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-2">
@@ -196,16 +361,51 @@ const PortfolioManager = () => {
                 <p className="text-slate-400 text-sm sm:text-base">
                   Create and manage your portfolio projects
                 </p>
+                {/* Network Status Indicator */}
+                {isOffline && (
+                  <div className="mt-2 flex items-center gap-2 text-yellow-400 text-xs">
+                    <span>📡</span>
+                    <span>You're currently offline</span>
+                  </div>
+                )}
+                {/* Retry Status */}
+                {isRetrying && (
+                  <div className="mt-2 flex items-center gap-2 text-blue-400 text-xs">
+                    <span>⏳</span>
+                    <span>Retrying... ({retryCount}/{MAX_RETRIES})</span>
+                  </div>
+                )}
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => openModal('form', undefined, false)}
                   className="group bg-emerald-600/50 hover:bg-emerald-500/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-emerald-600/50 hover:border-emerald-500/50 flex items-center gap-1 sm:gap-2"
                   aria-label="Add new portfolio project"
+                  disabled={isOffline}
                 >
                   <span>➕</span>
                   <span className="hidden sm:inline">Add New Project</span>
                   <span className="sm:hidden">Add Project</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    toast.loading("Refreshing portfolio...", { id: 'refresh-portfolio' });
+                    fetchItems().finally(() => {
+                      toast.success("Portfolio refreshed!", { id: 'refresh-portfolio' });
+                    });
+                  }}
+                  disabled={loading || isRetrying}
+                  className="group bg-blue-600/50 hover:bg-blue-500/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-blue-600/50 hover:border-blue-500/50 flex items-center gap-1 sm:gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Refresh portfolio items"
+                >
+                  <span>{loading || isRetrying ? "⏳" : "🔄"}</span>
+                  <span className="hidden sm:inline">
+                    {loading || isRetrying ? "Refreshing..." : "Refresh"}
+                  </span>
+                  <span className="sm:hidden">
+                    {loading || isRetrying ? "Refreshing..." : "Refresh"}
+                  </span>
                 </button>
 
                 <button
@@ -236,7 +436,29 @@ const PortfolioManager = () => {
           {/* Content */}
           {error ? (
             <div className="bg-gradient-to-br from-red-900/30 to-red-800/30 backdrop-blur-sm border border-red-700/50 rounded-xl sm:rounded-2xl p-6">
-              <p className="text-red-400 text-center">{error}</p>
+              <div className="text-center">
+                <div className="text-red-400 mb-4">
+                  <span className="text-2xl">⚠️</span>
+                  <p className="mt-2">{error.message}</p>
+                </div>
+                {error.retryable && (
+                  <button
+                    onClick={() => {
+                      setRetryCount(0); // Reset retry count for new retry
+                      fetchItems();
+                    }}
+                    className="mt-4 px-4 py-2 rounded-lg bg-red-600/50 hover:bg-red-500/50 text-white transition-all duration-200 border border-red-600/50 hover:border-red-500/50"
+                    aria-label="Retry fetching portfolio items"
+                  >
+                    🔄 Retry
+                  </button>
+                )}
+                {isOffline && (
+                  <p className="mt-4 text-slate-400 text-sm">
+                    You are currently offline. Please check your connection.
+                  </p>
+                )}
+              </div>
             </div>
           ) : items.length === 0 ? (
             <div className="bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-6">
@@ -329,6 +551,7 @@ const PortfolioManager = () => {
                             onClick={() => openModal('form', item, true)}
                             className="px-3 py-1 text-xs rounded-lg bg-blue-600/50 hover:bg-blue-500/50 text-white transition-all duration-200 border border-blue-600/50 hover:border-blue-500/50"
                             aria-label={`Edit ${item.title}`}
+                            disabled={isOffline}
                           >
                             Edit
                           </button>
@@ -341,8 +564,16 @@ const PortfolioManager = () => {
                                 : ""
                             }`}
                             aria-label={`Delete ${item.title}`}
+                            disabled={isOffline || deletingId === item._id}
                           >
-                            {deletingId === item._id ? "Deleting..." : "Delete"}
+                            {deletingId === item._id ? (
+                              <span className="flex items-center gap-1">
+                                <span className="animate-spin">⏳</span>
+                                Deleting...
+                              </span>
+                            ) : (
+                              "Delete"
+                            )}
                           </button>
                         </div>
                       </div>

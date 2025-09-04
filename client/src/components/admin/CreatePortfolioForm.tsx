@@ -1,8 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import { uploadImage, uploadVideo } from "../../services/upload";
 import api from "../../services/api";
 import { getToken } from "../../utils/helpers";
+
+type ErrorState = {
+  message: string;
+  type: 'upload' | 'api' | 'network' | 'validation' | 'unknown';
+  retryable: boolean;
+  component?: string;
+};
 
 type Props = {
   onCreated?: () => void;
@@ -42,12 +49,86 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
   const [thumbnailError, setThumbnailError] = useState<string | null>(null);
   const [videoError, setVideoError] = useState<string | null>(null);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
+  
+  // Robust error handling states
+  const [error, setError] = useState<ErrorState | null>(null);
+  const [isRetrying, setIsRetrying] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const [isOffline, setIsOffline] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<{thumbnail: number, video: number}>({thumbnail: 0, video: 0});
+  const [isUploading, setIsUploading] = useState(false);
 
   // File size constants
   const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
   const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB
   const MAX_TITLE_LIMIT = 75; // Character limit for title
   const MAX_DESC_LIMIT = 300; // Character limit for description
+
+  // Retry configuration
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY = 2000; // 2 seconds
+
+  // Network status detection 
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+      if (error?.type === 'network') {
+        setError(null);
+        // Auto-retry when coming back online
+        if (retryCount < MAX_RETRIES) {
+          handleRetry();
+        }
+      }
+    };
+
+    const handleOffline = () => {
+      setIsOffline(true);
+      if (!error) {
+        setError({
+          message: "You're currently offline. File uploads and form submission are unavailable.",
+          type: 'network',
+          retryable: true
+        });
+      }
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    // Check initial network status
+    setIsOffline(!navigator.onLine);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [error, retryCount]);
+
+  // Retry handler (same pattern as Dashboard)
+  const handleRetry = useCallback(async () => {
+    if (retryCount >= MAX_RETRIES) return;
+
+    try {
+      setIsRetrying(true);
+      const newRetryCount = retryCount + 1;
+      setRetryCount(newRetryCount);
+
+      // Clear errors and retry
+      setError(null);
+      setThumbnailError(null);
+      setVideoError(null);
+
+      // Simulate retry delay
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * newRetryCount));
+
+      // Reset retry count on success
+      setRetryCount(0);
+    } catch (error) {
+      console.error("Retry failed:", error);
+    } finally {
+      setIsRetrying(false);
+    }
+  }, [retryCount]);
 
   // Character limit helper functions
   const getCharLimitColor = (currentLength: number, maxLength: number) => {
@@ -212,7 +293,9 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
   const uploadMedia = async () => {
     const uploaded: Partial<PortfolioFormData> = {};
     const token = getToken();
-    if (!token) throw new Error("Not authenticated. Please log in again.");
+    if (!token) {
+      throw new Error("Not authenticated. Please log in again.");
+    }
 
     // Validate files before upload
     if (thumbnailFile && !validateImageFile(thumbnailFile)) {
@@ -223,15 +306,68 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
     }
 
     try {
+      setIsUploading(true);
+      setUploadProgress({thumbnail: 0, video: 0});
+
+      // Upload thumbnail with progress tracking
       if (thumbnailFile) {
+        setUploadProgress(prev => ({...prev, thumbnail: 10}));
         uploaded.thumbnailUrl = await uploadImage(thumbnailFile);
+        setUploadProgress(prev => ({...prev, thumbnail: 100}));
       }
+
+      // Upload video with progress tracking
       if (videoFile) {
+        setUploadProgress(prev => ({...prev, video: 10}));
         uploaded.videoUrl = await uploadVideo(videoFile);
+        setUploadProgress(prev => ({...prev, video: 100}));
       }
+
       return uploaded;
     } catch (uploadErr: any) {
+      console.error("Upload error:", uploadErr);
+      
+      let errorMessage = "Failed to upload media files.";
+      let errorType: ErrorState['type'] = 'upload';
+      let retryable = true;
+
+      // Determine specific error type and message
+      if (uploadErr?.response?.status === 401) {
+        errorMessage = "Authentication expired. Please log in again.";
+        errorType = 'api';
+        retryable = false;
+      } else if (uploadErr?.response?.status === 403) {
+        errorMessage = "Access denied. You don't have permission to upload files.";
+        errorType = 'api';
+        retryable = false;
+      } else if (uploadErr?.response?.status === 413) {
+        errorMessage = "File too large. Please reduce file size and try again.";
+        errorType = 'upload';
+        retryable = true;
+      } else if (uploadErr?.response?.status >= 500) {
+        errorMessage = "Server error during upload. Please try again.";
+        errorType = 'upload';
+        retryable = true;
+      } else if (uploadErr?.message?.includes('Network Error') || uploadErr?.code === 'NETWORK_ERROR') {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+        errorType = 'network';
+        retryable = true;
+      } else if (uploadErr?.message?.includes('timeout')) {
+        errorMessage = "Upload timed out. Please try again.";
+        errorType = 'upload';
+        retryable = true;
+      }
+
+      setError({
+        message: errorMessage,
+        type: errorType,
+        retryable
+      });
+
       throw uploadErr;
+    } finally {
+      setIsUploading(false);
+      setUploadProgress({thumbnail: 0, video: 0});
     }
   };
 
@@ -243,7 +379,13 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
       return;
     }
 
+    if (isOffline) {
+      toast.error("You're currently offline. Please check your connection.");
+      return;
+    }
+
     setLoading(true);
+    setError(null);
     const token = getToken();
 
     try {
@@ -257,7 +399,7 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
             Authorization: `Bearer ${token}`,
           },
         });
-        toast.success("Portfolio updated!");
+        toast.success("Portfolio updated successfully!");
         onUpdated?.();
       } else {
         // Create new portfolio item
@@ -266,11 +408,12 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
             Authorization: `Bearer ${token}`,
           },
         });
-        toast.success("Portfolio created!");
+        toast.success("Portfolio created successfully!");
         onCreated?.();
       }
 
       // Backend automatically creates notifications for portfolio operations
+      setRetryCount(0); // Reset retry count on success
 
       setFormData(initialState);
       setThumbnailFile(null);
@@ -278,13 +421,96 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
       setErrors({});
       onClose();
     } catch (err: any) {
-      toast.error(
-        err?.response?.data?.message || "Failed to create portfolio."
-      );
+      console.error("Submit error:", err);
+      
+      let errorMessage = "Failed to create portfolio.";
+      let errorType: ErrorState['type'] = 'api';
+      let retryable = true;
+
+      // Determine specific error type and message
+      if (err?.response?.status === 401) {
+        errorMessage = "Authentication expired. Please log in again.";
+        errorType = 'api';
+        retryable = false;
+      } else if (err?.response?.status === 403) {
+        errorMessage = "Access denied. You don't have permission to create/update portfolio items.";
+        errorType = 'api';
+        retryable = false;
+      } else if (err?.response?.status === 404) {
+        errorMessage = "Portfolio service not found. Please contact support.";
+        errorType = 'api';
+        retryable = true;
+      } else if (err?.response?.status >= 500) {
+        errorMessage = "Server error. Our team has been notified.";
+        errorType = 'api';
+        retryable = true;
+      } else if (err?.message?.includes('Network Error') || err?.code === 'NETWORK_ERROR') {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+        errorType = 'network';
+        retryable = true;
+      } else if (err?.message?.includes('timeout')) {
+        errorMessage = "Request timed out. Please try again.";
+        errorType = 'api';
+        retryable = true;
+      }
+
+      setError({
+        message: errorMessage,
+        type: errorType,
+        retryable
+      });
+
+      // Auto-retry for retryable errors
+      if (retryable && retryCount < MAX_RETRIES) {
+        const newRetryCount = retryCount + 1;
+        setRetryCount(newRetryCount);
+        
+        if (newRetryCount <= MAX_RETRIES) {
+          setIsRetrying(true);
+          toast.error(`Retrying... (${newRetryCount}/${MAX_RETRIES})`);
+          
+          setTimeout(() => {
+            handleSubmit(e);
+          }, RETRY_DELAY * newRetryCount);
+        }
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
+      setIsRetrying(false);
     }
   };
+
+  // Error boundary fallback - prevent form crashes
+  if (error && !error.retryable && retryCount >= MAX_RETRIES) {
+    return (
+      <div className="bg-gradient-to-br from-slate-800 to-slate-900 text-white w-full max-w-3xl max-h-[90vh] rounded-2xl shadow-2xl border border-slate-700/50 overflow-hidden">
+        <div className="p-6 text-center">
+          <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6">
+            <div className="text-red-400 mb-4">
+              <span className="text-2xl">⚠️</span>
+              <p className="mt-2">Portfolio form is temporarily unavailable</p>
+            </div>
+            <div className="space-y-3">
+              <p className="text-slate-300 text-sm">
+                {error.message}
+              </p>
+              <button
+                onClick={() => {
+                  setRetryCount(0);
+                  setError(null);
+                }}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              >
+                🔄 Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gradient-to-br from-slate-800 to-slate-900 text-white w-full max-w-3xl max-h-[90vh] rounded-2xl shadow-2xl border border-slate-700/50 overflow-hidden">
@@ -300,12 +526,85 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
               <p className="text-slate-400 text-xs sm:text-sm mt-1">
                 {editMode ? "Modify your project details" : "Add a new project to your portfolio"}
               </p>
+              
+              {/* Network Status Indicator */}
+              {isOffline && (
+                <div className="mt-2 flex items-center gap-2 text-yellow-400 text-xs">
+                  <span>📡</span>
+                  <span>You're currently offline</span>
+                </div>
+              )}
+              
+              {/* Retry Status */}
+              {isRetrying && (
+                <div className="mt-2 flex items-center gap-2 text-blue-400 text-xs">
+                  <span>⏳</span>
+                  <span>Retrying... ({retryCount}/{MAX_RETRIES})</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         {/* Form Content */}
         <div className="p-4 sm:p-6">
+          {/* Error Display */}
+          {error && (
+            <div className="mb-6 bg-red-900/20 border border-red-500/30 rounded-xl p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-red-400">
+                  <span>⚠️</span>
+                  <span className="text-sm">{error.message}</span>
+                </div>
+                {error.retryable && (
+                  <button
+                    onClick={handleRetry}
+                    disabled={isRetrying}
+                    className="text-red-400 hover:text-red-300 text-xs font-medium transition-colors"
+                  >
+                    {isRetrying ? "Retrying..." : "Retry"}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Upload Progress */}
+          {isUploading && (
+            <div className="mb-6 bg-blue-900/20 border border-blue-500/30 rounded-xl p-4">
+              <div className="flex items-center gap-2 text-blue-400 mb-2">
+                <span>⏳</span>
+                <span className="text-sm">Uploading files...</span>
+              </div>
+              <div className="space-y-2">
+                {thumbnailFile && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-300">Thumbnail:</span>
+                    <div className="flex-1 bg-slate-700 rounded-full h-2">
+                      <div 
+                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${uploadProgress.thumbnail}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-xs text-slate-400">{uploadProgress.thumbnail}%</span>
+                  </div>
+                )}
+                {videoFile && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-300">Video:</span>
+                    <div className="flex-1 bg-slate-700 rounded-full h-2">
+                      <div 
+                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${uploadProgress.video}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-xs text-slate-400">{uploadProgress.video}%</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             {/* Basic Information Section */}
             <div className="bg-slate-700/20 backdrop-blur-sm border border-slate-600/30 rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-5">
@@ -740,17 +1039,24 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
               </button>
               <button
                 type="submit"
-                disabled={loading || !!thumbnailError || !!videoError}
+                disabled={loading || !!thumbnailError || !!videoError || isOffline || isRetrying}
                 className={`flex-1 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-all duration-200 shadow-lg text-sm sm:text-base ${
-                  loading || !!thumbnailError || !!videoError
+                  loading || !!thumbnailError || !!videoError || isOffline || isRetrying
                     ? "bg-slate-600/50 text-slate-400 cursor-not-allowed border border-slate-600/50"
                     : "bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-105"
                 }`}
               >
-                {loading ? (
+                {loading || isRetrying ? (
                   <span className="flex items-center justify-center gap-2 sm:gap-3">
                     <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
-                    <span className="text-xs sm:text-sm">{editMode ? "Updating Portfolio..." : "Creating Portfolio..."}</span>
+                    <span className="text-xs sm:text-sm">
+                      {isRetrying ? "Retrying..." : (editMode ? "Updating Portfolio..." : "Creating Portfolio...")}
+                    </span>
+                  </span>
+                ) : isOffline ? (
+                  <span className="flex items-center justify-center gap-1 sm:gap-2">
+                    <span className="text-base sm:text-lg">📡</span>
+                    <span className="text-xs sm:text-sm">Offline - Cannot Submit</span>
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-1 sm:gap-2">

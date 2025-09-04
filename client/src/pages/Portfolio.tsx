@@ -2,6 +2,7 @@ import { useState } from "react";
 import PortfolioBanner from "../components/portfolio/PortfolioBanner";
 import PortfolioGrid from "../components/portfolio/PortfolioGrid";
 import SEO from "../components/common/SEO";
+import ErrorBoundary from "../components/common/ErrorBoundary";
 
 const categories = [
   { label: "광고 · 홍보 영상", value: "advertisement/promotional" },
@@ -22,12 +23,30 @@ const Portfolio = () => {
         keywords="비디오크루포트폴리오, 광고영상, 홍보영상, 이러닝영상, 기업행사영상, 영상제작사례, 비디오제작포트폴리오"
       />
       <div className="bg-black">
-        <PortfolioBanner
-          currentFilter={currentFilter}
-          setCurrentFilter={setCurrentFilter}
-          categories={categories}
-        />
-        <PortfolioGrid currentFilter={currentFilter} />
+        <ErrorBoundary
+          onError={(error, errorInfo) => {
+            console.error('Portfolio page error:', error, errorInfo);
+            // You can add error reporting here (e.g., Sentry, LogRocket, etc.)
+          }}
+        >
+          <PortfolioBanner
+            currentFilter={currentFilter}
+            setCurrentFilter={setCurrentFilter}
+            categories={categories}
+          />
+          <ErrorBoundary
+            fallback={
+              <div className="min-h-[400px] flex items-center justify-center">
+                <div className="text-center text-white">
+                  <h3 className="text-xl font-semibold mb-2">포트폴리오를 불러올 수 없습니다</h3>
+                  <p className="text-gray-400">페이지를 새로고침해주세요.</p>
+                </div>
+              </div>
+            }
+          >
+            <PortfolioGrid currentFilter={currentFilter} />
+          </ErrorBoundary>
+        </ErrorBoundary>
       </div>
     </>
   );
