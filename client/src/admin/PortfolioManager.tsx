@@ -85,6 +85,7 @@ const PortfolioManager = () => {
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully!");
+    navigate("/admin/login");
   };
 
   const fetchItems = useCallback(async (isRetry: boolean = false) => {
