@@ -20,7 +20,7 @@ const Navbar = () => {
         <div className="flex items-center space-x-3">
           <Link to="/" className="group">
             <img
-              src="imgs/Frame 362.png"
+              src="/imgs/Frame 362.png"
               alt="Logo"
               className="h-12 w-auto group-hover:scale-110 transition-all duration-300 ease-out"
             />

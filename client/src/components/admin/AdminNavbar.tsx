@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const AdminNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -16,8 +18,7 @@ const AdminNavbar = () => {
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully!");
-    // Redirect to login page after logout
-    window.location.href = "/admin/login";
+    navigate("/admin/login");
   };
 
   const handleGoToHome = () => {

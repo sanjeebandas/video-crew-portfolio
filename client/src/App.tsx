@@ -5,6 +5,7 @@ import { initGSAP } from "./utils/animations";
 import { incrementPageVisit } from "./services/api";
 import InstallPrompt from "./components/common/InstallPrompt";
 import OfflineIndicator from "./components/common/OfflineIndicator";
+import { useAuth } from "./context/AuthContext";
 
 // Public Pages
 import Home from "./pages/Home";
@@ -24,10 +25,20 @@ import PortfolioManager from "./admin/PortfolioManager";
 import PrivateRoutes from "./routes/PrivateRoute";
 import EditPortfolioPage from "./pages/EditPortfolioPage";
 import AuthGuard from "./components/admin/AuthGuard";
+import AdminRouteGuard from "./components/admin/AdminRouteGuard";
+import NotFoundClean from "./pages/NotFoundClean";
 
 function LayoutWrapper() {
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
   const isAdminRoute = location.pathname.startsWith("/admin");
+  const isAdminLogin = location.pathname === "/admin/login";
+  const isAdminDashboard =
+    (location.pathname.startsWith("/admin/dashboard") ||
+      location.pathname.startsWith("/admin/contacts") ||
+      location.pathname.startsWith("/admin/portfolio")) &&
+    isAuthenticated;
+  const is404Page = !isAuthenticated && isAdminRoute;
 
   // Scroll to top on route change
   useEffect(() => {
@@ -43,7 +54,7 @@ function LayoutWrapper() {
 
   return (
     <div className="bg-black text-white min-h-screen">
-      {!isAdminRoute && <Navbar />}
+      {!isAdminDashboard && !isAdminLogin && !is404Page && <Navbar />}
 
       <Routes>
         {/* --------- PUBLIC ROUTES --------- */}
@@ -56,18 +67,54 @@ function LayoutWrapper() {
 
         {/* --------- ADMIN ROUTES --------- */}
         <Route path="/admin/login" element={<Login />} />
+        <Route
+          path="/admin"
+          element={
+            <AdminRouteGuard>
+              <NotFoundClean />
+            </AdminRouteGuard>
+          }
+        />
         <Route element={<PrivateRoutes />}>
-          <Route path="/admin/dashboard" element={<AuthGuard><Dashboard /></AuthGuard>} />
-          <Route path="/admin/contacts" element={<AuthGuard><ContactManager /></AuthGuard>} />
-          <Route path="/admin/portfolio" element={<AuthGuard><PortfolioManager /></AuthGuard>} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AuthGuard>
+                <Dashboard />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/admin/contacts"
+            element={
+              <AuthGuard>
+                <ContactManager />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/admin/portfolio"
+            element={
+              <AuthGuard>
+                <PortfolioManager />
+              </AuthGuard>
+            }
+          />
           <Route
             path="/admin/portfolio/edit/:id"
-            element={<AuthGuard><EditPortfolioPage /></AuthGuard>}
+            element={
+              <AuthGuard>
+                <EditPortfolioPage />
+              </AuthGuard>
+            }
           />
         </Route>
+
+        {/* --------- 404 ROUTE --------- */}
+        <Route path="*" element={<NotFoundClean />} />
       </Routes>
 
-      {!isAdminRoute && <Footer />}
+      {!isAdminDashboard && !isAdminLogin && !is404Page && <Footer />}
 
       {/* PWA Components */}
       <InstallPrompt />

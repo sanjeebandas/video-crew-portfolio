@@ -89,6 +89,7 @@ const ContactManager = () => {
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully!");
+    navigate("/admin/login");
   };
 
   const fetchContacts = useCallback(async (isRetry: boolean = false) => {
