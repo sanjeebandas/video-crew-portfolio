@@ -51,7 +51,7 @@ const About = () => {
       <div ref={containerRef} className="relative overflow-hidden">
         <ErrorBoundary
           onError={(error, errorInfo) => {
-            console.error('About page error:', error, errorInfo);
+            console.error("About page error:", error, errorInfo);
           }}
         >
           <section className="bg-black text-white w-full px-6 py-12 md:py-16 lg:py-20">
@@ -62,24 +62,25 @@ const About = () => {
                   Who we are, Video Crew
                 </p>
                 <h2 className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold leading-snug">
-                  스토리로 말하는 영상 콘텐츠,
+                  스토리로 말하는 영상
                   <br />
-                  시선을 사로잡는 영상,
+                  시선을 사로잡는 영상
                   <br />더 이상 고민하지 마세요!
                 </h2>
               </div>
 
               {/* Right Paragraph Block */}
-              <div className="w-full md:flex-1 text-sm md:text-sm lg:text-base text-gray-300 leading-relaxed text-center md:text-justify md:mt-6 lg:mt-8 about-title-right">
+              <div className="w-full md:flex-1 text-sm md:text-sm lg:text-base text-gray-300 leading-relaxed text-center md:text-right md:mt-6 lg:mt-8 about-title-right">
                 <div className="about-text-line">
                   우리는 영상이 단순히 기술적인 가치가 있다고 생각하지 않습니다.
-                  우리에게는 각각 걸어온 하나의 경험을 나타냅니다. 비디오크루는,
-                  브랜드 스토리를 강력하고 인상적인 모습의 이야기로 일련의
-                  작업물을 거쳐 제작한 내용들이 우리가 가지고 있는 비전입니다.
+                  우리에게는 각각 걸어온 하나의 경험을 나타냅니다. 브랜드
+                  비디오크루는, 브랜드 스토리를 강력하고 인상적인 모습의
+                  이야기로 일련의 작업물을 거쳐 제작한 내용들이 우리가 가지고
+                  있는 비전입니다.
                 </div>
                 <div className="about-text-line">
                   "모든 프로젝트에 가치를 담아" 고객과 함께 성장하는 파트너가
-                  되겠습니다.
+                  되겠습니다."
                 </div>
               </div>
             </div>
@@ -90,7 +91,9 @@ const About = () => {
             fallback={
               <div className="min-h-[400px] flex items-center justify-center bg-black">
                 <div className="text-center text-white">
-                  <h3 className="text-xl font-semibold mb-2">회사 소개 섹션을 불러올 수 없습니다</h3>
+                  <h3 className="text-xl font-semibold mb-2">
+                    회사 소개 섹션을 불러올 수 없습니다
+                  </h3>
                   <p className="text-gray-400">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
@@ -98,12 +101,14 @@ const About = () => {
           >
             <AboutHero />
           </ErrorBoundary>
-          
+
           <ErrorBoundary
             fallback={
               <div className="min-h-[100px] flex items-center justify-center bg-black">
                 <div className="text-center text-white">
-                  <h3 className="text-lg font-semibold mb-2">기업 로고 섹션을 불러올 수 없습니다</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    기업 로고 섹션을 불러올 수 없습니다
+                  </h3>
                   <p className="text-gray-400">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
@@ -144,13 +149,15 @@ const About = () => {
               </div>
             </div>
           </div>
-          
+
           {/* About Grid */}
           <ErrorBoundary
             fallback={
               <div className="min-h-[300px] flex items-center justify-center bg-black">
                 <div className="text-center text-white">
-                  <h3 className="text-lg font-semibold mb-2">Core Value 섹션을 불러올 수 없습니다</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    Core Value 섹션을 불러올 수 없습니다
+                  </h3>
                   <p className="text-gray-400">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
@@ -158,7 +165,7 @@ const About = () => {
           >
             <AboutGrid />
           </ErrorBoundary>
-          
+
           <LazyImage
             src="/imgs/Image-1.webp"
             alt="비디오크루 Work Culture 섹션 구분 디자인 이미지"
@@ -168,7 +175,7 @@ const About = () => {
               refreshGSAPAnimations(".about-separator");
             }}
           />
-          
+
           {/* Work Culture Text Block */}
           <div className="w-full px-6 md:-mt-24 lg:-mt-32">
             <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
@@ -183,12 +190,14 @@ const About = () => {
               </div>
             </div>
           </div>
-          
+
           <ErrorBoundary
             fallback={
               <div className="min-h-[300px] flex items-center justify-center bg-black">
                 <div className="text-center text-white">
-                  <h3 className="text-lg font-semibold mb-2">Work Culture 섹션을 불러올 수 없습니다</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    Work Culture 섹션을 불러올 수 없습니다
+                  </h3>
                   <p className="text-gray-400">페이지를 새로고침해주세요.</p>
                 </div>
               </div>

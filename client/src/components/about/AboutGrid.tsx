@@ -7,12 +7,12 @@ const services = [
   {
     title: "Problem Solving",
     description:
-      "비디오크루는 디자인 이슈, 제안 컨설팅 등 고객의 문제에 집중합니다.",
+      "비디오크루는 디자인 이슈, 제안 컨설팅 등 고객의 \n 문제에 집중합니다.",
     image: "/imgs/about/image 5.webp",
   },
   {
     title: "Candidness",
-    description: "업무를 수행함에 있어서 솔직하고 진정성 있게 접근합니다.",
+    description: "업무를 수행함에 있어서 솔직하고 진정성 있게 \n 접근합니다.",
     image: "/imgs/about/image 4.webp",
   },
 ];
@@ -22,7 +22,9 @@ import { useScrollAnimations } from "../../utils/animations";
 
 const AboutGrid = () => {
   const { stackIn } = useScrollAnimations();
-  const [imageErrors, setImageErrors] = useState<boolean[]>(new Array(services.length).fill(false));
+  const [imageErrors, setImageErrors] = useState<boolean[]>(
+    new Array(services.length).fill(false)
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -35,7 +37,7 @@ const AboutGrid = () => {
   }, []);
 
   const handleImageError = (index: number) => {
-    setImageErrors(prev => {
+    setImageErrors((prev) => {
       const newErrors = [...prev];
       newErrors[index] = true;
       return newErrors;
@@ -62,8 +64,18 @@ const AboutGrid = () => {
               <div className="w-full h-full bg-gray-800 flex items-center justify-center">
                 <div className="text-center text-white">
                   <div className="w-12 h-12 mx-auto mb-2 bg-gray-600 rounded-full flex items-center justify-center">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
                     </svg>
                   </div>
                   <p className="text-xs text-gray-400">이미지 로드 실패</p>
@@ -77,7 +89,7 @@ const AboutGrid = () => {
                 <h3 className="text-base min-[768px]:text-base min-[1024px]:text-lg font-bold group-hover:text-blue-400 transition-colors duration-300 ease-out">
                   {service.title}
                 </h3>
-                <p className="text-xs min-[768px]:text-sm min-[1024px]:text-sm text-gray-200 leading-snug min-[768px]:leading-relaxed min-[1024px]:leading-relaxed group-hover:text-white transition-colors duration-300 ease-out">
+                <p className="text-xs min-[768px]:text-sm min-[1024px]:text-sm text-gray-200 leading-snug min-[768px]:leading-relaxed min-[1024px]:leading-relaxed group-hover:text-white transition-colors duration-300 ease-out whitespace-pre-line">
                   {service.description}
                 </p>
               </div>
@@ -104,8 +116,18 @@ const AboutGrid = () => {
               <div className="w-full h-full bg-gray-800 flex items-center justify-center">
                 <div className="text-center text-white">
                   <div className="w-12 h-12 mx-auto mb-2 bg-gray-600 rounded-full flex items-center justify-center">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
                     </svg>
                   </div>
                   <p className="text-xs text-gray-400">이미지 로드 실패</p>
@@ -119,7 +141,7 @@ const AboutGrid = () => {
                 <h3 className="text-base min-[768px]:text-base lg:text-lg font-bold group-hover:text-blue-400 transition-colors duration-300 ease-out">
                   {service.title}
                 </h3>
-                <p className="text-xs min-[768px]:text-sm lg:text-sm text-gray-200 leading-snug min-[768px]:leading-relaxed lg:leading-relaxed group-hover:text-white transition-colors duration-300 ease-out">
+                <p className="text-xs min-[768px]:text-sm lg:text-sm text-gray-200 leading-snug min-[768px]:leading-relaxed lg:leading-relaxed group-hover:text-white transition-colors duration-300 ease-out whitespace-pre-line">
                   {service.description}
                 </p>
               </div>
