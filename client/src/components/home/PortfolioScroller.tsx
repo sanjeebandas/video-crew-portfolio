@@ -19,7 +19,7 @@ const PortfolioScroller = () => {
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   const handleImageError = (src: string) => {
-    setImageErrors(prev => new Set([...prev, src]));
+    setImageErrors((prev) => new Set([...prev, src]));
   };
 
   useEffect(() => {
@@ -72,17 +72,14 @@ const PortfolioScroller = () => {
       <div className="w-full px-4 xs:px-6 md:px-8 lg:px-6">
         <div className="max-w-[1248px] mx-auto text-center text-white mb-4 xs:mb-6">
           <h2 className="portfolio-title text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug">
-            비디오크루의 영상제작 사례
+            비디오크루의 영상 제작 사례
           </h2>
           <div className="portfolio-subtitle">
             <div className="portfolio-text-line text-sm xs:text-base sm:text-lg md:text-base text-gray-400 leading-relaxed">
-              당신의 이야기에 생명을 불어넣는 영상,
-            </div>
-            <div className="portfolio-text-line text-sm xs:text-base sm:text-lg md:text-base text-gray-400 leading-relaxed block sm:hidden">
-              비디오크루가 만듭니다.
+              당신의 이야기에 생명을 불어넣는 영상
             </div>
             <div className="portfolio-text-line text-sm xs:text-base sm:text-lg md:text-base text-gray-400 leading-relaxed">
-              모든 프레임에 가치를 담다, 비디오크루
+              모든 프레임에 가치를 담다
             </div>
           </div>
         </div>
@@ -108,8 +105,18 @@ const PortfolioScroller = () => {
                 <div className="w-full h-full bg-gray-800 flex items-center justify-center">
                   <div className="text-center text-white">
                     <div className="w-8 h-8 mx-auto mb-1 bg-gray-600 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
                       </svg>
                     </div>
                     <p className="text-xs text-gray-400">이미지 로드 실패</p>
@@ -138,8 +145,18 @@ const PortfolioScroller = () => {
                 <div className="w-full h-full bg-gray-800 flex items-center justify-center">
                   <div className="text-center text-white">
                     <div className="w-8 h-8 mx-auto mb-1 bg-gray-600 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
                       </svg>
                     </div>
                     <p className="text-xs text-gray-400">이미지 로드 실패</p>
