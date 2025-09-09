@@ -16,9 +16,14 @@ const AdminNavbar = () => {
   }, [location.pathname]);
 
   const handleLogout = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to logout?"
+    );
+    if (confirmed) {
     logout();
-    toast.success("Logged out successfully!");
-    navigate("/admin/login");
+      toast.success("Logged out successfully!");
+      navigate("/admin/login");
+    }
   };
 
   const handleGoToHome = () => {
@@ -42,19 +47,19 @@ const AdminNavbar = () => {
     {
       path: "/admin/dashboard",
       label: "Dashboard",
-      icon: "📊",
+      icon: "fas fa-chart-line",
       onClick: () => setIsMobileMenuOpen(false),
     },
     {
       path: "/admin/contacts",
       label: "Manage Contacts",
-      icon: "📬",
+      icon: "fas fa-envelope",
       onClick: () => setIsMobileMenuOpen(false),
     },
     {
       path: "/admin/portfolio",
       label: "Manage Portfolio",
-      icon: "🎯",
+      icon: "fas fa-briefcase",
       onClick: () => setIsMobileMenuOpen(false),
     },
   ];
@@ -62,18 +67,18 @@ const AdminNavbar = () => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden md:flex fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-slate-800/95 to-slate-900/95 backdrop-blur-sm border-r border-slate-700/50 z-50">
+      <div className="hidden md:flex fixed left-0 top-0 h-full w-64 bg-black border-r border-gray-700 z-50 font-montserrat">
         <div className="flex flex-col w-full">
           {/* Logo/Brand */}
-          <div className="p-6 border-b border-slate-700/50">
-            <div className="flex items-center gap-3">
+          <div className="p-6 border-b border-gray-700">
+            <div className="flex items-center gap-2">
               <img
                 src="/imgs/Frame 362.png"
                 alt="Video Crew Logo"
-                className="w-24 h-10"
+                className="w-24 h-10 hover:scale-105 transition-all duration-200 ease-out"
               />
               <div>
-                <p className="text-white text-sm font-bold">Admin Panel</p>
+                <p className="text-gray-400 text-xs font-bold">Admin Panel</p>
               </div>
             </div>
           </div>
@@ -88,32 +93,59 @@ const AdminNavbar = () => {
                   onClick={item.onClick}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
                     isActive(item.path)
-                      ? "bg-gradient-to-r from-emerald-500/20 to-blue-500/20 text-white border border-emerald-500/30"
-                      : "text-slate-300 hover:text-white hover:bg-slate-700/30"
+                      ? "text-white border border-gray-600"
+                      : "text-gray-300 hover:text-white hover:scale-105"
                   }`}
+                  style={{
+                    backgroundColor: isActive(item.path) ? '#1F1F1F' : 'transparent'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive(item.path)) {
+                      e.currentTarget.style.backgroundColor = '#1F1F1F';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive(item.path)) {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }
+                  }}
                 >
-                  <span className="text-xl">{item.icon}</span>
+                  <i className={`${item.icon} text-lg`}></i>
                   <span>{item.label}</span>
                 </Link>
               ))}
 
               <button
                 onClick={handleGoToHome}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-slate-300 hover:text-white hover:bg-slate-700/30"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-gray-300 hover:text-white hover:scale-105"
+                style={{ backgroundColor: 'transparent' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#1F1F1F';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }}
               >
-                <span className="text-xl">🏠</span>
+                <i className="fas fa-home text-lg"></i>
                 <span>Go to Homepage</span>
               </button>
             </nav>
           </div>
 
           {/* Logout Button */}
-          <div className="p-4 border-t border-slate-700/50">
+          <div className="p-4">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/20 hover:border-red-400/30"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-red-400 hover:text-red-300 border border-red-600 hover:border-red-500 hover:scale-105"
+              style={{ backgroundColor: 'transparent' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#1F1F1F';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
             >
-              <span className="text-xl">🚪</span>
+              <i className="fas fa-sign-out-alt text-lg"></i>
               <span>Logout</span>
             </button>
           </div>
@@ -121,7 +153,7 @@ const AdminNavbar = () => {
       </div>
 
       {/* Mobile Top Bar */}
-      <div className="md:hidden bg-gradient-to-r from-slate-800/95 to-slate-900/95 backdrop-blur-sm border-b border-slate-700/50 sticky top-0 z-50">
+      <div className="md:hidden bg-black border-b border-gray-700 sticky top-0 z-50 font-montserrat">
         <div className="px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -134,7 +166,7 @@ const AdminNavbar = () => {
 
             <button
               onClick={toggleMobileMenu}
-              className="text-slate-300 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-slate-700/30"
+              className="text-gray-300 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-gray-800"
               aria-label="Toggle menu"
             >
               <svg
@@ -158,9 +190,9 @@ const AdminNavbar = () => {
       {/* Mobile Navigation Overlay */}
       {isMobileMenuOpen && (
         <div className="md:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
-          <div className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-gradient-to-b from-slate-800/95 to-slate-900/95 backdrop-blur-sm border-l border-slate-700/50 shadow-2xl">
+          <div className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-black border-l border-gray-700 shadow-2xl">
             {/* Mobile Menu Header */}
-            <div className="flex items-center justify-between p-4 border-b border-slate-700/50">
+            <div className="flex items-center justify-between p-4 border-b border-gray-700">
               <div className="flex items-center gap-3">
                 <img
                   src="/imgs/Frame 362.png"
@@ -169,13 +201,13 @@ const AdminNavbar = () => {
                 />
                 <div>
                   <p className="text-white text-sm font-bold">Video Crew</p>
-                  <p className="text-slate-400 text-sm">Admin Panel</p>
+                  <p className="text-gray-300 text-sm">Admin Panel</p>
                 </div>
               </div>
 
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-slate-300 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-slate-700/30"
+                className="text-gray-300 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-gray-800"
                 aria-label="Close menu"
               >
                 <svg
@@ -202,12 +234,25 @@ const AdminNavbar = () => {
                   to={item.path}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
                     isActive(item.path)
-                      ? "bg-gradient-to-r from-emerald-500/20 to-blue-500/20 text-white border border-emerald-500/30"
-                      : "text-slate-300 hover:text-white hover:bg-slate-700/30"
+                      ? "text-white border border-gray-600"
+                      : "text-gray-300 hover:text-white hover:scale-105"
                   }`}
+                  style={{
+                    backgroundColor: isActive(item.path) ? '#1F1F1F' : 'transparent'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive(item.path)) {
+                      e.currentTarget.style.backgroundColor = '#1F1F1F';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive(item.path)) {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }
+                  }}
                   onClick={item.onClick}
                 >
-                  <span className="text-xl">{item.icon}</span>
+                  <i className={`${item.icon} text-lg`}></i>
                   <span>{item.label}</span>
                 </Link>
               ))}
@@ -217,23 +262,37 @@ const AdminNavbar = () => {
                   setIsMobileMenuOpen(false);
                   handleGoToHome();
                 }}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-slate-300 hover:text-white hover:bg-slate-700/30"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-gray-300 hover:text-white hover:scale-105"
+                style={{ backgroundColor: 'transparent' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#1F1F1F';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }}
               >
-                <span className="text-xl">🏠</span>
+                <i className="fas fa-home text-lg"></i>
                 <span>Go to Homepage</span>
               </button>
             </div>
 
             {/* Mobile Logout Button */}
-            <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-700/50">
+            <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700">
               <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   handleLogout();
                 }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/20 hover:border-red-400/30"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-red-400 hover:text-red-300 border border-red-600 hover:border-red-500 hover:scale-105"
+                style={{ backgroundColor: 'transparent' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#1F1F1F';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }}
               >
-                <span className="text-xl">🚪</span>
+                <i className="fas fa-sign-out-alt text-lg"></i>
                 <span>Logout</span>
               </button>
             </div>

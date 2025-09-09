@@ -114,7 +114,7 @@ export const checkPageVisitMilestones = async () => {
       if (currentVisits >= milestone && !notifiedMilestones.includes(milestone)) {
         await createNotification(
           "page_visit",
-          "🎉 Page Visit Milestone Reached!",
+          "Page Visit Milestone Reached!",
           `Congratulations! Your website has reached ${milestone.toLocaleString()} visits!`,
           { milestone, currentVisits }
         );
@@ -129,15 +129,15 @@ export const checkPageVisitMilestones = async () => {
 export const createPortfolioNotification = async (action: "created" | "updated" | "deleted", portfolioData: any) => {
   const actions = {
     created: {
-      title: "🎯 New Portfolio Item Created",
+      title: "New Portfolio Item Created",
       message: `New project "${portfolioData.title || "Untitled Project"}" has been added to portfolio`,
     },
     updated: {
-      title: "✏️ Portfolio Item Updated",
+      title: "Portfolio Item Updated",
       message: `Project "${portfolioData.title || "Untitled Project"}" has been updated`,
     },
     deleted: {
-      title: "🗑️ Portfolio Item Deleted",
+      title: "Portfolio Item Deleted",
       message: `Project "${portfolioData.title || "Untitled Project"}" has been removed from portfolio`,
     },
   };
@@ -155,14 +155,14 @@ export const createContactNotification = async (action: "received" | "status_upd
   if (action === "received") {
     await createNotification(
       "contact",
-      "📬 New Contact Inquiry",
+      "New Contact Inquiry",
       `${contactData.name || "Someone"} sent a message about ${contactData.subject || "video production services"}`,
       { action, contactData }
     );
   } else if (action === "status_updated") {
     await createNotification(
       "contact",
-      "📋 Contact Status Updated",
+      "Contact Status Updated",
       `Contact inquiry from ${contactData.name || "Unknown"} status updated to ${contactData.status}`,
       { action, contactData }
     );

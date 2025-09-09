@@ -2,7 +2,11 @@ import { useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { getContacts, updateContactStatus, deleteContact } from "../services/api";
+import {
+  getContacts,
+  updateContactStatus,
+  deleteContact,
+} from "../services/api";
 import AdminNavbar from "../components/admin/AdminNavbar";
 
 type Contact = {
@@ -29,7 +33,7 @@ type Contact = {
 
 type ErrorState = {
   message: string;
-  type: 'fetch' | 'update' | 'delete' | 'network' | 'unknown';
+  type: "fetch" | "update" | "delete" | "network" | "unknown";
   retryable: boolean;
 };
 
@@ -45,7 +49,7 @@ const ContactManager = () => {
   const [isRetrying, setIsRetrying] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const [isOffline, setIsOffline] = useState(false);
-  
+
   const navigate = useNavigate();
   const { logout } = useAuth();
 
@@ -57,7 +61,7 @@ const ContactManager = () => {
   useEffect(() => {
     const handleOnline = () => {
       setIsOffline(false);
-      if (error?.type === 'network') {
+      if (error?.type === "network") {
         setError(null);
         fetchContacts(); // Auto-retry when coming back online
       }
@@ -67,22 +71,23 @@ const ContactManager = () => {
       setIsOffline(true);
       if (!error) {
         setError({
-          message: "You're currently offline. Some features may be unavailable.",
-          type: 'network',
-          retryable: true
+          message:
+            "You're currently offline. Some features may be unavailable.",
+          type: "network",
+          retryable: true,
         });
       }
     };
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     // Check initial network status
     setIsOffline(!navigator.onLine);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, [error]);
 
@@ -92,118 +97,132 @@ const ContactManager = () => {
     navigate("/admin/login");
   };
 
-  const fetchContacts = useCallback(async (isRetry: boolean = false) => {
-    try {
-      if (!isRetry) {
-        setLoading(true);
-        setError(null);
-      }
-
-      const contacts = await getContacts();
-      if (Array.isArray(contacts)) {
-        // Remove duplicates based on _id
-        const uniqueContacts = contacts.filter((contact, index, self) => 
-          index === self.findIndex(c => c._id === contact._id)
-        );
-        setContacts(uniqueContacts);
-        setRetryCount(0); // Reset retry count on success
-      } else {
-        console.error("Contacts data is not an array:", contacts);
-        setContacts([]);
-        setError({
-          message: "Invalid data format received from server. Please contact support.",
-          type: 'fetch',
-          retryable: true
-        });
-      }
-    } catch (error: any) {
-      console.error("Error fetching contacts:", error);
-      
-      let errorMessage = "Failed to fetch contacts.";
-      let errorType: ErrorState['type'] = 'fetch';
-      let retryable = true;
-
-      // Determine specific error type and message
-      if (error?.response?.status === 401) {
-        errorMessage = "Authentication expired. Please log in again.";
-        errorType = 'fetch';
-        retryable = false;
-      } else if (error?.response?.status === 403) {
-        errorMessage = "Access denied. You don't have permission to view contacts.";
-        errorType = 'fetch';
-        retryable = false;
-      } else if (error?.response?.status === 404) {
-        errorMessage = "Contact service not found. Please contact support.";
-        errorType = 'fetch';
-        retryable = true;
-      } else if (error?.response?.status >= 500) {
-        errorMessage = "Server error. Our team has been notified.";
-        errorType = 'fetch';
-        retryable = true;
-      } else if (error?.message?.includes('Network Error') || error?.code === 'NETWORK_ERROR') {
-        errorMessage = "Network connection failed. Please check your internet connection.";
-        errorType = 'network';
-        retryable = true;
-      } else if (error?.message?.includes('timeout')) {
-        errorMessage = "Request timed out. Please try again.";
-        errorType = 'fetch';
-        retryable = true;
-      }
-
-      setError({
-        message: errorMessage,
-        type: errorType,
-        retryable
-      });
-
-      // Auto-retry for retryable errors
-      if (retryable && retryCount < MAX_RETRIES) {
-        const newRetryCount = retryCount + 1;
-        setRetryCount(newRetryCount);
-        
-        if (newRetryCount <= MAX_RETRIES) {
-          setIsRetrying(true);
-          toast.error(`Retrying... (${newRetryCount}/${MAX_RETRIES})`, { id: 'refresh-contacts' });
-          
-          setTimeout(() => {
-            fetchContacts(true);
-          }, RETRY_DELAY * newRetryCount);
+  const fetchContacts = useCallback(
+    async (isRetry: boolean = false) => {
+      try {
+        if (!isRetry) {
+          setLoading(true);
+          setError(null);
         }
+
+        const contacts = await getContacts();
+        if (Array.isArray(contacts)) {
+          // Remove duplicates based on _id
+          const uniqueContacts = contacts.filter(
+            (contact, index, self) =>
+              index === self.findIndex((c) => c._id === contact._id)
+          );
+          setContacts(uniqueContacts);
+          setRetryCount(0); // Reset retry count on success
+        } else {
+          console.error("Contacts data is not an array:", contacts);
+          setContacts([]);
+          setError({
+            message:
+              "Invalid data format received from server. Please contact support.",
+            type: "fetch",
+            retryable: true,
+          });
+        }
+      } catch (error: any) {
+        console.error("Error fetching contacts:", error);
+
+        let errorMessage = "Failed to fetch contacts.";
+        let errorType: ErrorState["type"] = "fetch";
+        let retryable = true;
+
+        // Determine specific error type and message
+        if (error?.response?.status === 401) {
+          errorMessage = "Authentication expired. Please log in again.";
+          errorType = "fetch";
+          retryable = false;
+        } else if (error?.response?.status === 403) {
+          errorMessage =
+            "Access denied. You don't have permission to view contacts.";
+          errorType = "fetch";
+          retryable = false;
+        } else if (error?.response?.status === 404) {
+          errorMessage = "Contact service not found. Please contact support.";
+          errorType = "fetch";
+          retryable = true;
+        } else if (error?.response?.status >= 500) {
+          errorMessage = "Server error. Our team has been notified.";
+          errorType = "fetch";
+          retryable = true;
+        } else if (
+          error?.message?.includes("Network Error") ||
+          error?.code === "NETWORK_ERROR"
+        ) {
+          errorMessage =
+            "Network connection failed. Please check your internet connection.";
+          errorType = "network";
+          retryable = true;
+        } else if (error?.message?.includes("timeout")) {
+          errorMessage = "Request timed out. Please try again.";
+          errorType = "fetch";
+          retryable = true;
+        }
+
+        setError({
+          message: errorMessage,
+          type: errorType,
+          retryable,
+        });
+
+        // Auto-retry for retryable errors
+        if (retryable && retryCount < MAX_RETRIES) {
+          const newRetryCount = retryCount + 1;
+          setRetryCount(newRetryCount);
+
+          if (newRetryCount <= MAX_RETRIES) {
+            setIsRetrying(true);
+            toast.error(`Retrying... (${newRetryCount}/${MAX_RETRIES})`, {
+              id: "refresh-contacts",
+            });
+
+            setTimeout(() => {
+              fetchContacts(true);
+            }, RETRY_DELAY * newRetryCount);
+          }
+        }
+      } finally {
+        setLoading(false);
+        setIsRetrying(false);
       }
-    } finally {
-      setLoading(false);
-      setIsRetrying(false);
-    }
-  }, [retryCount]);
+    },
+    [retryCount]
+  );
 
   const updateStatus = async (id: string, newStatus: Contact["status"]) => {
     if (!newStatus) return;
-    
+
     try {
       setUpdatingId(id);
       await updateContactStatus(id, newStatus);
       setContacts((prev) =>
         prev.map((c) => (c._id === id ? { ...c, status: newStatus } : c))
       );
-      toast.success("✅ Inquiry status updated successfully!");
+      toast.success("Inquiry status updated successfully!");
     } catch (error: any) {
       console.error("Update status error:", error);
-      
+
       let errorMessage = "Failed to update status.";
-      
+
       if (error?.response?.status === 401) {
         errorMessage = "Authentication expired. Please log in again.";
       } else if (error?.response?.status === 403) {
-        errorMessage = "Access denied. You don't have permission to update this inquiry.";
+        errorMessage =
+          "Access denied. You don't have permission to update this inquiry.";
       } else if (error?.response?.status === 404) {
         errorMessage = "Inquiry not found. It may have been deleted.";
       } else if (error?.response?.status >= 500) {
         errorMessage = "Server error. Please try again later.";
-      } else if (error?.message?.includes('Network Error')) {
-        errorMessage = "Network connection failed. Please check your internet connection.";
+      } else if (error?.message?.includes("Network Error")) {
+        errorMessage =
+          "Network connection failed. Please check your internet connection.";
       }
-      
-      toast.error(`❌ ${errorMessage}`);
+
+      toast.error(errorMessage);
     } finally {
       setUpdatingId(null);
     }
@@ -219,25 +238,27 @@ const ContactManager = () => {
       setDeletingId(id);
       await deleteContact(id);
       setContacts((prev) => prev.filter((c) => c._id !== id));
-      toast.success("🗑️ Inquiry deleted successfully!");
+      toast.success("Inquiry deleted successfully!");
     } catch (error: any) {
       console.error("Delete error:", error);
-      
+
       let errorMessage = "Failed to delete inquiry.";
-      
+
       if (error?.response?.status === 401) {
         errorMessage = "Authentication expired. Please log in again.";
       } else if (error?.response?.status === 403) {
-        errorMessage = "Access denied. You don't have permission to delete this inquiry.";
+        errorMessage =
+          "Access denied. You don't have permission to delete this inquiry.";
       } else if (error?.response?.status === 404) {
         errorMessage = "Inquiry not found. It may have been already deleted.";
       } else if (error?.response?.status >= 500) {
         errorMessage = "Server error. Please try again later.";
-      } else if (error?.message?.includes('Network Error')) {
-        errorMessage = "Network connection failed. Please check your internet connection.";
+      } else if (error?.message?.includes("Network Error")) {
+        errorMessage =
+          "Network connection failed. Please check your internet connection.";
       }
-      
-      toast.error(`❌ ${errorMessage}`);
+
+      toast.error(errorMessage);
     } finally {
       setDeletingId(null);
     }
@@ -263,31 +284,35 @@ const ContactManager = () => {
   // Error boundary fallback - prevent dashboard crashes
   if (error && !error.retryable && retryCount >= MAX_RETRIES) {
     return (
-      <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen">
+      <div className="bg-black min-h-screen font-montserrat">
         <AdminNavbar />
         <div className="md:ml-64 p-3 sm:p-4 md:p-6">
           <div className="max-w-7xl mx-auto">
             <div className="mb-6 sm:mb-8">
               <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xs sm:text-sm">VC</span>
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-lg flex items-center justify-center">
+                  <span className="text-black font-bold text-xs sm:text-sm">
+                    VC
+                  </span>
                 </div>
-                <span className="text-slate-400 text-xs sm:text-sm font-medium">Video Crew</span>
+                <span className="text-gray-300 text-xs sm:text-sm font-medium">
+                  Video Crew
+                </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-2">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
                 Contact Inquiries
               </h1>
             </div>
 
-            <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6 text-center">
+            <div className="bg-red-900/20 border border-red-600 rounded-xl p-6 text-center">
               <div className="text-red-400 mb-4">
-                <span className="text-2xl">⚠️</span>
-                <p className="mt-2">Contact Manager is temporarily unavailable</p>
+                <i className="fas fa-exclamation-triangle text-2xl"></i>
+                <p className="mt-2">
+                  Contact Manager is temporarily unavailable
+                </p>
               </div>
               <div className="space-y-3">
-                <p className="text-slate-300 text-sm">
-                  {error.message}
-                </p>
+                <p className="text-gray-300 text-sm">{error.message}</p>
                 <button
                   onClick={() => {
                     setRetryCount(0);
@@ -296,7 +321,7 @@ const ContactManager = () => {
                   }}
                   className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                 >
-                  🔄 Try Again
+                  <i className="fas fa-redo mr-2"></i>Try Again
                 </button>
               </div>
             </div>
@@ -311,57 +336,57 @@ const ContactManager = () => {
   }, [fetchContacts]);
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen">
+    <div className="bg-black min-h-screen font-montserrat">
       {/* AdminNavbar */}
       <AdminNavbar />
-      
+
       {/* Main Content */}
       <div className="md:ml-64 p-3 sm:p-4 md:p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-6 sm:mb-8">
-            <div className="flex items-center gap-2 sm:gap-3 mb-2">
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs sm:text-sm">VC</span>
-              </div>
-              <span className="text-slate-400 text-xs sm:text-sm font-medium">Video Crew</span>
-            </div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-2">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
                   Contact Inquiries
                 </h1>
-                <p className="text-slate-400 text-sm sm:text-base">
+                <p className="text-gray-400 text-sm sm:text-base">
                   Manage and respond to customer inquiries
                 </p>
                 {/* Network Status Indicator */}
                 {isOffline && (
                   <div className="mt-2 flex items-center gap-2 text-yellow-400 text-xs">
-                    <span>📡</span>
+                    <i className="fas fa-wifi"></i>
                     <span>You're currently offline</span>
                   </div>
                 )}
                 {/* Retry Status */}
                 {isRetrying && (
                   <div className="mt-2 flex items-center gap-2 text-blue-400 text-xs">
-                    <span>⏳</span>
-                    <span>Retrying... ({retryCount}/{MAX_RETRIES})</span>
+                    <i className="fas fa-clock"></i>
+                    <span>
+                      Retrying... ({retryCount}/{MAX_RETRIES})
+                    </span>
                   </div>
                 )}
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => {
-                    toast.loading("Refreshing contacts...", { id: 'refresh-contacts' });
+                    toast.loading("Refreshing contacts...", {
+                      id: "refresh-contacts",
+                    });
                     fetchContacts().finally(() => {
-                      toast.success("Contacts refreshed!", { id: 'refresh-contacts' });
+                      toast.success("Contacts refreshed!", {
+                        id: "refresh-contacts",
+                      });
                     });
                   }}
                   disabled={loading || isRetrying}
                   className="group bg-blue-600/50 hover:bg-blue-500/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-blue-600/50 hover:border-blue-500/50 flex items-center gap-1 sm:gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label="Refresh contacts"
                 >
-                  <span>{loading || isRetrying ? "⏳" : "🔄"}</span>
+                  <i className={loading || isRetrying ? "fas fa-clock" : "fas fa-sync-alt"}></i>
                   <span className="hidden sm:inline">
                     {loading || isRetrying ? "Refreshing..." : "Refresh"}
                   </span>
@@ -374,7 +399,7 @@ const ContactManager = () => {
                   onClick={() => navigate("/admin/dashboard")}
                   className="group bg-slate-700/50 hover:bg-slate-600/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50 flex items-center gap-1 sm:gap-2"
                 >
-                  <span className="group-hover:-translate-x-1 transition-transform duration-200">←</span>
+                  <i className="fas fa-arrow-left group-hover:-translate-x-1 transition-transform duration-200"></i>
                   <span className="hidden sm:inline">Back to Dashboard</span>
                   <span className="sm:hidden">Back</span>
                 </button>
@@ -383,7 +408,7 @@ const ContactManager = () => {
                   onClick={handleLogout}
                   className="group bg-red-600/50 hover:bg-red-500/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-red-600/50 hover:border-red-500/50 flex items-center gap-1 sm:gap-2"
                 >
-                  <span>🚪</span>
+                  <i className="fas fa-sign-out-alt"></i>
                   <span className="hidden sm:inline">Logout</span>
                   <span className="sm:hidden">Logout</span>
                 </button>
@@ -393,14 +418,14 @@ const ContactManager = () => {
 
           {/* Content */}
           {loading && !isRetrying ? (
-            <div className="bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-6">
+            <div className="bg-black border border-gray-700 rounded-xl sm:rounded-2xl p-6">
               <div className="flex items-center justify-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
-                <span className="ml-3 text-slate-400">Loading contacts...</span>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                <span className="ml-3 text-gray-300">Loading contacts...</span>
               </div>
             </div>
           ) : error ? (
-            <div className="bg-gradient-to-br from-red-900/30 to-red-800/30 backdrop-blur-sm border border-red-700/50 rounded-xl sm:rounded-2xl p-6">
+            <div className="bg-red-900/20 border border-red-600 rounded-xl sm:rounded-2xl p-6">
               <p className="text-red-400 text-center">{error.message}</p>
               {error.retryable && (
                 <button
@@ -417,10 +442,12 @@ const ContactManager = () => {
               )}
             </div>
           ) : !Array.isArray(contacts) || contacts.length === 0 ? (
-            <div className="bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-6">
+            <div className="bg-black border border-gray-700 rounded-xl sm:rounded-2xl p-6">
               <div className="text-center py-8">
-                <span className="text-4xl mb-4 block">📬</span>
-                <p className="text-slate-400 text-sm sm:text-base">No contact submissions found.</p>
+                <i className="fas fa-envelope text-4xl mb-4 block text-gray-400"></i>
+                <p className="text-gray-300 text-sm sm:text-base">
+                  No contact submissions found.
+                </p>
               </div>
             </div>
           ) : (
@@ -429,17 +456,25 @@ const ContactManager = () => {
               <div className="space-y-4 sm:space-y-6 mb-6">
                 {currentContacts.map((contact, index) => {
                   const isExpanded = expandedIds.includes(contact._id);
-                  const uniqueKey = contact._id || `contact-${index}-${Date.now()}`;
+                  const uniqueKey =
+                    contact._id || `contact-${index}-${Date.now()}`;
                   const isNew = contact.status === "new" || !contact.status;
-                  
+
                   return (
                     <div
                       key={uniqueKey}
-                      className={`bg-gradient-to-br from-slate-700/80 via-slate-800/80 to-slate-900/80 backdrop-blur-sm border rounded-xl sm:rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-slate-500/20 ${
-                        isNew 
-                          ? 'border-emerald-500/30 bg-emerald-500/5' 
-                          : 'border-slate-600/30'
+                      className={`bg-gray-950 border rounded-xl sm:rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl ${
+                        isNew
+                          ? "border-emerald-500/30 bg-emerald-500/5"
+                          : "border-gray-700"
                       }`}
+                      style={{ backgroundColor: 'transparent' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#1F1F1F';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
                     >
                       <div className="p-4 sm:p-6">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -464,17 +499,27 @@ const ContactManager = () => {
                                 </span>
                               )}
                             </div>
-                            <p className="text-slate-300 text-sm mb-1">{contact.email}</p>
-                            <p className="text-slate-400 text-xs">
-                              {new Date(contact.createdAt).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                              })} at {new Date(contact.createdAt).toLocaleTimeString('en-US', {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: true
-                              })}
+                            <p className="text-gray-300 text-sm mb-1">
+                              {contact.email}
+                            </p>
+                            <p className="text-gray-400 text-xs">
+                              {new Date(contact.createdAt).toLocaleDateString(
+                                "en-US",
+                                {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                }
+                              )}{" "}
+                              at{" "}
+                              {new Date(contact.createdAt).toLocaleTimeString(
+                                "en-US",
+                                {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                }
+                              )}
                             </p>
                           </div>
 
@@ -487,7 +532,7 @@ const ContactManager = () => {
                                   e.target.value as Contact["status"]
                                 )
                               }
-                              className="border border-slate-600/50 rounded-lg px-3 py-2 bg-slate-800/50 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                              className="border border-gray-600 rounded-lg px-3 py-2 bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
                               disabled={updatingId === contact._id || isOffline}
                             >
                               <option value="new">New</option>
@@ -497,7 +542,7 @@ const ContactManager = () => {
 
                             <button
                               onClick={() => toggleExpand(contact._id)}
-                              className="px-3 py-2 text-sm rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50"
+                              className="px-3 py-2 text-sm rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition-all duration-200 border border-gray-600 hover:border-gray-500"
                               disabled={isOffline}
                             >
                               {isExpanded ? "Hide Details" : "View Details"}
@@ -508,74 +553,114 @@ const ContactManager = () => {
                         {/* Loading indicator for status update */}
                         {updatingId === contact._id && (
                           <div className="mt-2 flex items-center gap-2 text-blue-400 text-xs">
-                            <span className="animate-spin">⏳</span>
+                            <i className="fas fa-spinner animate-spin"></i>
                             <span>Updating status...</span>
                           </div>
                         )}
 
                         {isExpanded && (
-                          <div className="mt-4 pt-4 border-t border-slate-600/30">
+                          <div className="mt-4 pt-4 border-t border-gray-700">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                               {/* Basic Information */}
                               <div>
-                                <strong className="text-slate-300">Phone:</strong>
-                                <p className="text-slate-400 mt-1">{contact.phone || "Not provided"}</p>
-                              </div>
-                              <div>
-                                <strong className="text-slate-300">Company:</strong>
-                                <p className="text-slate-400 mt-1">{contact.company || "Not provided"}</p>
-                              </div>
-                              <div>
-                                <strong className="text-slate-300">Budget:</strong>
-                                <p className="text-slate-400 mt-1">
-                                  {contact.budget 
-                                    ? `${contact.budget} million won` 
-                                    : "Not specified"
-                                  }
+                                <strong className="text-gray-300">
+                                  Phone:
+                                </strong>
+                                <p className="text-gray-400 mt-1">
+                                  {contact.phone || "Not provided"}
                                 </p>
                               </div>
                               <div>
-                                <strong className="text-slate-300">Preferred Date:</strong>
-                                <p className="text-slate-400 mt-1">{contact.preferredDate || "Not specified"}</p>
+                                <strong className="text-gray-300">
+                                  Company:
+                                </strong>
+                                <p className="text-gray-400 mt-1">
+                                  {contact.company || "Not provided"}
+                                </p>
                               </div>
                               <div>
-                                <strong className="text-slate-300">Production Purpose:</strong>
-                                <p className="text-slate-400 mt-1">{contact.productionPurpose || contact.service || "Not specified"}</p>
+                                <strong className="text-gray-300">
+                                  Budget:
+                                </strong>
+                                <p className="text-gray-400 mt-1">
+                                  {contact.budget
+                                    ? `${contact.budget} million won`
+                                    : "Not specified"}
+                                </p>
                               </div>
-                              
+                              <div>
+                                <strong className="text-gray-300">
+                                  Preferred Date:
+                                </strong>
+                                <p className="text-gray-400 mt-1">
+                                  {contact.preferredDate || "Not specified"}
+                                </p>
+                              </div>
+                              <div>
+                                <strong className="text-gray-300">
+                                  Production Purpose:
+                                </strong>
+                                <p className="text-gray-400 mt-1">
+                                  {contact.productionPurpose ||
+                                    contact.service ||
+                                    "Not specified"}
+                                </p>
+                              </div>
+
                               {/* Project Details from Subject */}
                               {(() => {
-                                const subjectParts = contact.subject.split(' • ');
-                                const videoCount = subjectParts[0]?.replace(' Videos', '') || 'Not specified';
-                                const runningTime = subjectParts[1]?.replace(' Runtime', '') || 'Not specified';
-                                const platform = subjectParts[2]?.replace('Platform: ', '') || 'Not specified';
-                                
+                                const subjectParts =
+                                  contact.subject.split(" • ");
+                                const videoCount =
+                                  subjectParts[0]?.replace(" Videos", "") ||
+                                  "Not specified";
+                                const runningTime =
+                                  subjectParts[1]?.replace(" Runtime", "") ||
+                                  "Not specified";
+                                const platform =
+                                  subjectParts[2]?.replace("Platform: ", "") ||
+                                  "Not specified";
+
                                 return (
                                   <>
                                     <div>
-                                      <strong className="text-slate-300">Video Count:</strong>
-                                      <p className="text-slate-400 mt-1">{videoCount}</p>
+                                      <strong className="text-gray-300">
+                                        Video Count:
+                                      </strong>
+                                      <p className="text-gray-400 mt-1">
+                                        {videoCount}
+                                      </p>
                                     </div>
                                     <div>
-                                      <strong className="text-slate-300">Running Time:</strong>
-                                      <p className="text-slate-400 mt-1">{runningTime}</p>
+                                      <strong className="text-gray-300">
+                                        Running Time:
+                                      </strong>
+                                      <p className="text-gray-400 mt-1">
+                                        {runningTime}
+                                      </p>
                                     </div>
                                     <div>
-                                      <strong className="text-slate-300">Upload Platform:</strong>
-                                      <p className="text-slate-400 mt-1">{platform}</p>
+                                      <strong className="text-gray-300">
+                                        Upload Platform:
+                                      </strong>
+                                      <p className="text-gray-400 mt-1">
+                                        {platform}
+                                      </p>
                                     </div>
                                   </>
                                 );
                               })()}
-                              
+
                               {/* Reference Materials */}
                               <div className="sm:col-span-2">
-                                <strong className="text-slate-300">Reference Videos:</strong>
-                                <p className="text-slate-400 mt-1 break-words">
+                                <strong className="text-gray-300">
+                                  Reference Videos:
+                                </strong>
+                                <p className="text-gray-400 mt-1 break-words">
                                   {contact.referenceVideos ? (
-                                    <a 
-                                      href={contact.referenceVideos} 
-                                      target="_blank" 
+                                    <a
+                                      href={contact.referenceVideos}
+                                      target="_blank"
                                       rel="noopener noreferrer"
                                       className="text-blue-400 hover:text-blue-300 underline"
                                     >
@@ -587,12 +672,14 @@ const ContactManager = () => {
                                 </p>
                               </div>
                               <div className="sm:col-span-2">
-                                <strong className="text-slate-300">Website Links:</strong>
-                                <p className="text-slate-400 mt-1 break-words">
+                                <strong className="text-gray-300">
+                                  Website Links:
+                                </strong>
+                                <p className="text-gray-400 mt-1 break-words">
                                   {contact.websiteLinks ? (
-                                    <a 
-                                      href={contact.websiteLinks} 
-                                      target="_blank" 
+                                    <a
+                                      href={contact.websiteLinks}
+                                      target="_blank"
                                       rel="noopener noreferrer"
                                       className="text-blue-400 hover:text-blue-300 underline"
                                     >
@@ -603,25 +690,31 @@ const ContactManager = () => {
                                   )}
                                 </p>
                               </div>
-                              
-                                                           </div>
-                            <div className="mt-4 pt-4 border-t border-slate-600/30">
+                            </div>
+                            <div className="mt-4 pt-4 border-t border-gray-700">
                               <button
-                                onClick={() => deleteContactHandler(contact._id)}
+                                onClick={() =>
+                                  deleteContactHandler(contact._id)
+                                }
                                 className={`text-red-400 hover:text-red-300 font-medium transition-colors duration-200 ${
                                   deletingId === contact._id
                                     ? "opacity-50 pointer-events-none"
                                     : ""
                                 }`}
-                                disabled={isOffline || deletingId === contact._id}
+                                disabled={
+                                  isOffline || deletingId === contact._id
+                                }
                               >
                                 {deletingId === contact._id ? (
                                   <span className="flex items-center gap-1">
-                                    <span className="animate-spin">⏳</span>
+                                    <i className="fas fa-spinner animate-spin"></i>
                                     Deleting...
                                   </span>
                                 ) : (
-                                  "🗑️ Delete Inquiry"
+                                  <span className="flex items-center gap-1">
+                                    <i className="fas fa-trash"></i>
+                                    Delete Inquiry
+                                  </span>
                                 )}
                               </button>
                             </div>
@@ -639,40 +732,44 @@ const ContactManager = () => {
                   <button
                     onClick={() => goToPage(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="px-3 py-2 text-sm rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-sm rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition-all duration-200 border border-gray-600 hover:border-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    ← Previous
+                    <i className="fas fa-arrow-left mr-1"></i>Previous
                   </button>
-                  
+
                   <div className="flex gap-1">
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                      <button
-                        key={page}
-                        onClick={() => goToPage(page)}
-                        className={`px-3 py-2 text-sm rounded-lg transition-all duration-200 border ${
-                          currentPage === page
-                            ? "bg-emerald-600 text-white border-emerald-500"
-                            : "bg-slate-700/50 hover:bg-slate-600/50 text-white border-slate-600/50 hover:border-slate-500/50"
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    ))}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (page) => (
+                        <button
+                          key={page}
+                          onClick={() => goToPage(page)}
+                          className={`px-3 py-2 text-sm rounded-lg transition-all duration-200 border ${
+                            currentPage === page
+                              ? "bg-emerald-600 text-white border-emerald-500"
+                              : "bg-gray-800 hover:bg-gray-700 text-white border-gray-600 hover:border-gray-500"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      )
+                    )}
                   </div>
-                  
+
                   <button
                     onClick={() => goToPage(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="px-3 py-2 text-sm rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-sm rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition-all duration-200 border border-gray-600 hover:border-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Next →
+                    Next<i className="fas fa-arrow-right ml-1"></i>
                   </button>
                 </div>
               )}
 
               {/* Summary */}
-              <div className="mt-6 text-center text-slate-400 text-sm">
-                Showing {startIndex + 1} to {Math.min(endIndex, contacts.length)} of {contacts.length} inquiries
+              <div className="mt-6 text-center text-gray-400 text-sm">
+                Showing {startIndex + 1} to{" "}
+                {Math.min(endIndex, contacts.length)} of {contacts.length}{" "}
+                inquiries
               </div>
             </>
           )}

@@ -30,7 +30,7 @@ import NotFoundClean from "./pages/NotFoundClean";
 
 function LayoutWrapper() {
   const location = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isAdminLogin = location.pathname === "/admin/login";
   const isAdminDashboard =
@@ -38,7 +38,7 @@ function LayoutWrapper() {
       location.pathname.startsWith("/admin/contacts") ||
       location.pathname.startsWith("/admin/portfolio")) &&
     isAuthenticated;
-  const is404Page = !isAuthenticated && isAdminRoute;
+  const is404Page = !isAuthenticated && isAdminRoute && !isLoading;
 
   // Scroll to top on route change
   useEffect(() => {
@@ -51,6 +51,15 @@ function LayoutWrapper() {
       incrementPageVisit();
     }
   }, [location.pathname, isAdminRoute]);
+
+  // Show loading screen while checking authentication for admin routes
+  if (isLoading && isAdminRoute && !isAdminLogin) {
+    return (
+      <div className="bg-black min-h-screen flex items-center justify-center">
+        <div className="text-white text-lg">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-black text-white min-h-screen">

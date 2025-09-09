@@ -2,6 +2,7 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import CreatePortfolioForm from "../components/admin/CreatePortfolioForm";
+import PortfolioItemCard from "../components/admin/PortfolioItemCard";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import { getPortfolioItems, deletePortfolioItem} from "../services/api";
@@ -196,7 +197,7 @@ const PortfolioManager = () => {
       setDeletingId(id);
       await deletePortfolioItem(id);
       setItems((prev) => prev.filter((item) => item._id !== id));
-      toast.success("🗑️ Portfolio item deleted successfully!");
+      toast.success("Portfolio item deleted successfully!");
     } catch (error: any) {
       console.error("Delete error:", error);
       
@@ -214,7 +215,7 @@ const PortfolioManager = () => {
         errorMessage = "Network connection failed. Please check your internet connection.";
       }
       
-      toast.error(`❌ ${errorMessage}`);
+      toast.error(errorMessage);
     } finally {
       setDeletingId(null);
     }
@@ -251,33 +252,33 @@ const PortfolioManager = () => {
   // Error boundary fallback - prevent dashboard crashes
   if (error && !error.retryable && retryCount >= MAX_RETRIES) {
     return (
-      <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen">
+      <div className="bg-black min-h-screen font-montserrat">
         <AdminNavbar />
         <div className="md:ml-64 p-3 sm:p-4 md:p-6">
           <div className="max-w-7xl mx-auto">
             <div className="mb-6 sm:mb-8">
               <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xs sm:text-sm">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-lg flex items-center justify-center">
+                  <span className="text-black font-bold text-xs sm:text-sm">
                     VC
                   </span>
                 </div>
-                <span className="text-slate-400 text-xs sm:text-sm font-medium">
+                <span className="text-gray-300 text-xs sm:text-sm font-medium">
                   Video Crew
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-2">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
                 Portfolio Manager
               </h1>
             </div>
 
-            <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6 text-center">
+            <div className="bg-red-900/20 border border-red-600 rounded-xl p-6 text-center">
               <div className="text-red-400 mb-4">
-                <span className="text-2xl">⚠️</span>
+                <i className="fas fa-exclamation-triangle text-2xl"></i>
                 <p className="mt-2">Portfolio Manager is temporarily unavailable</p>
               </div>
               <div className="space-y-3">
-                <p className="text-slate-300 text-sm">
+                <p className="text-gray-300 text-sm">
                   {error.message}
                 </p>
                 <button
@@ -288,7 +289,7 @@ const PortfolioManager = () => {
                   }}
                   className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                 >
-                  🔄 Try Again
+                  <i className="fas fa-redo mr-2"></i>Try Again
                 </button>
               </div>
             </div>
@@ -301,25 +302,25 @@ const PortfolioManager = () => {
   // Loading state with skeleton animation
   if (loading) {
     return (
-      <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen">
+      <div className="bg-black min-h-screen font-montserrat">
         <AdminNavbar />
         <div className="md:ml-64 p-3 sm:p-4 md:p-6">
           <div className="max-w-7xl mx-auto">
             <div className="mb-6 sm:mb-8">
               <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xs sm:text-sm">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-lg flex items-center justify-center">
+                  <span className="text-black font-bold text-xs sm:text-sm">
                     VC
                   </span>
                 </div>
-                <span className="text-slate-400 text-xs sm:text-sm font-medium">
+                <span className="text-gray-300 text-xs sm:text-sm font-medium">
                   Video Crew
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-2">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
                 Portfolio Manager
               </h1>
-              <p className="text-slate-400 text-sm sm:text-base">
+              <p className="text-gray-400 text-sm sm:text-base">
                 Loading portfolio items...
               </p>
             </div>
@@ -328,12 +329,12 @@ const PortfolioManager = () => {
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 animate-pulse"
+                  className="bg-black border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 animate-pulse"
                 >
-                  <div className="w-full h-48 bg-slate-700 rounded-lg mb-4"></div>
-                  <div className="w-3/4 h-6 bg-slate-700 rounded mb-2"></div>
-                  <div className="w-full h-4 bg-slate-700 rounded mb-2"></div>
-                  <div className="w-1/2 h-4 bg-slate-700 rounded"></div>
+                  <div className="w-full h-48 bg-gray-700 rounded-lg mb-4"></div>
+                  <div className="w-3/4 h-6 bg-gray-700 rounded mb-2"></div>
+                  <div className="w-full h-4 bg-gray-700 rounded mb-2"></div>
+                  <div className="w-1/2 h-4 bg-gray-700 rounded"></div>
                 </div>
               ))}
             </div>
@@ -344,7 +345,7 @@ const PortfolioManager = () => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen">
+    <div className="bg-black min-h-screen font-montserrat">
       {/* AdminNavbar */}
       <AdminNavbar />
 
@@ -356,23 +357,23 @@ const PortfolioManager = () => {
             
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-2">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
                   Portfolio Manager
                 </h1>
-                <p className="text-slate-400 text-sm sm:text-base">
+                <p className="text-gray-400 text-sm sm:text-base">
                   Create and manage your portfolio projects
                 </p>
                 {/* Network Status Indicator */}
                 {isOffline && (
                   <div className="mt-2 flex items-center gap-2 text-yellow-400 text-xs">
-                    <span>📡</span>
+                    <i className="fas fa-wifi"></i>
                     <span>You're currently offline</span>
                   </div>
                 )}
                 {/* Retry Status */}
                 {isRetrying && (
                   <div className="mt-2 flex items-center gap-2 text-blue-400 text-xs">
-                    <span>⏳</span>
+                    <i className="fas fa-clock"></i>
                     <span>Retrying... ({retryCount}/{MAX_RETRIES})</span>
                   </div>
                 )}
@@ -384,7 +385,7 @@ const PortfolioManager = () => {
                   aria-label="Add new portfolio project"
                   disabled={isOffline}
                 >
-                  <span>➕</span>
+                  <i className="fas fa-plus"></i>
                   <span className="hidden sm:inline">Add New Project</span>
                   <span className="sm:hidden">Add Project</span>
                 </button>
@@ -400,7 +401,7 @@ const PortfolioManager = () => {
                   className="group bg-blue-600/50 hover:bg-blue-500/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-blue-600/50 hover:border-blue-500/50 flex items-center gap-1 sm:gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label="Refresh portfolio items"
                 >
-                  <span>{loading || isRetrying ? "⏳" : "🔄"}</span>
+                  <i className={loading || isRetrying ? "fas fa-clock" : "fas fa-sync-alt"}></i>
                   <span className="hidden sm:inline">
                     {loading || isRetrying ? "Refreshing..." : "Refresh"}
                   </span>
@@ -414,9 +415,7 @@ const PortfolioManager = () => {
                   className="group bg-slate-700/50 hover:bg-slate-600/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50 flex items-center gap-1 sm:gap-2"
                   aria-label="Navigate back to dashboard"
                 >
-                  <span className="group-hover:-translate-x-1 transition-transform duration-200">
-                    ←
-                  </span>
+                  <i className="fas fa-arrow-left group-hover:-translate-x-1 transition-transform duration-200"></i>
                   <span className="hidden sm:inline">Back to Dashboard</span>
                   <span className="sm:hidden">Back</span>
                 </button>
@@ -426,7 +425,7 @@ const PortfolioManager = () => {
                   className="group bg-red-600/50 hover:bg-red-500/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-red-600/50 hover:border-red-500/50 flex items-center gap-1 sm:gap-2"
                   aria-label="Logout from admin panel"
                 >
-                  <span>🚪</span>
+                  <i className="fas fa-sign-out-alt"></i>
                   <span className="hidden sm:inline">Logout</span>
                   <span className="sm:hidden">Logout</span>
                 </button>
@@ -436,10 +435,10 @@ const PortfolioManager = () => {
 
           {/* Content */}
           {error ? (
-            <div className="bg-gradient-to-br from-red-900/30 to-red-800/30 backdrop-blur-sm border border-red-700/50 rounded-xl sm:rounded-2xl p-6">
+            <div className="bg-red-900/20 border border-red-600 rounded-xl sm:rounded-2xl p-6">
               <div className="text-center">
                 <div className="text-red-400 mb-4">
-                  <span className="text-2xl">⚠️</span>
+                  <i className="fas fa-exclamation-triangle text-2xl"></i>
                   <p className="mt-2">{error.message}</p>
                 </div>
                 {error.retryable && (
@@ -451,21 +450,21 @@ const PortfolioManager = () => {
                     className="mt-4 px-4 py-2 rounded-lg bg-red-600/50 hover:bg-red-500/50 text-white transition-all duration-200 border border-red-600/50 hover:border-red-500/50"
                     aria-label="Retry fetching portfolio items"
                   >
-                    🔄 Retry
+                    <i className="fas fa-redo mr-2"></i>Retry
                   </button>
                 )}
                 {isOffline && (
-                  <p className="mt-4 text-slate-400 text-sm">
+                  <p className="mt-4 text-gray-400 text-sm">
                     You are currently offline. Please check your connection.
                   </p>
                 )}
               </div>
             </div>
           ) : items.length === 0 ? (
-            <div className="bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-6">
+            <div className="bg-black border border-gray-700 rounded-xl sm:rounded-2xl p-6">
               <div className="text-center py-8">
-                <span className="text-4xl mb-4 block">🎯</span>
-                <p className="text-slate-400 text-sm sm:text-base mb-4">
+                <i className="fas fa-briefcase text-4xl mb-4 block text-gray-400"></i>
+                <p className="text-gray-300 text-sm sm:text-base mb-4">
                   No portfolio items found.
                 </p>
                 <button
@@ -482,104 +481,16 @@ const PortfolioManager = () => {
               {/* Portfolio Items Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
                 {paginationData.currentItems.map((item) => (
-                  <div
+                  <PortfolioItemCard
                     key={item._id}
-                    className="bg-gradient-to-br from-slate-700/80 via-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-600/30 rounded-xl sm:rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-slate-500/20 overflow-hidden"
-                  >
-                    {/* Thumbnail */}
-                    <div className="relative h-48 bg-slate-800">
-                      {item.thumbnailUrl ? (
-                        <img
-                          src={item.thumbnailUrl}
-                          alt={item.title}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-700 to-slate-800">
-                          <span className="text-4xl text-slate-500">🎬</span>
-                        </div>
-                      )}
-
-                      {/* Video Preview Button */}
-                      {item.videoUrl && (
-                        <button
-                          onClick={() => openModal('video', item.videoUrl)}
-                          className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-lg transition-all duration-200"
-                          title="Preview Video"
-                          aria-label={`Preview video for ${item.title}`}
-                        >
-                          ▶️
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-4 sm:p-6">
-                      <div className="mb-3">
-                        <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 line-clamp-2">
-                          {item.title}
-                        </h3>
-                        <p className="text-slate-300 text-sm mb-2 line-clamp-3">
-                          {item.description}
-                        </p>
-                        <div className="flex items-center gap-2 text-xs text-slate-400">
-                          <span className="bg-slate-600/50 px-2 py-1 rounded-full">
-                            {item.category}
-                          </span>
-                          {item.client && (
-                            <span className="bg-blue-600/50 px-2 py-1 rounded-full">
-                              {item.client}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-slate-500">
-                          {new Date(item.createdAt).toLocaleDateString()}
-                        </span>
-
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => openModal('details', item)}
-                            className="px-3 py-1 text-xs rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50"
-                            aria-label={`View details for ${item.title}`}
-                          >
-                            Details
-                          </button>
-
-                          <button
-                            onClick={() => openModal('form', item, true)}
-                            className="px-3 py-1 text-xs rounded-lg bg-blue-600/50 hover:bg-blue-500/50 text-white transition-all duration-200 border border-blue-600/50 hover:border-blue-500/50"
-                            aria-label={`Edit ${item.title}`}
-                            disabled={isOffline}
-                          >
-                            Edit
-                          </button>
-
-                          <button
-                            onClick={() => deleteItem(item._id)}
-                            className={`px-3 py-1 text-xs rounded-lg bg-red-600/50 hover:bg-red-500/50 text-white transition-all duration-200 border border-red-600/50 hover:border-red-500/50 ${
-                              deletingId === item._id
-                                ? "opacity-50 pointer-events-none"
-                                : ""
-                            }`}
-                            aria-label={`Delete ${item.title}`}
-                            disabled={isOffline || deletingId === item._id}
-                          >
-                            {deletingId === item._id ? (
-                              <span className="flex items-center gap-1">
-                                <span className="animate-spin">⏳</span>
-                                Deleting...
-                              </span>
-                            ) : (
-                              "Delete"
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    item={item}
+                    onEdit={(item) => openModal('form', item, true)}
+                    onDelete={deleteItem}
+                    onViewDetails={(item) => openModal('details', item)}
+                    onPreviewVideo={(videoUrl) => openModal('video', videoUrl)}
+                    isDeleting={deletingId === item._id}
+                    isOffline={isOffline}
+                  />
                 ))}
               </div>
 
@@ -589,10 +500,10 @@ const PortfolioManager = () => {
                   <button
                     onClick={() => goToPage(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="px-3 py-2 text-sm rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-sm rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition-all duration-200 border border-gray-600 hover:border-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     aria-label="Go to previous page"
                   >
-                    ← Previous
+                    <i className="fas fa-arrow-left mr-1"></i>Previous
                   </button>
 
                   <div className="flex gap-1">
@@ -604,7 +515,7 @@ const PortfolioManager = () => {
                           className={`px-3 py-2 text-sm rounded-lg transition-all duration-200 border ${
                             currentPage === page
                               ? "bg-emerald-600 text-white border-emerald-500"
-                              : "bg-slate-700/50 hover:bg-slate-600/50 text-white border-slate-600/50 hover:border-slate-500/50"
+                              : "bg-gray-800 hover:bg-gray-700 text-white border-gray-600 hover:border-gray-500"
                           }`}
                           aria-label={`Go to page ${page}`}
                           aria-current={currentPage === page ? "page" : undefined}
@@ -618,16 +529,16 @@ const PortfolioManager = () => {
                   <button
                     onClick={() => goToPage(currentPage + 1)}
                     disabled={currentPage === paginationData.totalPages}
-                    className="px-3 py-2 text-sm rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-white transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-sm rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition-all duration-200 border border-gray-600 hover:border-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     aria-label="Go to next page"
                   >
-                    Next →
+                    Next<i className="fas fa-arrow-right ml-1"></i>
                   </button>
                 </div>
               )}
 
               {/* Summary */}
-              <div className="text-center text-slate-400 text-sm mb-6">
+              <div className="text-center text-gray-400 text-sm mb-6">
                 Showing {paginationData.startIndex + 1} to {Math.min(paginationData.endIndex, items.length)}{" "}
                 of {items.length} portfolio items
               </div>
@@ -637,17 +548,17 @@ const PortfolioManager = () => {
           {/* Create/Edit Portfolio Form Modal */}
           {modalState.type === 'form' && (
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 w-full max-w-2xl max-h-[85vh] overflow-y-auto">
+              <div className="bg-black border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 w-full max-w-2xl max-h-[85vh] overflow-y-auto">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg sm:text-2xl font-bold text-white">
                     {modalState.editMode ? "Edit Portfolio Item" : "Create New Portfolio Item"}
                   </h2>
                   <button
                     onClick={closeModal}
-                    className="text-slate-400 hover:text-white transition-colors duration-200"
+                    className="text-gray-400 hover:text-white transition-colors duration-200"
                     aria-label="Close modal"
                   >
-                    ✕
+                    <i className="fas fa-times"></i>
                   </button>
                 </div>
                 <CreatePortfolioForm
@@ -676,7 +587,7 @@ const PortfolioManager = () => {
                   className="absolute -top-10 right-0 text-white hover:text-slate-300 transition-colors duration-200 z-10"
                   aria-label="Close video preview"
                 >
-                  ✕ Close
+                  <i className="fas fa-times mr-1"></i>Close
                 </button>
                 <video
                   src={modalState.data}
@@ -693,17 +604,17 @@ const PortfolioManager = () => {
           {/* Item Details Modal */}
           {modalState.type === 'details' && modalState.data && (
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="bg-black border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl sm:text-2xl font-bold text-white">
                     Project Details
                   </h2>
                   <button
                     onClick={closeModal}
-                    className="text-slate-400 hover:text-white transition-colors duration-200"
+                    className="text-gray-400 hover:text-white transition-colors duration-200"
                     aria-label="Close details modal"
                   >
-                    ✕
+                    <i className="fas fa-times"></i>
                   </button>
                 </div>
 
@@ -712,29 +623,29 @@ const PortfolioManager = () => {
                     <h3 className="text-lg font-semibold text-white mb-2">
                       {modalState.data.title}
                     </h3>
-                    <p className="text-slate-300 text-sm">
+                    <p className="text-gray-300 text-sm">
                       {modalState.data.description}
                     </p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                     <div>
-                      <strong className="text-slate-300">Category:</strong>
-                      <p className="text-slate-400 mt-1">
+                      <strong className="text-gray-300">Category:</strong>
+                      <p className="text-gray-400 mt-1">
                         {modalState.data.category}
                       </p>
                     </div>
                     {modalState.data.client && (
                       <div>
-                        <strong className="text-slate-300">Client:</strong>
-                        <p className="text-slate-400 mt-1">
+                        <strong className="text-gray-300">Client:</strong>
+                        <p className="text-gray-400 mt-1">
                           {modalState.data.client}
                         </p>
                       </div>
                     )}
                     <div>
-                      <strong className="text-slate-300">Created:</strong>
-                      <p className="text-slate-400 mt-1">
+                      <strong className="text-gray-300">Created:</strong>
+                      <p className="text-gray-400 mt-1">
                         {new Date(
                           modalState.data.createdAt
                         ).toLocaleDateString()}{" "}
@@ -748,7 +659,7 @@ const PortfolioManager = () => {
 
                   {modalState.data.videoUrl && (
                     <div>
-                      <strong className="text-slate-300 block mb-2">
+                      <strong className="text-gray-300 block mb-2">
                         Video:
                       </strong>
                       <video

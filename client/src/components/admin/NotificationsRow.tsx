@@ -165,49 +165,53 @@ const NotificationsRow = () => {
     }
   };
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case "contact":
-        return "border-purple-500/20 bg-purple-600/10";
-      case "portfolio":
-        return "border-emerald-500/20 bg-emerald-600/10";
-      case "page_visit":
-        return "border-blue-500/20 bg-blue-600/10";
-      case "system":
-        return "border-orange-500/20 bg-orange-600/10";
-      default:
-        return "border-slate-500/20 bg-slate-600/10";
-    }
-  };
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (notification: Notification) => {
+    const { type, title, data } = notification;
+    
     switch (type) {
       case "contact":
-        return "📬";
+        // Check if it's a status update or new inquiry
+        if (title.includes("Status Updated")) {
+          return "fas fa-clipboard-check";
+        }
+        return "fas fa-envelope";
+        
       case "portfolio":
-        return "🎯";
+        // Check the action in data or title to show specific icons
+        if (data?.action === "created" || title.includes("Created")) {
+          return "fas fa-plus-circle";
+        } else if (data?.action === "updated" || title.includes("Updated")) {
+          return "fas fa-edit";
+        } else if (data?.action === "deleted" || title.includes("Deleted")) {
+          return "fas fa-trash";
+        }
+        return "fas fa-briefcase";
+        
       case "page_visit":
-        return "🎉";
+        return "fas fa-chart-line";
+        
       case "system":
-        return "⚙️";
+        return "fas fa-cog";
+        
       default:
-        return "🔔";
+        return "fas fa-bell";
     }
   };
 
   if (loading) {
     return (
-      <div className="mb-4 sm:mb-6 lg:mb-8">
+      <div className="mb-4 sm:mb-6 lg:mb-8 font-montserrat">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-3 sm:mb-4 lg:mb-6">
           <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-white flex items-center gap-2 sm:gap-3">
-            <span className="w-1 h-5 sm:h-6 lg:h-8 bg-gradient-to-b from-emerald-500 to-blue-500 rounded-full"></span>
+            <span className="w-1 h-5 sm:h-6 lg:h-8 bg-white rounded-full"></span>
             Notifications
           </h2>
         </div>
-        <div className="bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700/50 rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6">
+        <div className="bg-black border border-gray-700 rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6">
           <div className="text-center py-4 sm:py-6 lg:py-8">
             <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-emerald-500 mx-auto mb-3 sm:mb-4"></div>
-            <p className="text-slate-400 text-xs sm:text-sm lg:text-base">Loading notifications...</p>
+            <p className="text-gray-300 text-xs sm:text-sm lg:text-base">Loading notifications...</p>
           </div>
         </div>
       </div>
@@ -215,10 +219,10 @@ const NotificationsRow = () => {
   }
 
   return (
-    <div className="mb-4 sm:mb-6 lg:mb-8">
+    <div className="mb-4 sm:mb-6 lg:mb-8 font-['Montserrat']">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-3 sm:mb-4 lg:mb-6">
         <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-white flex items-center gap-2 sm:gap-3">
-          <span className="w-1 h-5 sm:h-6 lg:h-8 bg-gradient-to-b from-emerald-500 to-blue-500 rounded-full"></span>
+          <span className="w-1 h-5 sm:h-6 lg:h-8 bg-white rounded-full"></span>
           Notifications
           {unreadCount > 0 && (
             <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] text-center ml-2">
@@ -230,15 +234,15 @@ const NotificationsRow = () => {
           <button
             onClick={handleMarkAllAsRead}
             disabled={markingAllAsRead}
-            className={`text-slate-400 hover:text-white text-xs sm:text-sm font-medium transition-colors duration-200 self-start sm:self-auto px-3 py-1.5 rounded-lg border ${
+            className={`text-gray-300 hover:text-white text-xs sm:text-sm font-medium transition-colors duration-200 self-start sm:self-auto px-3 py-1.5 rounded-lg border ${
               markingAllAsRead
-                ? "bg-slate-600/30 text-slate-500 border-slate-600/30 cursor-not-allowed"
-                : "bg-slate-700/30 hover:bg-slate-600/30 border-slate-600/30 hover:border-slate-500/30"
+                ? "bg-gray-800 text-gray-500 border-gray-600 cursor-not-allowed"
+                : "bg-gray-800 hover:bg-gray-700 border-gray-600 hover:border-gray-500"
             }`}
           >
             {markingAllAsRead ? (
               <span className="flex items-center gap-1">
-                <div className="w-3 h-3 border border-slate-400 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-3 h-3 border border-gray-400 border-t-transparent rounded-full animate-spin"></div>
                 Marking...
               </span>
             ) : (
@@ -248,22 +252,22 @@ const NotificationsRow = () => {
         )}
       </div>
 
-      <div className="bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700/50 rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6">
+      <div className="bg-black border border-gray-700 rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6">
         {error ? (
           <div className="text-center py-4 sm:py-6 lg:py-8">
-            <span className="text-2xl sm:text-3xl lg:text-4xl mb-2 sm:mb-3 lg:mb-4 block">⚠️</span>
+            <i className="fas fa-exclamation-triangle text-2xl sm:text-3xl lg:text-4xl mb-2 sm:mb-3 lg:mb-4 block text-red-400"></i>
             <p className="text-red-400 text-xs sm:text-sm lg:text-base mb-3 sm:mb-4">{error}</p>
             <button
               onClick={loadNotifications}
-              className="text-emerald-400 hover:text-emerald-300 text-xs sm:text-sm font-medium transition-colors duration-200 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded-lg border border-emerald-500/30"
+              className="text-emerald-400 hover:text-emerald-300 text-xs sm:text-sm font-medium transition-colors duration-200 bg-emerald-900/20 hover:bg-emerald-800/20 px-3 py-1.5 rounded-lg border border-emerald-600"
             >
               Try again
             </button>
           </div>
         ) : notifications.length === 0 ? (
           <div className="text-center py-4 sm:py-6 lg:py-8">
-            <span className="text-2xl sm:text-3xl lg:text-4xl mb-2 sm:mb-3 lg:mb-4 block">🔔</span>
-            <p className="text-slate-400 text-xs sm:text-sm lg:text-base">
+            <i className="fas fa-bell text-2xl sm:text-3xl lg:text-4xl mb-2 sm:mb-3 lg:mb-4 block text-gray-400"></i>
+            <p className="text-gray-300 text-xs sm:text-sm lg:text-base">
               No notifications yet
             </p>
           </div>
@@ -274,34 +278,30 @@ const NotificationsRow = () => {
                 key={notification._id}
                 className={`group relative p-2.5 sm:p-3 lg:p-4 rounded-lg sm:rounded-xl border transition-all duration-200 hover:translate-y-[-1px] sm:hover:translate-y-[-2px] hover:shadow-lg cursor-pointer ${
                   notification.isRead
-                    ? "border-slate-600/30 bg-slate-700/20"
-                    : `border-l-4 border-l-emerald-500 ${getTypeColor(
-                        notification.type
-                      )}`
+                    ? "border-gray-700 bg-purple-600/10"
+                    : "border-gray-700 bg-gray-900"
                 }`}
                 onClick={() => !notification.isRead && !markingAsRead && handleMarkAsRead(notification._id)}
               >
                 <div className="flex items-start gap-2 sm:gap-3 lg:gap-4">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-sm sm:text-base lg:text-lg">
-                      {getTypeIcon(notification.type)}
-                    </span>
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 bg-gray-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <i className={`${getTypeIcon(notification)} text-sm sm:text-base lg:text-lg`}></i>
                   </div>
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-1 sm:gap-2">
                       <h4
                         className={`font-semibold text-xs sm:text-sm lg:text-base ${
-                          notification.isRead ? "text-slate-300" : "text-white"
+                          notification.isRead ? "text-gray-300" : "text-white"
                         }`}
                       >
                         {notification.title}
                       </h4>
-                      <span className="text-xs text-slate-500 flex-shrink-0">
+                      <span className="text-xs text-gray-400 flex-shrink-0">
                         {formatTimeAgo(notification.createdAt)}
                       </span>
                     </div>
-                    <p className="text-slate-400 text-xs sm:text-sm lg:text-base mt-0.5 sm:mt-1">
+                    <p className="text-gray-300 text-xs sm:text-sm lg:text-base mt-0.5 sm:mt-1">
                       {notification.message}
                     </p>
                   </div>
@@ -317,13 +317,13 @@ const NotificationsRow = () => {
                       disabled={markingAsRead === notification._id}
                       className={`opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1 sm:p-1.5 rounded ${
                         markingAsRead === notification._id
-                          ? "text-slate-500 cursor-not-allowed"
-                          : "text-slate-400 hover:text-white"
+                          ? "text-gray-500 cursor-not-allowed"
+                          : "text-gray-400 hover:text-white"
                       }`}
                       title="Mark as read"
                     >
                       {markingAsRead === notification._id ? (
-                        <div className="w-3 h-3 sm:w-4 sm:h-4 border border-slate-400 border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-3 h-3 sm:w-4 sm:h-4 border border-gray-400 border-t-transparent rounded-full animate-spin"></div>
                       ) : (
                         <svg
                           className="w-3 h-3 sm:w-4 sm:h-4"
@@ -344,7 +344,7 @@ const NotificationsRow = () => {
                 </div>
 
                 {!notification.isRead && (
-                  <div className="absolute top-2 sm:top-3 lg:top-4 right-2 sm:right-3 lg:right-4 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-emerald-500 rounded-full"></div>
+                  <div className="absolute top-2 sm:top-3 lg:top-4 right-2 sm:right-3 lg:right-4 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full"></div>
                 )}
               </div>
             ))}
