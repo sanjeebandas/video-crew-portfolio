@@ -1,12 +1,12 @@
 const images = [
-  "/imgs/Group 41.webp",
-  "/imgs/Group 42.webp",
-  "/imgs/Group 43.webp",
-  "/imgs/Group 43.webp",
-  "/imgs/Group 44.webp",
-  "/imgs/Group 45.webp",
-  "/imgs/Group 46.webp",
-  "/imgs/Group 48.webp",
+  "imgs/portfolio_scroller_images/portfolio_image_1.webp",
+  "imgs/portfolio_scroller_images/portfolio_image_2.webp",
+  "imgs/portfolio_scroller_images/portfolio_image_3.webp",
+  "imgs/portfolio_scroller_images/portfolio_image_4.webp",
+  "imgs/portfolio_scroller_images/portfolio_image_5.webp",
+  "imgs/portfolio_scroller_images/portfolio_image_6.webp",
+  "imgs/portfolio_scroller_images/portfolio_image_7.webp",
+  "imgs/portfolio_scroller_images/portfolio_image_8.webp",
 ];
 
 import { useEffect, useState } from "react";
