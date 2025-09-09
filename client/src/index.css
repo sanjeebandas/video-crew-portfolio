@@ -6,7 +6,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Montserrat", "SUIT", sans-serif;
 }
 /* Company Logos Infinite Scroll Bar */
 @keyframes company-scroll-left {

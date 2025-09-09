@@ -94,26 +94,26 @@ const Dashboard = () => {
   // Error boundary fallback - prevent dashboard crashes
   if (error && !error.retryable && retryCount >= MAX_RETRIES) {
     return (
-      <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen">
+      <div className="bg-black min-h-screen font-montserrat">
         <AdminNavbar />
         <div className="md:ml-64 p-3 sm:p-4 md:p-6">
           <div className="max-w-7xl mx-auto">
             <div className="mb-6 sm:mb-8">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-2 sm:mb-3">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-3">
                 Admin Dashboard
               </h1>
-              <p className="text-slate-400 text-sm sm:text-base md:text-lg">
+              <p className="text-gray-400 text-sm sm:text-base md:text-lg">
                 Welcome back! Here's your portfolio overview
               </p>
             </div>
 
-            <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6 text-center">
+            <div className="bg-red-900/20 border border-red-600 rounded-xl p-6 text-center">
               <div className="text-red-400 mb-4">
                 <span className="text-2xl">⚠️</span>
                 <p className="mt-2">Dashboard is temporarily unavailable</p>
               </div>
               <div className="space-y-3">
-                <p className="text-slate-300 text-sm">
+                <p className="text-gray-300 text-sm">
                   {error.message}
                 </p>
                 <button
@@ -135,7 +135,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-black min-h-screen">
+    <div className="bg-black min-h-screen font-['Montserrat']">
       {/* Div1: AdminNavbar */}
       <AdminNavbar />
 
@@ -144,10 +144,10 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-2 sm:mb-3">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-3">
               Admin Dashboard
             </h1>
-            <p className="text-slate-400 text-sm sm:text-base md:text-lg">
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg">
               Welcome back! Here's your portfolio overview
             </p>
             
@@ -170,7 +170,7 @@ const Dashboard = () => {
 
           {/* Error Display for Component Failures */}
           {Object.keys(componentErrors).length > 0 && (
-            <div className="mb-6 bg-yellow-900/20 border border-yellow-500/30 rounded-xl p-4">
+            <div className="mb-6 bg-yellow-900/20 border border-yellow-600 rounded-xl p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-yellow-400">
                   <span>⚠️</span>
@@ -192,12 +192,12 @@ const Dashboard = () => {
           {/* Row 1: Analytics */}
           <div className="mb-6 sm:mb-8">
             {componentErrors.AnalyticsRow ? (
-              <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6 text-center">
+              <div className="bg-red-900/20 border border-red-600 rounded-xl p-6 text-center">
                 <div className="text-red-400 mb-2">
                   <span className="text-xl">📊</span>
                   <p className="mt-2 text-sm">Analytics temporarily unavailable</p>
                 </div>
-                <p className="text-slate-300 text-xs mb-3">
+                <p className="text-gray-300 text-xs mb-3">
                   {componentErrors.AnalyticsRow.message}
                 </p>
                 <button
@@ -221,12 +221,12 @@ const Dashboard = () => {
           {/* Row 2: Quick Actions */}
           <div className="mb-6 sm:mb-8">
             {componentErrors.QuickActionsRow ? (
-              <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6 text-center">
+              <div className="bg-red-900/20 border border-red-600 rounded-xl p-6 text-center">
                 <div className="text-red-400 mb-2">
                   <span className="text-xl">⚡</span>
                   <p className="mt-2 text-sm">Quick Actions temporarily unavailable</p>
                 </div>
-                <p className="text-slate-300 text-xs mb-3">
+                <p className="text-gray-300 text-xs mb-3">
                   {componentErrors.QuickActionsRow.message}
                 </p>
                 <button
@@ -250,12 +250,12 @@ const Dashboard = () => {
           {/* Row 3: Notifications */}
           <div className="mb-6 sm:mb-8">
             {componentErrors.NotificationsRow ? (
-              <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6 text-center">
+              <div className="bg-red-900/20 border border-red-600 rounded-xl p-6 text-center">
                 <div className="text-red-400 mb-2">
                   <span className="text-xl">🔔</span>
                   <p className="mt-2 text-sm">Notifications temporarily unavailable</p>
                 </div>
-                <p className="text-slate-300 text-xs mb-3">
+                <p className="text-gray-300 text-xs mb-3">
                   {componentErrors.NotificationsRow.message}
                 </p>
                 <button

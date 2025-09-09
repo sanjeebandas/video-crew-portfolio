@@ -11,9 +11,6 @@ interface AnalyticsData {
   contacts: number;
   portfolioItems: number;
   pageVisits: number;
-  contactsChange: number;
-  portfolioChange: number;
-  visitsChange: number;
 }
 
 interface AnalyticsState {
@@ -28,12 +25,9 @@ interface AnalyticsState {
 const AnalyticsRow = () => {
   const [state, setState] = useState<AnalyticsState>({
     data: {
-    contacts: 0,
-    portfolioItems: 0,
-    pageVisits: 0,
-    contactsChange: 0,
-    portfolioChange: 0,
-    visitsChange: 0,
+      contacts: 0,
+      portfolioItems: 0,
+      pageVisits: 0,
     },
     loading: true,
     error: null,
@@ -53,59 +47,20 @@ const AnalyticsRow = () => {
       // Fetch real data from API
       const [contactsResponse, portfolioResponse, currentVisits] =
         await Promise.all([
-        getContacts(),
-        getPortfolioItems(),
+          getContacts(),
+          getPortfolioItems(),
           getPageVisitsFromAPI(),
-      ]);
+        ]);
 
       // Get current counts
       const currentContacts = contactsResponse?.length || 0;
       const currentPortfolioItems = portfolioResponse?.length || 0;
 
-      // Get previous data from localStorage for comparison
-      const previousData = localStorage.getItem("analyticsData");
-      const previous = previousData
-        ? JSON.parse(previousData)
-        : {
-            contacts: 0,
-            portfolioItems: 0,
-            pageVisits: 0,
-          };
-
-      // Calculate percentage changes
-      const contactsChange =
-        previous.contacts > 0
-          ? ((currentContacts - previous.contacts) / previous.contacts) * 100
-          : 0;
-      const portfolioChange =
-        previous.portfolioItems > 0
-          ? ((currentPortfolioItems - previous.portfolioItems) /
-              previous.portfolioItems) *
-            100
-          : 0;
-      const visitsChange =
-        previous.pageVisits > 0
-          ? ((currentVisits - previous.pageVisits) / previous.pageVisits) * 100
-          : 0;
-
       const newAnalytics = {
         contacts: currentContacts,
         portfolioItems: currentPortfolioItems,
         pageVisits: currentVisits,
-        contactsChange: Math.round(contactsChange * 10) / 10,
-        portfolioChange: Math.round(portfolioChange * 10) / 10,
-        visitsChange: Math.round(visitsChange * 10) / 10,
       };
-
-      // Store current data for next comparison
-      localStorage.setItem(
-        "analyticsData",
-        JSON.stringify({
-          contacts: currentContacts,
-          portfolioItems: currentPortfolioItems,
-          pageVisits: currentVisits,
-        })
-      );
 
       return newAnalytics;
     } catch (error) {
@@ -181,8 +136,8 @@ const AnalyticsRow = () => {
         lastUpdate: new Date(),
         consecutiveFailures: 0, // Reset on successful silent refresh
       }));
-        } catch (error) {
-          console.error("Silent analytics refresh failed:", error);
+    } catch (error) {
+      console.error("Silent analytics refresh failed:", error);
 
       // Increment failure count but don't show user notification for silent failures
       setState((prev) => ({
@@ -208,32 +163,25 @@ const AnalyticsRow = () => {
     return () => clearInterval(interval);
   }, [loadAnalytics, silentRefresh]);
 
-  const getChangeColor = (change: number) => {
-    return change >= 0 ? "text-emerald-500" : "text-red-500";
-  };
-
-  const getChangeIcon = (change: number) => {
-    return change >= 0 ? "↗" : "↘";
-  };
 
   // Error boundary fallback - prevent dashboard crashes
   if (state.error && state.consecutiveFailures > MAX_RETRIES) {
     return (
-      <div className="mb-6 sm:mb-8">
+      <div className="mb-6 sm:mb-8 font-montserrat">
         <div className="mb-4 sm:mb-6">
           <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 flex items-center gap-2 sm:gap-3">
-            <span className="w-1 h-6 sm:h-8 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></span>
+            <span className="w-1 h-6 sm:h-8 bg-white rounded-full"></span>
             Analytics Overview
           </h2>
         </div>
 
-        <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6 text-center">
+        <div className="bg-red-900/20 border border-red-600 rounded-xl p-6 text-center">
           <div className="text-red-400 mb-4">
-            <span className="text-2xl">⚠️</span>
+            <i className="fas fa-exclamation-triangle text-2xl"></i>
             <p className="mt-2">Analytics data is temporarily unavailable</p>
           </div>
           <div className="space-y-3">
-            <p className="text-slate-300 text-sm">
+            <p className="text-gray-300 text-sm">
               Last update:{" "}
               {state.lastUpdate
                 ? state.lastUpdate.toLocaleTimeString()
@@ -243,7 +191,7 @@ const AnalyticsRow = () => {
               onClick={() => loadAnalytics()}
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
-              🔄 Retry Now
+              <i className="fas fa-redo mr-2"></i>Retry Now
             </button>
           </div>
         </div>
@@ -253,35 +201,32 @@ const AnalyticsRow = () => {
 
   if (state.loading) {
     return (
-      <div className="mb-6 sm:mb-8">
+      <div className="mb-6 sm:mb-8 font-montserrat">
         {/* Analytics Header */}
         <div className="mb-4 sm:mb-6">
           <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 flex items-center gap-2 sm:gap-3">
-            <span className="w-1 h-6 sm:h-8 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></span>
+            <span className="w-1 h-6 sm:h-8 bg-white rounded-full"></span>
             Analytics Overview
           </h2>
-          <p className="text-slate-400 text-xs sm:text-sm">
-            Real-time metrics and performance indicators
-          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="bg-gradient-to-br from-slate-800/30 to-slate-900/30 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 animate-pulse relative overflow-hidden"
+              className="bg-black border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 animate-pulse relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50"></div>
-              <div className="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-white/5 rounded-full"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-800/50 to-transparent opacity-50"></div>
+              <div className="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-gray-800 rounded-full"></div>
 
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <div className="w-10 h-10 sm:w-14 sm:h-14 bg-slate-700 rounded-lg sm:rounded-xl"></div>
-                  <div className="w-16 sm:w-20 h-4 sm:h-6 bg-slate-700 rounded-full"></div>
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 bg-gray-700 rounded-lg sm:rounded-xl"></div>
+                  <div className="w-16 sm:w-20 h-4 sm:h-6 bg-gray-700 rounded-full"></div>
                 </div>
-                <div className="w-20 sm:w-24 h-8 sm:h-10 bg-slate-700 rounded mb-1 sm:mb-2"></div>
-                <div className="w-24 sm:w-32 h-3 sm:h-4 bg-slate-700 rounded mb-3 sm:mb-4"></div>
-                <div className="w-full h-2 sm:h-3 bg-slate-700 rounded-full"></div>
+                <div className="w-20 sm:w-24 h-8 sm:h-10 bg-gray-700 rounded mb-1 sm:mb-2"></div>
+                <div className="w-24 sm:w-32 h-3 sm:h-4 bg-gray-700 rounded mb-3 sm:mb-4"></div>
+                <div className="w-full h-2 sm:h-3 bg-gray-700 rounded-full"></div>
               </div>
             </div>
           ))}
@@ -291,18 +236,17 @@ const AnalyticsRow = () => {
   }
 
   return (
-    <div className="mb-6 sm:mb-8">
+    <div className="mb-6 sm:mb-8 font-['Montserrat']">
       {/* Analytics Header */}
       <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 flex items-center gap-2 sm:gap-3">
-            <span className="w-1 h-6 sm:h-8 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></span>
+            <span className="w-1 h-6 sm:h-8 bg-white rounded-full"></span>
             Analytics Overview
           </h2>
-          <p className="text-slate-400 text-xs sm:text-sm">
-            Real-time metrics and performance indicators
+          <p className="text-gray-400 text-xs sm:text-sm">
             {state.lastUpdate && (
-              <span className="block text-xs text-slate-500 mt-1">
+              <span className="block text-xs text-gray-500 mt-1">
                 Last updated: {state.lastUpdate.toLocaleTimeString()}
               </span>
             )}
@@ -312,9 +256,11 @@ const AnalyticsRow = () => {
           <button
             onClick={handleManualRefresh}
             disabled={state.isRetrying}
-            className="bg-slate-700/50 hover:bg-slate-600/50 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-slate-600/50 hover:border-slate-500/50 flex items-center gap-1 sm:gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-gray-800 hover:bg-gray-700 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-gray-600 hover:border-gray-500 flex items-center gap-1 sm:gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span>{state.isRetrying ? "⏳" : "🔄"}</span>
+            <i
+              className={state.isRetrying ? "fas fa-clock" : "fas fa-sync-alt"}
+            ></i>
             <span className="hidden sm:inline">
               {state.isRetrying ? "Retrying..." : "Refresh Analytics"}
             </span>
@@ -334,10 +280,10 @@ const AnalyticsRow = () => {
                 toast.error("Failed to reset page visits");
               }
             }}
-            className="bg-red-600/50 hover:bg-red-500/50 text-white px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-red-600/50 hover:border-red-500/50 flex items-center gap-1 sm:gap-2"
+            className="bg-red-900/20 hover:bg-red-800/20 text-red-400 px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 border border-red-600 hover:border-red-500 flex items-center gap-1 sm:gap-2"
             title="Reset page visits count"
           >
-            <span>🧹</span>
+            <i className="fas fa-broom"></i>
             <span className="hidden sm:inline">Reset Visits</span>
             <span className="sm:hidden">Reset</span>
           </button>
@@ -347,45 +293,35 @@ const AnalyticsRow = () => {
       {/* Error indicator for consecutive failures */}
       {state.consecutiveFailures > 0 &&
         state.consecutiveFailures < FAILURE_THRESHOLD && (
-          <div className="mb-4 p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+          <div className="mb-4 p-3 bg-yellow-900/20 border border-yellow-600 rounded-lg">
             <p className="text-yellow-400 text-sm text-center">
-              ⚠️ Some analytics data may be outdated. Retrying automatically...
+              <i className="fas fa-exclamation-triangle mr-2"></i>Some analytics
+              data may be outdated. Retrying automatically...
             </p>
           </div>
         )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Contacts Analytics */}
-        <div className="bg-gradient-to-br from-slate-700/80 via-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-600/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:shadow-2xl hover:shadow-slate-500/20 transition-all duration-300 hover:scale-105 relative overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-red-500/10 opacity-30"></div>
-          <div className="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-orange-500/10 rounded-full"></div>
-
+        <div className="bg-black border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:shadow-lg transition-all duration-300 hover:scale-105 relative overflow-hidden">
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="w-10 h-10 sm:w-14 sm:h-14 bg-orange-500/20 backdrop-blur-sm rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg border border-orange-500/20">
-                <span className="text-lg sm:text-2xl">📬</span>
-              </div>
               <div
-                className={`text-xs sm:text-sm font-bold px-2 sm:px-3 py-1 rounded-full ${getChangeColor(
-                  state.data.contactsChange
-                )} bg-slate-600/50 backdrop-blur-sm border border-slate-500/30`}
+                className="w-10 h-10 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg"
+                style={{ backgroundColor: "#272727" }}
               >
-                <span className="flex items-center gap-1">
-                  {getChangeIcon(state.data.contactsChange)}
-                  {Math.abs(state.data.contactsChange)}%
-                </span>
+                <i className="fas fa-envelope text-lg sm:text-2xl"></i>
               </div>
             </div>
             <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2">
               {state.data.contacts}
             </h3>
-            <p className="text-slate-300 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+            <p className="text-gray-300 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
               Total Contacts
             </p>
-            <div className="w-full bg-slate-600/30 rounded-full h-2 sm:h-3 overflow-hidden">
+            <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-orange-500/60 to-red-500/60 h-2 sm:h-3 rounded-full transition-all duration-1000 shadow-lg"
+                className="bg-white h-2 sm:h-3 rounded-full transition-all duration-1000 shadow-lg"
                 style={{
                   width: `${Math.min((state.data.contacts / 50) * 100, 100)}%`,
                 }}
@@ -395,36 +331,25 @@ const AnalyticsRow = () => {
         </div>
 
         {/* Portfolio Items Analytics */}
-        <div className="bg-gradient-to-br from-slate-700/80 via-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-600/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:shadow-2xl hover:shadow-slate-500/20 transition-all duration-300 hover:scale-105 relative overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 opacity-30"></div>
-          <div className="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-emerald-500/10 rounded-full"></div>
-
+        <div className="bg-black border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:shadow-lg transition-all duration-300 hover:scale-105 relative overflow-hidden">
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="w-10 h-10 sm:w-14 sm:h-14 bg-emerald-500/20 backdrop-blur-sm rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg border border-emerald-500/20">
-                <span className="text-lg sm:text-2xl">🎯</span>
-              </div>
               <div
-                className={`text-xs sm:text-sm font-bold px-2 sm:px-3 py-1 rounded-full ${getChangeColor(
-                  state.data.portfolioChange
-                )} bg-slate-600/50 backdrop-blur-sm border border-slate-500/30`}
+                className="w-10 h-10 sm:w-14 sm:h-14  rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg"
+                style={{ backgroundColor: "#1f1f1f" }}
               >
-                <span className="flex items-center gap-1">
-                  {getChangeIcon(state.data.portfolioChange)}
-                  {Math.abs(state.data.portfolioChange)}%
-                </span>
+                <i className="fas fa-briefcase text-lg sm:text-2xl"></i>
               </div>
             </div>
             <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2">
               {state.data.portfolioItems}
             </h3>
-            <p className="text-slate-300 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+            <p className="text-gray-300 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
               Portfolio Items
             </p>
-            <div className="w-full bg-slate-600/30 rounded-full h-2 sm:h-3 overflow-hidden">
+            <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-emerald-500/60 to-teal-500/60 h-2 sm:h-3 rounded-full transition-all duration-1000 shadow-lg"
+                className="bg-white h-2 sm:h-3 rounded-full transition-all duration-1000 shadow-lg"
                 style={{
                   width: `${Math.min(
                     (state.data.portfolioItems / 20) * 100,
@@ -437,36 +362,25 @@ const AnalyticsRow = () => {
         </div>
 
         {/* Page Visits Analytics */}
-        <div className="bg-gradient-to-br from-slate-700/80 via-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-600/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:shadow-2xl hover:shadow-slate-500/20 transition-all duration-300 hover:scale-105 relative overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-30"></div>
-          <div className="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-blue-500/10 rounded-full"></div>
-
+        <div className="bg-black border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:shadow-lg transition-all duration-300 hover:scale-105 relative overflow-hidden">
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="w-10 h-10 sm:w-14 sm:h-14 bg-blue-500/20 backdrop-blur-sm rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg border border-blue-500/20">
-                <span className="text-lg sm:text-2xl">👥</span>
-              </div>
               <div
-                className={`text-xs sm:text-sm font-bold px-2 sm:px-3 py-1 rounded-full ${getChangeColor(
-                  state.data.visitsChange
-                )} bg-slate-600/50 backdrop-blur-sm border border-slate-500/30`}
+                className="w-10 h-10 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg"
+                style={{ backgroundColor: "#1f1f1f" }}
               >
-                <span className="flex items-center gap-1">
-                  {getChangeIcon(state.data.visitsChange)}
-                  {Math.abs(state.data.visitsChange)}%
-                </span>
+                <i className="fas fa-users text-lg sm:text-2xl"></i>
               </div>
             </div>
             <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2">
               {state.data.pageVisits.toLocaleString()}
             </h3>
-            <p className="text-slate-300 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+            <p className="text-gray-300 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
               Page Visits
             </p>
-            <div className="w-full bg-slate-600/30 rounded-full h-2 sm:h-3 overflow-hidden">
+            <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-blue-500/60 to-purple-500/60 h-2 sm:h-3 rounded-full transition-all duration-1000 shadow-lg"
+                className="bg-white h-2 sm:h-3 rounded-full transition-all duration-1000 shadow-lg"
                 style={{
                   width: `${Math.min(
                     (state.data.pageVisits / 2000) * 100,
