@@ -7,9 +7,9 @@ const AboutHero = () => {
 
   // Array of banner images for the carousel
   const bannerImages = [
-    "/imgs/about/Frame.webp",
+    "/imgs/about/Frame-1.webp",
     "/imgs/about/Frame-3.webp",
-    "/imgs/about/Frame-3.webp",
+    "/imgs/about/Frame-6.webp",
     "/imgs/about/Frame-4.webp",
     "/imgs/about/Frame-5.webp",
   ];
@@ -60,7 +60,6 @@ const AboutHero = () => {
             <div className="absolute bottom-12 left-4 right-4 md:bottom-16 md:left-8 md:right-auto lg:bottom-20 lg:left-10 about-hero-text">
               <div>
                 <div>
-                  <h3 className="text-sm md:text-base lg:text-lg font-semibold">회사소개</h3>
                   <p className="text-sm md:text-sm lg:text-sm leading-snug mt-1">
                     <span className="font-semibold">Video Crew,</span>
                     <br />
