@@ -45,7 +45,7 @@ const AboutGrid = () => {
   };
 
   return (
-    <section className="w-full bg-black text-white px-6 py-16">
+    <section className="w-full bg-black text-white px-6 py-14 sm:py-16 md:py-12 lg:py-14">
       {/* Desktop and Mobile Version (hidden on iPad Pro) */}
       <div className="max-w-[1248px] mx-auto grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6 place-items-center hidden xl:grid">
         {services.map((service, idx) => (
