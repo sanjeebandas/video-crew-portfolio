@@ -9,7 +9,6 @@ import AboutHero from "../components/about/AboutHero";
 import AboutWorkCultureGrid from "../components/about/AboutWorkCultureGrid";
 import SEO from "../components/common/SEO";
 import LazyImage from "../components/common/LazyImage";
-import InfiniteScroller from "../components/common/InfiniteScroller";
 import ErrorBoundary from "../components/common/ErrorBoundary";
 
 const About = () => {
@@ -30,7 +29,7 @@ const About = () => {
       slideInFromRight(".about-title-right");
       staggerFadeIn(".about-text-line", 0.06); // Reduced stagger delay
       parallaxEffect(".about-separator", 0.3);
-      fadeInUp(".about-section-title");
+      fadeInUp(".about-section-title", 0.06);
       staggerFadeIn(".about-section-text", 0.06); // Reduced stagger delay
     }, 120); // Reduced from 200ms to 120ms
 
@@ -102,23 +101,8 @@ const About = () => {
             <AboutHero />
           </ErrorBoundary>
 
-          <ErrorBoundary
-            fallback={
-              <div className="min-h-[100px] flex items-center justify-center bg-black">
-                <div className="text-center text-white">
-                  <h3 className="text-lg font-semibold mb-2">
-                    기업 로고 섹션을 불러올 수 없습니다
-                  </h3>
-                  <p className="text-gray-400">페이지를 새로고침해주세요.</p>
-                </div>
-              </div>
-            }
-          >
-            <InfiniteScroller />
-          </ErrorBoundary>
-
           {/* Decorative Centered Separator Image */}
-          <div className="w-full mt-4 sm:mt-6 md:mt-6 lg:mt-12 md:-mt-8 lg:-mt-10">
+          <div className="w-full -mt-12 sm:mt-6 md:-mt-16 lg:-mt-28 ">
             <LazyImage
               src="/imgs/Image.webp"
               alt="비디오크루 Core Value 섹션 구분 디자인 이미지"
@@ -131,7 +115,7 @@ const About = () => {
           </div>
 
           {/* Core Value Text Block */}
-          <div className="w-full px-6">
+          <div className="w-full px-6 -mt-4 sm:-mt-12 md:-mt-14 lg:-mt-20">
             <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
               <h2 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug about-section-title">
                 Core Value
@@ -169,7 +153,7 @@ const About = () => {
           <LazyImage
             src="/imgs/Image-1.webp"
             alt="비디오크루 Work Culture 섹션 구분 디자인 이미지"
-            className="w-full h-auto object-cover -mt-10 sm:-mt-10 about-separator"
+            className="w-full h-auto object-cover -mt-8 sm:mt-16 about-separator"
             onImageLoad={() => {
               // Re-trigger separator animations after image loads
               refreshGSAPAnimations(".about-separator");
@@ -177,7 +161,7 @@ const About = () => {
           />
 
           {/* Work Culture Text Block */}
-          <div className="w-full px-6 md:-mt-24 lg:-mt-32">
+          <div className="w-full px-6 -mt-12 md:-mt-22 lg:-mt-44">
             <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
               <h2 className="text-lg sm:text-3xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug about-section-title">
                 Work Culture
