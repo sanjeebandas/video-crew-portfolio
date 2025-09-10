@@ -65,7 +65,7 @@ const AboutWorkCultureGrid = () => {
             {workCultureItems.slice(0, 2).map((item, idx) => (
               <div
                 key={idx}
-                className="work-culture-card relative w-[613px] h-[548px] overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl hover:border-blue-400/30 group"
+                className="work-culture-card relative w-[613px] h-[548px] overflow-hidden shadow-md transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl group"
               >
                 {!imageErrors.has(item.image) ? (
                   <img
@@ -89,13 +89,13 @@ const AboutWorkCultureGrid = () => {
                 {/* Overlay */}
                 <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 ease-out">
                   <div className="flex flex-col gap-2">
-                    <p className="work-culture-text text-xs text-gray-300 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                    <p className="work-culture-text text-md text-gray-400 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                       {item.subtitle}
                     </p>
-                    <h3 className="work-culture-text text-lg font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
+                    <h3 className="work-culture-text text-2xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
                       {item.title}
                     </h3>
-                    <p className="work-culture-text text-sm text-gray-200 leading-relaxed group-hover:text-gray-100 transition-colors duration-300 ease-out">
+                    <p className="work-culture-text text-md text-gray-400 leading-relaxed group-hover:text-gray-200 transition-colors duration-300 ease-out">
                       {item.description}
                     </p>
                   </div>
@@ -106,7 +106,7 @@ const AboutWorkCultureGrid = () => {
 
           {/* Bottom Row - One Large Card */}
           <div className="col-span-2">
-            <div className="work-culture-ipad-card relative w-[1248px] h-[560px] overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl hover:border-blue-400/30 group">
+            <div className="work-culture-ipad-card relative w-[1248px] h-[560px] overflow-hidden shadow-md transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl group">
               {!imageErrors.has(workCultureItems[2].image) ? (
                 <img
                   src={workCultureItems[2].image}
@@ -129,13 +129,13 @@ const AboutWorkCultureGrid = () => {
               {/* Overlay */}
               <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 ease-out">
                 <div className="flex flex-col gap-2">
-                  <p className="work-culture-text text-xs text-gray-300 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                  <p className="work-culture-text text-md text-gray-400 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                     {workCultureItems[2].subtitle}
                   </p>
-                  <h3 className="work-culture-text text-xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
+                  <h3 className="work-culture-text text-2xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
                     {workCultureItems[2].title}
                   </h3>
-                  <p className="work-culture-text text-base text-gray-200 leading-relaxed max-w-2xl group-hover:text-gray-100 transition-colors duration-300 ease-out">
+                  <p className="work-culture-text text-md text-gray-400 leading-relaxed max-w-2xl group-hover:text-gray-200 transition-colors duration-300 ease-out">
                     {workCultureItems[2].description}
                   </p>
                 </div>
@@ -151,7 +151,7 @@ const AboutWorkCultureGrid = () => {
             {workCultureItems.slice(0, 2).map((item, idx) => (
               <div
                 key={idx}
-                className="work-culture-ipad-card relative w-full h-[480px] overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl hover:border-blue-400/30 group"
+                className="work-culture-ipad-card relative w-full h-[480px] overflow-hidden shadow-md transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl group"
               >
                 {!imageErrors.has(item.image) ? (
                   <img
@@ -192,7 +192,7 @@ const AboutWorkCultureGrid = () => {
 
           {/* Bottom Row - One Large Card */}
           <div className="col-span-2">
-            <div className="work-culture-card relative w-full h-[520px] overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl hover:border-blue-400/30 group">
+            <div className="work-culture-card relative w-full h-[520px] overflow-hidden shadow-md transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl group">
               {!imageErrors.has(workCultureItems[2].image) ? (
                 <img
                   src={workCultureItems[2].image}
@@ -237,7 +237,7 @@ const AboutWorkCultureGrid = () => {
             {workCultureItems.slice(0, 2).map((item, idx) => (
               <div
                 key={idx}
-                className="work-culture-tablet-card relative w-full h-[400px] overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl hover:border-blue-400/30 group"
+                className="work-culture-tablet-card relative w-full h-[400px] overflow-hidden shadow-md transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl group"
               >
                 {!imageErrors.has(item.image) ? (
                   <img
@@ -278,7 +278,7 @@ const AboutWorkCultureGrid = () => {
 
           {/* Bottom Row - One Large Card */}
           <div className="col-span-2">
-            <div className="work-culture-tablet-card relative w-full h-[450px] overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl hover:border-blue-400/30 group">
+            <div className="work-culture-tablet-card relative w-full h-[450px] overflow-hidden shadow-md transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl group">
               {!imageErrors.has(workCultureItems[2].image) ? (
                 <img
                   src={workCultureItems[2].image}
@@ -321,7 +321,7 @@ const AboutWorkCultureGrid = () => {
           {workCultureItems.map((item, idx) => (
             <div
               key={idx}
-              className="work-culture-mobile-card relative w-[302px] h-[257px] min-[768px]:w-[360px] min-[768px]:h-[300px] rounded-lg overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl hover:border-blue-400/30 group"
+              className="work-culture-mobile-card relative w-[302px] h-[257px] min-[768px]:w-[360px] min-[768px]:h-[300px] rounded-lg overflow-hidden shadow-md transition-all duration-300 ease-in-out hover:-translate-y-3 hover:shadow-xl group"
             >
               <img
                 src={item.image}
