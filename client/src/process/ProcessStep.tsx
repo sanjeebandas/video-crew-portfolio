@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 type Props = {
   id: string;
@@ -20,10 +20,74 @@ const ProcessStep = ({
   offsetY = "",
 }: Props) => {
   const [imageError, setImageError] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleImageError = () => {
     setImageError(true);
   };
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  // Responsive character limits for text truncation
+  const getCharacterLimit = () => {
+    // Mobile: ~60 chars, Tablet: ~80 chars, Desktop: ~100 chars
+    return {
+      mobile: 50,
+      tablet: 70,
+      desktop: 90
+    };
+  };
+
+  // Process description with truncation logic
+  const processedDescription = useMemo(() => {
+    const limits = getCharacterLimit();
+    const fullText = description;
+    
+    // Check if text needs truncation (this should always be based on original text length)
+    const needsTruncation = fullText.length > limits.mobile;
+    
+    if (!needsTruncation) {
+      return {
+        displayText: fullText,
+        needsTruncation: false
+      };
+    }
+
+    if (isExpanded) {
+      return {
+        displayText: fullText,
+        needsTruncation: true // Keep this true so button shows
+      };
+    }
+
+    // Find a good truncation point (end of sentence or word)
+    let truncateAt = limits.mobile;
+    const text = fullText.substring(0, limits.mobile);
+    
+    // Try to break at sentence end
+    const lastSentenceEnd = Math.max(
+      text.lastIndexOf('.'),
+      text.lastIndexOf('!'),
+      text.lastIndexOf('?')
+    );
+    
+    if (lastSentenceEnd > limits.mobile * 0.7) {
+      truncateAt = lastSentenceEnd + 1;
+    } else {
+      // Break at word boundary
+      const lastSpace = text.lastIndexOf(' ');
+      if (lastSpace > limits.mobile * 0.8) {
+        truncateAt = lastSpace;
+      }
+    }
+
+    return {
+      displayText: fullText.substring(0, truncateAt).trim(),
+      needsTruncation: true
+    };
+  }, [description, isExpanded]);
 
   return (
     <div className="w-full">
@@ -31,7 +95,7 @@ const ProcessStep = ({
       <div className="md:hidden">
         <div className="relative w-full max-w-[1248px] mx-auto flex flex-col items-start">
           {/* Step Number */}
-          <div className="absolute text-[120px] font-extrabold text-white opacity-10 pointer-events-none left-0 -translate-x-[6px] -top-16">
+          <div className="absolute text-[120px] font-extrabold text-white opacity-30 pointer-events-none left-0 -translate-x-[6px] -top-16">
             {id}
           </div>
 
@@ -65,16 +129,21 @@ const ProcessStep = ({
                 <p className="text-[15px] font-bold group-hover:text-blue-300 transition-colors duration-300 ease-out">
                   ({subtitle})
                 </p>
-                <p className="text-sm opacity-80 mt-1 group-hover:opacity-100 transition-opacity duration-300 ease-out">
-                  {description.split('\n').map((line, index) => (
+                <p className="text-sm opacity-80 mt-1 group-hover:opacity-100 transition-all duration-500 ease-out">
+                  {processedDescription.displayText.split('\n').map((line, index) => (
                     <span key={index}>
                       {line}
-                      {index < description.split('\n').length - 1 && <br />}
+                      {index < processedDescription.displayText.split('\n').length - 1 && <br />}
                     </span>
                   ))}
-                  <span className="font-bold cursor-pointer ml-1 group-hover:text-blue-400 hover:underline transition-all duration-300 ease-out">
-                    See more
-                  </span>
+                  {processedDescription.needsTruncation && (
+                    <span 
+                      className="font-bold cursor-pointer ml-1 group-hover:text-blue-400 hover:underline transition-all duration-300 ease-out"
+                      onClick={toggleExpanded}
+                    >
+                      {isExpanded ? 'Read less' : 'Read more'}
+                    </span>
+                  )}
                 </p>
               </div>
             </div>
@@ -86,7 +155,7 @@ const ProcessStep = ({
       <div className="hidden md:block xl:hidden">
         <div className="relative w-full max-w-[1248px] mx-auto flex flex-col items-start">
           {/* Step Number */}
-          <div className="absolute text-[120px] font-extrabold text-white opacity-10 pointer-events-none left-0 -translate-x-[6px] -top-16">
+          <div className="absolute text-[120px] font-extrabold text-white opacity-30 pointer-events-none left-0 -translate-x-[6px] -top-16">
             {id}
           </div>
 
@@ -120,16 +189,21 @@ const ProcessStep = ({
                 <p className="text-[15px] font-bold group-hover:text-blue-300 transition-colors duration-300 ease-out">
                   ({subtitle})
                 </p>
-                <p className="text-sm opacity-80 mt-1 group-hover:opacity-100 transition-opacity duration-300 ease-out">
-                  {description.split('\n').map((line, index) => (
+                <p className="text-sm opacity-80 mt-1 group-hover:opacity-100 transition-all duration-500 ease-out">
+                  {processedDescription.displayText.split('\n').map((line, index) => (
                     <span key={index}>
                       {line}
-                      {index < description.split('\n').length - 1 && <br />}
+                      {index < processedDescription.displayText.split('\n').length - 1 && <br />}
                     </span>
                   ))}
-                  <span className="font-bold cursor-pointer ml-1 group-hover:text-blue-400 hover:underline transition-all duration-300 ease-out">
-                    See more
-                  </span>
+                  {processedDescription.needsTruncation && (
+                    <span 
+                      className="font-bold cursor-pointer ml-1 group-hover:text-blue-400 hover:underline transition-all duration-300 ease-out"
+                      onClick={toggleExpanded}
+                    >
+                      {isExpanded ? 'Read less' : 'Read more'}
+                    </span>
+                  )}
                 </p>
               </div>
             </div>
@@ -146,7 +220,7 @@ const ProcessStep = ({
         >
           {/* Step Number */}
           <div
-            className={`absolute text-[150px] font-extrabold text-white opacity-10 pointer-events-none
+            className={`absolute text-[150px] font-extrabold text-white opacity-30 pointer-events-none
                ${
                  reverse
                    ? "right-0 left-auto translate-x-[6px] -top-20"
@@ -192,16 +266,21 @@ const ProcessStep = ({
                 <p className="text-[15px] font-bold group-hover:text-blue-300 transition-colors duration-300 ease-out">
                   ({subtitle})
                 </p>
-                <p className="text-sm opacity-80 mt-1 group-hover:opacity-100 transition-opacity duration-300 ease-out">
-                  {description.split('\n').map((line, index) => (
+                <p className="text-sm opacity-80 mt-1 group-hover:opacity-100 transition-all duration-500 ease-out">
+                  {processedDescription.displayText.split('\n').map((line, index) => (
                     <span key={index}>
                       {line}
-                      {index < description.split('\n').length - 1 && <br />}
+                      {index < processedDescription.displayText.split('\n').length - 1 && <br />}
                     </span>
                   ))}
-                  <span className="font-bold cursor-pointer ml-1 group-hover:text-blue-400 hover:underline transition-all duration-300 ease-out">
-                    See more
-                  </span>
+                  {processedDescription.needsTruncation && (
+                    <span 
+                      className="font-bold cursor-pointer ml-1 group-hover:text-blue-400 hover:underline transition-all duration-300 ease-out"
+                      onClick={toggleExpanded}
+                    >
+                      {isExpanded ? 'Read less' : 'Read more'}
+                    </span>
+                  )}
                 </p>
               </div>
             </div>
