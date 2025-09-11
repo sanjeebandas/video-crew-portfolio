@@ -66,7 +66,12 @@ const ProcessStep = ({
                   ({subtitle})
                 </p>
                 <p className="text-sm opacity-80 mt-1 group-hover:opacity-100 transition-opacity duration-300 ease-out">
-                  {description}
+                  {description.split('\n').map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      {index < description.split('\n').length - 1 && <br />}
+                    </span>
+                  ))}
                   <span className="font-bold cursor-pointer ml-1 group-hover:text-blue-400 hover:underline transition-all duration-300 ease-out">
                     See more
                   </span>
@@ -116,7 +121,12 @@ const ProcessStep = ({
                   ({subtitle})
                 </p>
                 <p className="text-sm opacity-80 mt-1 group-hover:opacity-100 transition-opacity duration-300 ease-out">
-                  {description}
+                  {description.split('\n').map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      {index < description.split('\n').length - 1 && <br />}
+                    </span>
+                  ))}
                   <span className="font-bold cursor-pointer ml-1 group-hover:text-blue-400 hover:underline transition-all duration-300 ease-out">
                     See more
                   </span>
@@ -183,7 +193,12 @@ const ProcessStep = ({
                   ({subtitle})
                 </p>
                 <p className="text-sm opacity-80 mt-1 group-hover:opacity-100 transition-opacity duration-300 ease-out">
-                  {description}
+                  {description.split('\n').map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      {index < description.split('\n').length - 1 && <br />}
+                    </span>
+                  ))}
                   <span className="font-bold cursor-pointer ml-1 group-hover:text-blue-400 hover:underline transition-all duration-300 ease-out">
                     See more
                   </span>
