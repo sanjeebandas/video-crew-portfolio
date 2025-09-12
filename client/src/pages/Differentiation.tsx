@@ -9,7 +9,8 @@ import ErrorBoundary from "../components/common/ErrorBoundary";
 
 const Differentiation = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { slideInFromLeft, slideInFromRight, staggerFadeIn, stackIn } = useScrollAnimations();
+  const { slideInFromLeft, slideInFromRight, staggerFadeIn, stackIn } =
+    useScrollAnimations();
 
   useEffect(() => {
     // Reduced delay for faster animations while maintaining lazy loading compatibility
@@ -30,7 +31,7 @@ const Differentiation = () => {
 
   return (
     <>
-      <SEO 
+      <SEO
         title="차별화"
         description="비디오크루만의 특별한 차별화 포인트를 소개합니다. A/B 시안 제공, 100% 투명한 정찰제, 고객사 맞춤형 제작, 결과에 대한 자신감 등 다른 업체와 차별화된 서비스를 제공합니다."
         keywords="비디오크루차별화, AB시안제공, 투명한정찰제, 맞춤형제작, 고객만족, 영상제작차별화, 전문영상제작"
@@ -38,7 +39,7 @@ const Differentiation = () => {
       <div ref={containerRef} className="relative overflow-hidden">
         <ErrorBoundary
           onError={(error, errorInfo) => {
-            console.error('Differentiation page error:', error, errorInfo);
+            console.error("Differentiation page error:", error, errorInfo);
           }}
         >
           <section className="w-full bg-black text-white">
@@ -55,24 +56,26 @@ const Differentiation = () => {
                 </div>
 
                 {/* Right: Paragraph Block */}
-                <div className="flex-1 max-w-xl text-sm md:text-base font-medium leading-relaxed opacity-90 md:text-right diff-title-right">
+                <div className="flex-1 max-w-2xl text-sm md:text-base font-medium leading-relaxed opacity-90 md:text-right diff-title-right">
                   <div className="diff-text-line">
-                    컨설턴트가 스토리를 입히고, 전문 디자이너와 촬영감독, PD가 1:1
-                    맞춤 설계된 영상을 제공하며, 차별화된 스토리와 다양한 선택지를
-                    제시합니다.
+                    컨설턴트가 스토리를 입히고, 전문 디자이너와 촬영감독, PD가
+                    1:1 맞춤 설계된 영상을 제공하며, 차별화된 스토리와 다양한
+                    선택지를 제시합니다.
                   </div>
                 </div>
               </div>
             </div>
           </section>
-          
+
           <DifferentiationHero />
-          
+
           <ErrorBoundary
             fallback={
               <div className="min-h-[200px] flex items-center justify-center bg-black">
                 <div className="text-center text-white">
-                  <h3 className="text-lg font-semibold mb-2">차별화 섹션을 불러올 수 없습니다</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    차별화 섹션을 불러올 수 없습니다
+                  </h3>
                   <p className="text-gray-400">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
@@ -80,12 +83,14 @@ const Differentiation = () => {
           >
             <WhyVideoCrewBoxes />
           </ErrorBoundary>
-          
+
           <ErrorBoundary
             fallback={
               <div className="min-h-[300px] flex items-center justify-center bg-black">
                 <div className="text-center text-white">
-                  <h3 className="text-lg font-semibold mb-2">A/B 시안 제공 섹션을 불러올 수 없습니다</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    A/B 시안 제공 섹션을 불러올 수 없습니다
+                  </h3>
                   <p className="text-gray-400">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
@@ -100,12 +105,14 @@ const Differentiation = () => {
               />
             </div>
           </ErrorBoundary>
-          
+
           <ErrorBoundary
             fallback={
               <div className="min-h-[300px] flex items-center justify-center bg-black">
                 <div className="text-center text-white">
-                  <h3 className="text-lg font-semibold mb-2">투명한 정찰제 섹션을 불러올 수 없습니다</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    투명한 정찰제 섹션을 불러올 수 없습니다
+                  </h3>
                   <p className="text-gray-400">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
@@ -115,18 +122,20 @@ const Differentiation = () => {
               <DifferentiationFeatureSection
                 number="02"
                 title="100% 투명한 정찰제"
-                description="사전에 협의를 통해서 명확하게 예측 가능한 견적을 제공합니다..."
+                description="사전에 협의를 통해서 명확하게 예측 가능한 견적을 제공합니다."
                 imageUrl="imgs/differentiation/Frame 426.webp"
                 reverse
               />
             </div>
           </ErrorBoundary>
-          
+
           <ErrorBoundary
             fallback={
               <div className="min-h-[300px] flex items-center justify-center bg-black">
                 <div className="text-center text-white">
-                  <h3 className="text-lg font-semibold mb-2">맞춤형 제작 섹션을 불러올 수 없습니다</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    맞춤형 제작 섹션을 불러올 수 없습니다
+                  </h3>
                   <p className="text-gray-400">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
@@ -146,7 +155,9 @@ const Differentiation = () => {
             fallback={
               <div className="min-h-[300px] flex items-center justify-center bg-black">
                 <div className="text-center text-white">
-                  <h3 className="text-lg font-semibold mb-2">결과 자신감 섹션을 불러올 수 없습니다</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    결과 자신감 섹션을 불러올 수 없습니다
+                  </h3>
                   <p className="text-gray-400">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
@@ -156,18 +167,20 @@ const Differentiation = () => {
               <DifferentiationFeatureSection
                 number="04"
                 title="결과에 대한 자신감"
-                description="100% 고객 만족 책임 완본제! 비디오크루는 제공하는 영상의 퀄리티와 고객 만족에 대해 업계 최고 수준의 자신감을 가지고 있습니다. 만약 최종적으로 전달된 영상이 사전에 정의된 기획 의도 및 약속된 기준에서 현저히 벗어나 고객님께서 만족하지 못하실 경우…"
+                description="100% 고객 만족 책임 완본제! 비디오크루는 제공하는 영상의 퀄리티와 고객 만족에 대해 업계 최고 수준의 자신감을 가지고 있습니다. 만약 최종적으로 전달된 영상이 사전에 정의된 기획 의도 및 약속된 기준에서 현저히 벗어나 고객님께서 만족하지 못하실 경우."
                 imageUrl="imgs/differentiation/Frame 398.webp"
                 reverse
               />
             </div>
           </ErrorBoundary>
-          
+
           <ErrorBoundary
             fallback={
               <div className="min-h-[200px] flex items-center justify-center bg-black">
                 <div className="text-center text-white">
-                  <h3 className="text-lg font-semibold mb-2">문의 섹션을 불러올 수 없습니다</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    문의 섹션을 불러올 수 없습니다
+                  </h3>
                   <p className="text-gray-400">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
