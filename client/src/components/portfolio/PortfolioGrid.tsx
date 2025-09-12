@@ -16,7 +16,7 @@ const backendCategoryMap: Record<string, string> = {
   "corporate-event": "기업 행사 영상",
 };
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 12; // 3 rows of 4 items on desktop, 6 rows of 2 on mobile
 
 const PortfolioGrid = ({ currentFilter }: Props) => {
   const [allItems, setAllItems] = useState<PortfolioItem[]>([]);
@@ -167,7 +167,7 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
         loadingMessage="포트폴리오를 불러오는 중..."
         emptyMessage="이 카테고리에 아직 콘텐츠가 추가되지 않았습니다. 다른 카테고리를 확인해보세요."
       >
-        <div className="flex flex-col gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {visibleItems.map((item) => (
             <div key={item._id} className="portfolio-card">
               <PortfolioCard item={item} />
