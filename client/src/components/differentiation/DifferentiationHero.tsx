@@ -36,6 +36,19 @@ const DifferentiationHero = () => {
     setCurrentImageIndex(index);
   };
 
+  // Handle navigation buttons
+  const handlePrevious = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? bannerImages.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === bannerImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
   return (
     <section className="w-full bg-black text-white py-2 md:py-6">
       <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-0">
@@ -52,6 +65,24 @@ const DifferentiationHero = () => {
                 }`}
               />
             ))}
+
+            {/* Left Navigation Button */}
+            <button
+              onClick={handlePrevious}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all duration-300 ease-in-out hover:scale-110 z-10"
+              aria-label="Previous image"
+            >
+              <i className="fas fa-chevron-left text-sm"></i>
+            </button>
+
+            {/* Right Navigation Button */}
+            <button
+              onClick={handleNext}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all duration-300 ease-in-out hover:scale-110 z-10"
+              aria-label="Next image"
+            >
+              <i className="fas fa-chevron-right text-sm"></i>
+            </button>
 
             <div
               className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center space-x-2
