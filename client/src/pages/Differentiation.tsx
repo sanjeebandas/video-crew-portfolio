@@ -168,7 +168,7 @@ const Differentiation = () => {
                 number="04"
                 title="결과에 대한 자신감"
                 description="100% 고객 만족 책임 완본제! 비디오크루는 제공하는 영상의 퀄리티와 고객 만족에 대해 업계 최고 수준의 자신감을 가지고 있습니다. 만약 최종적으로 전달된 영상이 사전에 정의된 기획 의도 및 약속된 기준에서 현저히 벗어나 고객님께서 만족하지 못하실 경우."
-                imageUrl="imgs/differentiation/Frame 398.webp"
+                imageUrl="imgs/differentiation/diff_feature_image.webp"
                 reverse
               />
             </div>

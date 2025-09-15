@@ -16,7 +16,11 @@ const PortfolioCard = ({ item }: Props) => {
         <div className="relative w-full max-w-[1120px] aspect-[2/1] rounded-2xl overflow-hidden bg-black shadow-none transition duration-300 group hover:shadow-[0_0_30px_rgba(255,255,255,0.30)]">
           <div
             className="w-full h-full cursor-pointer relative"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              console.log('Portfolio card clicked, opening modal for:', item.title);
+              console.log('Video URL:', item.videoUrl);
+              setIsModalOpen(true);
+            }}
           >
             <LazyImage
               src={item.thumbnailUrl}
