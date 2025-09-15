@@ -44,7 +44,7 @@ const DifferentiationFeatureSection = ({
       >
         {/* Text Block */}
         <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left relative group">
-          <span className="text-[96px] font-extrabold text-white opacity-15 leading-none mb-2 group-hover:opacity-25 transition-opacity duration-300 ease-out">
+          <span className="text-[96px] font-extrabold text-white opacity-30 leading-none mb-2 group-hover:opacity-40 transition-opacity duration-300 ease-out">
             {number}
           </span>
           <h3 className="text-2xl md:text-3xl font-bold mb-2 group-hover:text-blue-400 transition-colors duration-300 ease-out">{title}</h3>
