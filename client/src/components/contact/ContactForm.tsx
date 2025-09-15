@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import { useScrollAnimations } from "../../utils/animations";
 import api from "../../services/api";
 import { useContactErrorHandler } from "../../hooks/useContactErrorHandler";
 import { useFormPersistence } from "../../hooks/useFormPersistence";
 
 const ContactForm = () => {
-  const { slideInFromLeft, staggerFadeIn, fadeInUp } = useScrollAnimations();
-
   // Initial form data
   const initialFormData = {
     namePosition: "",
@@ -27,31 +24,23 @@ const ContactForm = () => {
   };
 
   // Form persistence and error handling
-  const { formData, updateFormData, clearFormData } = useFormPersistence('contact-form', initialFormData);
-  const { errorState, handleError, clearError, retry, canRetry } = useContactErrorHandler({
-    maxRetries: 2,
-    retryDelay: 1000,
-    onRetry: () => {
-      console.log('Retrying contact form submission...');
-    }
-  });
+  const { formData, updateFormData, clearFormData } = useFormPersistence(
+    "contact-form",
+    initialFormData
+  );
+  const { errorState, handleError, clearError, retry, canRetry } =
+    useContactErrorHandler({
+      maxRetries: 2,
+      retryDelay: 1000,
+      onRetry: () => {
+        console.log("Retrying contact form submission...");
+      },
+    });
 
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    // Reduced delay for faster animations while maintaining lazy loading compatibility
-    const timer = setTimeout(() => {
-      // Contact form animations - optimized for smooth user experience
-      slideInFromLeft(".contact-title");
-      staggerFadeIn(".contact-form-row", 0.06); // Fast stagger for form rows
-      fadeInUp(".contact-submit-btn");
-    }, 120); // Reduced from 200ms to 120ms
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
+  // Removed title animation to prevent re-triggering during form interaction
 
   // Validation functions
   const validateName = (name: string): boolean => {
@@ -80,13 +69,14 @@ const ContactForm = () => {
   };
 
   const validateForm = (): boolean => {
-    const newErrors: {[key: string]: string} = {};
+    const newErrors: { [key: string]: string } = {};
 
     // Name validation
     if (!formData.namePosition.trim()) {
       newErrors.namePosition = "성함/직책을 입력해주세요.";
     } else if (!validateName(formData.namePosition)) {
-      newErrors.namePosition = "성함/직책은 한글, 영문, 숫자를 포함할 수 있지만 특수문자는 사용할 수 없습니다.";
+      newErrors.namePosition =
+        "성함/직책은 한글, 영문, 숫자를 포함할 수 있지만 특수문자는 사용할 수 없습니다.";
     }
 
     // Email validation
@@ -100,11 +90,15 @@ const ContactForm = () => {
     if (!formData.contact.trim()) {
       newErrors.contact = "연락처를 입력해주세요.";
     } else if (!validateContact(formData.contact)) {
-      newErrors.contact = "연락처는 숫자와 +, -, 공백, 괄호만 사용할 수 있습니다.";
+      newErrors.contact =
+        "연락처는 숫자와 +, -, 공백, 괄호만 사용할 수 있습니다.";
     }
 
     // Video count validation
-    if (formData.videoCount.trim() && !validateVideoCount(formData.videoCount)) {
+    if (
+      formData.videoCount.trim() &&
+      !validateVideoCount(formData.videoCount)
+    ) {
       newErrors.videoCount = "영상 제작 편수는 숫자만 입력해주세요.";
     }
 
@@ -118,8 +112,9 @@ const ContactForm = () => {
     >
   ) => {
     const { name, value, type } = e.target;
-    const newValue = type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
-    
+    const newValue =
+      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+
     updateFormData((prev) => ({
       ...prev,
       [name]: newValue,
@@ -127,7 +122,7 @@ const ContactForm = () => {
 
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
 
     // Clear submission error when user makes changes
@@ -162,7 +157,8 @@ const ContactForm = () => {
         preferredDate: formData.deliveryDate,
         service: formData.productionPurpose,
         subject: `${formData.videoCount} Videos • ${formData.runningTime} Runtime • Platform: ${formData.uploadPlatform}`,
-        message: formData.additionalInfo || "No additional information provided",
+        message:
+          formData.additionalInfo || "No additional information provided",
         referenceVideos: formData.referenceVideos,
         websiteLinks: formData.websiteLinks,
         productionPurpose: formData.productionPurpose,
@@ -176,7 +172,7 @@ const ContactForm = () => {
 
       const loadingToast = toast.loading("제출 중입니다...");
 
-      await api.post('/contact', payload);
+      await api.post("/contact", payload);
 
       toast.dismiss(loadingToast);
       toast.success("문의가 성공적으로 제출되었습니다!");
@@ -205,7 +201,8 @@ const ContactForm = () => {
         preferredDate: formData.deliveryDate,
         service: formData.productionPurpose,
         subject: `${formData.videoCount} Videos • ${formData.runningTime} Runtime • Platform: ${formData.uploadPlatform}`,
-        message: formData.additionalInfo || "No additional information provided",
+        message:
+          formData.additionalInfo || "No additional information provided",
         referenceVideos: formData.referenceVideos,
         websiteLinks: formData.websiteLinks,
         productionPurpose: formData.productionPurpose,
@@ -217,7 +214,7 @@ const ContactForm = () => {
         source: "website",
       };
 
-      await api.post('/contact', payload);
+      await api.post("/contact", payload);
       toast.success("문의가 성공적으로 제출되었습니다!");
       clearFormData();
       setErrors({});
@@ -227,7 +224,7 @@ const ContactForm = () => {
   return (
     <div className="max-w-4xl mx-auto p-8">
       {/* Title */}
-      <h1 className="text-white text-4xl font-bold text-center mb-12 contact-title">
+      <h1 className="text-white text-4xl font-bold text-center mb-12">
         Contact Us
       </h1>
 
@@ -237,8 +234,18 @@ const ContactForm = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                <svg
+                  className="w-5 h-5 text-red-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                  />
                 </svg>
               </div>
               <div className="ml-3">
@@ -249,7 +256,7 @@ const ContactForm = () => {
               <button
                 type="button"
                 onClick={handleRetry}
-                className="ml-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                className="ml-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-150"
               >
                 다시 시도
               </button>
@@ -260,7 +267,7 @@ const ContactForm = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Row 1 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 contact-form-row">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Name / Position */}
           <div>
             <input
@@ -269,10 +276,10 @@ const ContactForm = () => {
               placeholder=" 김영수 대표, John Smith CEO, 홍길동 123"
               value={formData.namePosition}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 bg-transparent border text-white placeholder-gray-400 focus:outline-none transition-colors duration-300 ease-out ${
-                errors.namePosition 
-                  ? 'border-red-500 focus:border-red-400' 
-                  : 'border-gray-600 focus:border-gray-400 hover:border-blue-400/50'
+              className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
+                errors.namePosition
+                  ? "border-red-500 focus:border-red-400"
+                  : "border-gray-600 focus:border-gray-400 hover:border-blue-400/50"
               }`}
             />
             {errors.namePosition && (
@@ -286,7 +293,7 @@ const ContactForm = () => {
               name="runningTime"
               value={formData.runningTime}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-300 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-150 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -294,22 +301,72 @@ const ContactForm = () => {
                 backgroundSize: "1.5em 1.5em",
               }}
             >
-              <option value="" className="bg-gray-900 text-white hover:bg-gray-700">러닝 타임 (분량)</option>
-              <option value="30sec" className="bg-gray-900 text-white hover:bg-gray-700">30초</option>
-              <option value="1min" className="bg-gray-900 text-white hover:bg-gray-700">1분</option>
-              <option value="2-3min" className="bg-gray-900 text-white hover:bg-gray-700">2-3분</option>
-              <option value="5min" className="bg-gray-900 text-white hover:bg-gray-700">5분</option>
-              <option value="10min" className="bg-gray-900 text-white hover:bg-gray-700">10분</option>
-              <option value="15min" className="bg-gray-900 text-white hover:bg-gray-700">15분</option>
-              <option value="20min" className="bg-gray-900 text-white hover:bg-gray-700">20분</option>
-              <option value="30min" className="bg-gray-900 text-white hover:bg-gray-700">30분</option>
-              <option value="over30min" className="bg-gray-900 text-white hover:bg-gray-700">30분 이상</option>
+              <option
+                value=""
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                러닝 타임 (분량)
+              </option>
+              <option
+                value="30sec"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                30초
+              </option>
+              <option
+                value="1min"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                1분
+              </option>
+              <option
+                value="2-3min"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                2-3분
+              </option>
+              <option
+                value="5min"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                5분
+              </option>
+              <option
+                value="10min"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                10분
+              </option>
+              <option
+                value="15min"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                15분
+              </option>
+              <option
+                value="20min"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                20분
+              </option>
+              <option
+                value="30min"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                30분
+              </option>
+              <option
+                value="over30min"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                30분 이상
+              </option>
             </select>
           </div>
         </div>
 
         {/* Row 2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 contact-form-row">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Email Address */}
           <div>
             <input
@@ -318,10 +375,10 @@ const ContactForm = () => {
               placeholder="example@company.com"
               value={formData.email}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 bg-transparent border text-white placeholder-gray-400 focus:outline-none transition-colors duration-300 ease-out ${
-                errors.email 
-                  ? 'border-red-500 focus:border-red-400' 
-                  : 'border-gray-600 focus:border-gray-400 hover:border-blue-400/50'
+              className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
+                errors.email
+                  ? "border-red-500 focus:border-red-400"
+                  : "border-gray-600 focus:border-gray-400 hover:border-blue-400/50"
               }`}
             />
             {errors.email && (
@@ -335,7 +392,7 @@ const ContactForm = () => {
               name="budget"
               value={formData.budget}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-300 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-150 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -343,20 +400,60 @@ const ContactForm = () => {
                 backgroundSize: "1.5em 1.5em",
               }}
             >
-              <option value="" className="bg-gray-900 text-white hover:bg-gray-700">희망 예산 (리프하게 선택해주세요.)</option>
-              <option value="under-50" className="bg-gray-900 text-white hover:bg-gray-700">50만원 미만</option>
-              <option value="50-100" className="bg-gray-900 text-white hover:bg-gray-700">50만원 - 100만원</option>
-              <option value="100-200" className="bg-gray-900 text-white hover:bg-gray-700">100만원 - 200만원</option>
-              <option value="200-300" className="bg-gray-900 text-white hover:bg-gray-700">200만원 - 300만원</option>
-              <option value="300-500" className="bg-gray-900 text-white hover:bg-gray-700">300만원 - 500만원</option>
-              <option value="500-1000" className="bg-gray-900 text-white hover:bg-gray-700">500만원 - 1000만원</option>
-              <option value="over-1000" className="bg-gray-900 text-white hover:bg-gray-700">1000만원 이상</option>
+              <option
+                value=""
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                희망 예산 (리프하게 선택해주세요.)
+              </option>
+              <option
+                value="under-50"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                50만원 미만
+              </option>
+              <option
+                value="50-100"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                50만원 - 100만원
+              </option>
+              <option
+                value="100-200"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                100만원 - 200만원
+              </option>
+              <option
+                value="200-300"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                200만원 - 300만원
+              </option>
+              <option
+                value="300-500"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                300만원 - 500만원
+              </option>
+              <option
+                value="500-1000"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                500만원 - 1000만원
+              </option>
+              <option
+                value="over-1000"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                1000만원 이상
+              </option>
             </select>
           </div>
         </div>
 
         {/* Row 3 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 contact-form-row">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Contact Number */}
           <div>
             <input
@@ -365,10 +462,10 @@ const ContactForm = () => {
               placeholder=" +82 10-1234-5678, 010-1234-5678"
               value={formData.contact}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 bg-transparent border text-white placeholder-gray-400 focus:outline-none transition-colors duration-300 ease-out ${
-                errors.contact 
-                  ? 'border-red-500 focus:border-red-400' 
-                  : 'border-gray-600 focus:border-gray-400 hover:border-blue-400/50'
+              className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
+                errors.contact
+                  ? "border-red-500 focus:border-red-400"
+                  : "border-gray-600 focus:border-gray-400 hover:border-blue-400/50"
               }`}
             />
             {errors.contact && (
@@ -382,7 +479,7 @@ const ContactForm = () => {
               name="productionPurpose"
               value={formData.productionPurpose}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-300 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-150 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -390,21 +487,66 @@ const ContactForm = () => {
                 backgroundSize: "1.5em 1.5em",
               }}
             >
-              <option value="" className="bg-gray-900 text-white hover:bg-gray-700">제작 목적</option>
-              <option value="corporate-promotion" className="bg-gray-900 text-white hover:bg-gray-700">기업 홍보</option>
-              <option value="product-introduction" className="bg-gray-900 text-white hover:bg-gray-700">제품 소개</option>
-              <option value="education-training" className="bg-gray-900 text-white hover:bg-gray-700">교육/연수</option>
-              <option value="event-coverage" className="bg-gray-900 text-white hover:bg-gray-700">행사 영상</option>
-              <option value="marketing" className="bg-gray-900 text-white hover:bg-gray-700">마케팅</option>
-              <option value="brand-story" className="bg-gray-900 text-white hover:bg-gray-700">브랜드 스토리</option>
-              <option value="recruitment" className="bg-gray-900 text-white hover:bg-gray-700">채용</option>
-              <option value="other" className="bg-gray-900 text-white hover:bg-gray-700">기타</option>
+              <option
+                value=""
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                제작 목적
+              </option>
+              <option
+                value="corporate-promotion"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                기업 홍보
+              </option>
+              <option
+                value="product-introduction"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                제품 소개
+              </option>
+              <option
+                value="education-training"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                교육/연수
+              </option>
+              <option
+                value="event-coverage"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                행사 영상
+              </option>
+              <option
+                value="marketing"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                마케팅
+              </option>
+              <option
+                value="brand-story"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                브랜드 스토리
+              </option>
+              <option
+                value="recruitment"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                채용
+              </option>
+              <option
+                value="other"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                기타
+              </option>
             </select>
           </div>
         </div>
 
         {/* Row 4 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 contact-form-row">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Company Name / Channel Name */}
           <div>
             <input
@@ -413,7 +555,7 @@ const ContactForm = () => {
               placeholder="회사명 / 채널명"
               value={formData.companyChannel}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-150 ease-out"
             />
           </div>
 
@@ -423,7 +565,7 @@ const ContactForm = () => {
               name="uploadPlatform"
               value={formData.uploadPlatform}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-300 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-150 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -431,22 +573,72 @@ const ContactForm = () => {
                 backgroundSize: "1.5em 1.5em",
               }}
             >
-              <option value="" className="bg-gray-900 text-white hover:bg-gray-700">영상을 어디에 업로드 할 예정인가요?</option>
-              <option value="youtube" className="bg-gray-900 text-white hover:bg-gray-700">유튜브</option>
-              <option value="website" className="bg-gray-900 text-white hover:bg-gray-700">홈페이지</option>
-              <option value="instagram" className="bg-gray-900 text-white hover:bg-gray-700">인스타그램</option>
-              <option value="facebook" className="bg-gray-900 text-white hover:bg-gray-700">페이스북</option>
-              <option value="tiktok" className="bg-gray-900 text-white hover:bg-gray-700">틱톡</option>
-              <option value="linkedin" className="bg-gray-900 text-white hover:bg-gray-700">링크드인</option>
-              <option value="tv-broadcast" className="bg-gray-900 text-white hover:bg-gray-700">TV 방송</option>
-              <option value="offline-event" className="bg-gray-900 text-white hover:bg-gray-700">오프라인 행사</option>
-              <option value="multiple" className="bg-gray-900 text-white hover:bg-gray-700">여러 플랫폼</option>
+              <option
+                value=""
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                영상을 어디에 업로드 할 예정인가요?
+              </option>
+              <option
+                value="youtube"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                유튜브
+              </option>
+              <option
+                value="website"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                홈페이지
+              </option>
+              <option
+                value="instagram"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                인스타그램
+              </option>
+              <option
+                value="facebook"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                페이스북
+              </option>
+              <option
+                value="tiktok"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                틱톡
+              </option>
+              <option
+                value="linkedin"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                링크드인
+              </option>
+              <option
+                value="tv-broadcast"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                TV 방송
+              </option>
+              <option
+                value="offline-event"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                오프라인 행사
+              </option>
+              <option
+                value="multiple"
+                className="bg-gray-900 text-white hover:bg-gray-700"
+              >
+                여러 플랫폼
+              </option>
             </select>
           </div>
         </div>
 
         {/* Row 5 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 contact-form-row">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Number of Videos */}
           <div>
             <input
@@ -455,10 +647,10 @@ const ContactForm = () => {
               placeholder=" 5 (숫자만 입력)"
               value={formData.videoCount}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 bg-transparent border text-white placeholder-gray-400 focus:outline-none transition-colors duration-300 ease-out ${
-                errors.videoCount 
-                  ? 'border-red-500 focus:border-red-400' 
-                  : 'border-gray-600 focus:border-gray-400 hover:border-blue-400/50'
+              className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
+                errors.videoCount
+                  ? "border-red-500 focus:border-red-400"
+                  : "border-gray-600 focus:border-gray-400 hover:border-blue-400/50"
               }`}
             />
             {errors.videoCount && (
@@ -474,13 +666,13 @@ const ContactForm = () => {
               placeholder="참고 영상 전달 (유튜브 링크, 전 작업물 등)"
               value={formData.referenceVideos}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-150 ease-out"
             />
           </div>
         </div>
 
         {/* Row 6 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 contact-form-row">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Delivery Date */}
           <div>
             <input
@@ -489,7 +681,7 @@ const ContactForm = () => {
               placeholder=" 2024년 3월 15일, 3월 말, ASAP"
               value={formData.deliveryDate}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-150 ease-out"
             />
           </div>
 
@@ -498,17 +690,17 @@ const ContactForm = () => {
             <input
               type="text"
               name="websiteLinks"
-              placeholder="현재 보유한 홈페이지, SNS, 랜딩페이지 링크를 가능한 모두 적어주세요."
+              placeholder="여기 문장이 잘려서 보이지 않아요"
               value={formData.websiteLinks}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-transparent border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-300 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-150 ease-out"
             />
           </div>
         </div>
 
         {/* Privacy Policy */}
-        <div className="space-y-4 contact-form-row">
-          <div className="bg-gray-950 border border-gray-600 p-4 text-xs text-gray-300 leading-relaxed max-h-40 overflow-y-auto hover:border-blue-400/30 transition-colors duration-300 ease-out">
+        <div className="space-y-4">
+          <div className="bg-gray-950 border border-gray-600 p-4 text-xs text-gray-300 leading-relaxed max-h-40 overflow-y-auto hover:border-blue-400/30 transition-colors duration-150 ease-out">
             <h3 className="text-white text-sm font-medium mb-3">
               개인정보 수집 및 이용 동의
             </h3>
@@ -536,7 +728,7 @@ const ContactForm = () => {
               name="agreeToTerms"
               checked={formData.agreeToTerms}
               onChange={handleInputChange}
-              className="mt-1 h-4 w-4 bg-transparent border border-gray-600 rounded focus:outline-none hover:border-blue-400 transition-colors duration-300 ease-out cursor-pointer"
+              className="mt-1 h-4 w-4 bg-transparent border border-gray-600 rounded focus:outline-none hover:border-blue-400 transition-colors duration-150 ease-out cursor-pointer"
             />
             <label className="text-gray-400 text-sm">
               개인정보 수집 및 이용에 동의합니다
@@ -549,10 +741,10 @@ const ContactForm = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`px-12 py-3 font-medium rounded-full transition-all duration-300 ease-out contact-submit-btn ${
+            className={`px-12 py-3 font-medium rounded-full transition-all duration-150 ease-out ${
               isSubmitting
-                ? 'bg-gray-600 cursor-not-allowed opacity-70'
-                : 'bg-blue-600 hover:bg-blue-700 hover:scale-105 cursor-pointer hover:shadow-lg'
+                ? "bg-gray-600 cursor-not-allowed opacity-70"
+                : "bg-blue-600 hover:bg-blue-700 hover:scale-105 cursor-pointer hover:shadow-lg"
             } text-white`}
           >
             {isSubmitting ? (
@@ -561,7 +753,7 @@ const ContactForm = () => {
                 제출 중...
               </div>
             ) : (
-              '제출하기'
+              "제출하기"
             )}
           </button>
         </div>

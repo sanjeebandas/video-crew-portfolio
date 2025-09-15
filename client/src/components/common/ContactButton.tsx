@@ -1,28 +1,16 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ContactButton = () => {
   const [isVisible, setIsVisible] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Hide button on contact page to avoid redundancy
   useEffect(() => {
-    const handleRouteChange = () => {
-      const isContactPage = window.location.pathname === "/contact";
-      setIsVisible(!isContactPage);
-    };
-
-    // Check initial route
-    handleRouteChange();
-
-    // Listen for route changes
-    const handlePopState = () => handleRouteChange();
-    window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, []);
+    const isContactPage = location.pathname === "/contact";
+    setIsVisible(!isContactPage);
+  }, [location.pathname]);
 
   const handleContactClick = () => {
     navigate("/contact");
