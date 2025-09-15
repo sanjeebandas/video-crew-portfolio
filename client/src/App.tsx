@@ -5,6 +5,7 @@ import { initGSAP } from "./utils/animations";
 import { incrementPageVisit } from "./services/api";
 import InstallPrompt from "./components/common/InstallPrompt";
 import OfflineIndicator from "./components/common/OfflineIndicator";
+import ContactButton from "./components/common/ContactButton";
 import { useAuth } from "./context/AuthContext";
 
 // Public Pages
@@ -128,6 +129,9 @@ function LayoutWrapper() {
       {/* PWA Components */}
       <InstallPrompt />
       <OfflineIndicator />
+
+      {/* Contact Button - Only show on public pages */}
+      {!isAdminDashboard && !isAdminLogin && !is404Page && <ContactButton />}
 
       {/* Global Hot Toast Container */}
       <Toaster
