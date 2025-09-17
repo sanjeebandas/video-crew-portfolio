@@ -181,7 +181,7 @@ const Dashboard = () => {
                 <button
                   onClick={handleRetry}
                   disabled={isRetrying}
-                  className="text-yellow-400 hover:text-yellow-300 text-xs font-medium transition-colors"
+                  className="text-blue-600 hover:text-blue-500 text-xs font-medium transition-colors"
                 >
                   {isRetrying ? "Retrying..." : "Retry"}
                 </button>

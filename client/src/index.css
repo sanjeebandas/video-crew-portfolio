@@ -361,4 +361,25 @@ body {
       margin: 2rem; /* m-8 */
     }
   }
+
+  /* Process Step Timeline Arrows */
+  .vertical-dotted-arrow {
+    width: 2px;
+    height: 550px;
+    background: repeating-linear-gradient(
+      to bottom,
+      #ccc 0px,
+      #ccc 4px,
+      transparent 4px,
+      transparent 8px
+    );
+  }
+
+  .horizontal-dotted-arrow {
+    border-top: 2px dotted #ccc;
+  }
+
+  .horizontal-dotted-arrow-reverse {
+    border-top: 2px dotted #ccc;
+  }
 }
