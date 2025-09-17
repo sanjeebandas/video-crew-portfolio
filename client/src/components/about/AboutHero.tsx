@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
 import { useScrollAnimations } from "../../utils/animations";
 
 const AboutHero = () => {
   const { parallaxEffect, fadeInUp } = useScrollAnimations();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const captionRef = useRef<HTMLSpanElement>(null);
 
   // Array of banner images for the carousel
   const bannerImages = [
@@ -12,6 +14,15 @@ const AboutHero = () => {
     "/imgs/about/Frame-6.webp",
     "/imgs/about/Frame-4.webp",
     "/imgs/about/Frame-5.webp",
+  ];
+
+  // Array of captions corresponding to each image
+  const captions = [
+    "스토리로 말하는 영상",
+    "시선을 사로잡는 순간",
+    "경험이 만든 우리의 길",
+    "모든 프레임에 가치",
+    "이야기로 남는 비전",
   ];
 
   // Auto-advance carousel every 3 seconds
@@ -31,6 +42,22 @@ const AboutHero = () => {
     fadeInUp(".about-hero-text");
     // Remove staggerFadeIn for dots to keep them visible
   }, []);
+
+  // Caption animation on carousel change
+  useEffect(() => {
+    if (captionRef.current) {
+      gsap.fromTo(
+        captionRef.current,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 0.6, // Match the opacity-30 class (30% = 0.3)
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        }
+      );
+    }
+  }, [currentImageIndex]);
 
   // Handle dot click to manually change image
   const handleDotClick = (index: number) => {
@@ -60,13 +87,18 @@ const AboutHero = () => {
             <div className="absolute bottom-12 left-4 right-4 md:bottom-16 md:left-8 md:right-auto lg:bottom-20 lg:left-10 about-hero-text">
               <div>
                 <div>
-                  <p className="text-sm md:text-sm lg:text-sm leading-snug mt-1">
-                    <span className="font-semibold">Video Crew,</span>
-                    <br />
-                    <span className="font-medium opacity-75">
-                      Video Consulting Firm
-                    </span>
-                  </p>
+                  <div>
+                     <h2 className="text-lg md:text-xl lg:text-2xl font-bold mb-1">
+                       회사소개
+                     </h2>
+                     <p className="text-sm md:text-md lg:text-lg leading-snug">
+                       <span className="font-semibold">Video Crew,</span>
+                       <br />
+                       <span ref={captionRef} className="opacity-60">
+                         {captions[currentImageIndex]}
+                       </span>
+                     </p>
+                  </div>
                 </div>
               </div>
 
