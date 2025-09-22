@@ -69,8 +69,34 @@ app.get("/api/test-cors", (req, res) => {
   });
 });
 
-//  Serve static uploads
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+//  Serve static uploads with environment-aware path
+const getStaticUploadsPath = (): string => {
+  // Platform-specific environment variables 
+  const platformPaths = {
+    // Render Premium persistent disk
+    RENDER_PERSISTENT_DISK_PATH: process.env.RENDER_PERSISTENT_DISK_PATH, //make sure to add this in the .env file once RENDER subscription is activated
+    // Generic volume mount
+    VOLUME_MOUNT_PATH: process.env.VOLUME_MOUNT_PATH,
+    // Local development fallback
+    LOCAL_UPLOAD_PATH: path.join(__dirname, "../uploads")
+  };
+
+  // Find first available platform path
+  for (const [key, value] of Object.entries(platformPaths)) {
+    if (value) {
+      console.log(`🌐 Using static uploads path for ${key}: ${value}`);
+      return value;
+    }
+  }
+
+  // Final fallback (should never reach here)
+  const fallbackPath = path.join(__dirname, "../uploads");
+  console.log(`🌐 Using fallback static uploads path: ${fallbackPath}`);
+  return fallbackPath;
+};
+
+const staticUploadsPath = getStaticUploadsPath();
+app.use("/uploads", express.static(staticUploadsPath));
 
 //  Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
