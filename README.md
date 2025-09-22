@@ -25,8 +25,9 @@ A full-stack video production website with admin panel and public-facing portfol
 - MongoDB (with Mongoose)
 
 ### Deployment:
-- Frontend: Vercel
-- Backend: Railway
+- Frontend: Render Premium
+- Backend: Render Premium (with Persistent Disk Storage)
+- Database: MongoDB
 
 ---
 
@@ -64,6 +65,9 @@ PORT=5000
 MONGO_URI=mongodb+srv://thisisrahul:RhCUDjUR01Hh5ZZQ@cluster0.gwzy8mv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 NODE_ENV=development
 JWT_SECRET=facf239f91cb21dc220bf2dfe36dcb1b1e5b1ae70c6aa5bbb78d1019bd8c59ad3e03f2cfd67525f1261d9ea3e2b66b0f9e958c938aa9d17f9c1f1c81c6b30e78
+
+# For Render Premium deployment (add when upgrading):
+# RENDER_PERSISTENT_DISK_PATH=/var/data/uploads
 ```
 
 ### 4. Run development servers
@@ -75,6 +79,30 @@ npm run dev
 # Start frontend (in new terminal)
 cd ../client
 npm run dev
+```
+
+---
+
+## 🚀 Production Deployment
+
+### **Render Premium Deployment**
+
+For production deployment with persistent file storage:
+
+1. **Follow the detailed guide**: [RENDER_DEPLOYMENT_GUIDE.md](./RENDER_DEPLOYMENT_GUIDE.md)
+2. **Key requirements**:
+   - Render Premium account
+   - Persistent disk for file storage
+   - Environment variables configured
+
+### **Environment Variables for Production**
+
+```env
+NODE_ENV=production
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+RENDER_PERSISTENT_DISK_PATH=/var/data/uploads
 ```
 
 ---
