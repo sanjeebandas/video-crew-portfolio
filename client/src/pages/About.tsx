@@ -69,7 +69,7 @@ const About = () => {
               </div>
 
               {/* Right Paragraph Block */}
-              <div className="w-full md:flex-1 text-sm md:text-sm lg:text-base text-gray-300 leading-relaxed text-center md:text-right md:mt-6 lg:mt-8 about-title-right">
+              <div className="w-full md:flex-1 text-sm md:text-sm lg:text-base text-gray-400 leading-relaxed text-center md:text-right md:mt-6 lg:mt-8 about-title-right">
                 <div className="about-text-line">
                   우리는 영상이 단순히 기술적인 가치가 있다고 생각하지 않습니다.
                   우리에게는 각각 걸어온 하나의 경험을 나타냅니다. 브랜드

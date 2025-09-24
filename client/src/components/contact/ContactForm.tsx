@@ -700,7 +700,7 @@ const ContactForm = () => {
 
         {/* Privacy Policy */}
         <div className="space-y-4">
-          <div className="bg-gray-950 border border-gray-600 p-4 text-xs text-gray-300 leading-relaxed max-h-40 overflow-y-auto hover:border-blue-400/30 transition-colors duration-150 ease-out">
+          <div className="bg-white/5 border border-gray-600 p-4 text-xs text-gray-300 leading-relaxed max-h-40 overflow-y-auto hover:border-blue-400/30 transition-colors duration-150 ease-out">
             <h3 className="text-white text-sm font-medium mb-3">
               개인정보 수집 및 이용 동의
             </h3>

@@ -7,7 +7,7 @@ import ErrorBoundary from "../components/common/ErrorBoundary";
 
 const Contact = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { slideInFromLeft, fadeInUp, staggerFadeIn, stackIn, parallaxEffect } = useScrollAnimations();
+  const { slideInFromLeft, fadeInUp, staggerFadeIn, stackIn } = useScrollAnimations();
 
   useEffect(() => {
     // Reduced delay for faster animations while maintaining lazy loading compatibility
@@ -17,7 +17,6 @@ const Contact = () => {
       staggerFadeIn(".contact-text-line", 0.06); // Reduced stagger delay
       fadeInUp(".contact-info-section");
       staggerFadeIn(".contact-info-item", 0.1); // Reduced stagger delay
-      parallaxEffect(".contact-image", 0.3);
       stackIn(".contact-form-row", 0.06); // Reduced stagger delay
       fadeInUp(".contact-submit-btn");
     }, 120); // Reduced from 200ms to 120ms
