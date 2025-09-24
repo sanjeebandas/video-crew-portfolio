@@ -43,7 +43,7 @@ const Differentiation = () => {
           }}
         >
           <section className="w-full bg-black text-white">
-            <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-0 py-10 md:py-14">
+            <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 py-10 md:py-14">
               <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
                 {/* Left: Title Block */}
                 <div className="flex-1 diff-title-left">

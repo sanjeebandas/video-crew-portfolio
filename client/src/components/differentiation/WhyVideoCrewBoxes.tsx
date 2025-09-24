@@ -33,7 +33,7 @@ const WhyVideoCrewBoxes = () => {
 
   return (
     <section className="w-full bg-black text-white">
-      <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-0 py-10 md:py-14">
+      <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 py-10 md:py-14">
         {/* Q&A Section Header */}
         <div className="text-center mb-12 diff-why-header">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">자주 묻는 질문</h2>

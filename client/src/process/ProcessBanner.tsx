@@ -51,7 +51,7 @@ const ProcessBanner = () => {
       </div>
 
       {/* Tablet Layout - Including iPad Pro (1024x1366) */}
-      <div className="hidden md:flex xl:hidden justify-center">
+      <div className="hidden md:flex xl:hidden justify-center px-6 py-10">
         <div className="grid grid-cols-3 w-full max-w-[900px] h-[500px] border border-white/20 overflow-hidden">
           {/* Left side - Text */}
           <div className="col-span-1 bg-black text-white px-8 py-12 flex flex-col justify-center h-full">
