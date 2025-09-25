@@ -29,7 +29,7 @@ const ContactBanner = ({
           <h1 className="text-4xl lg:text-5xl font-bold mb-6 contact-title">
             {title}
           </h1>
-          <div className="contact-text-line text-white/45 text-sm leading-relaxed mb-12">
+          <div className="contact-text-line text-muted text-sm leading-relaxed mb-12">
             {description.split('\n').map((line, index) => (
               <span key={index}>
                 {line}
@@ -43,7 +43,7 @@ const ContactBanner = ({
 
             {/* Address */}
             <div className="contact-info-item">
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">
+              <p className="text-xs text-muted uppercase tracking-wider mb-2">
                 ADDRESS
               </p>
               <p className="text-white text-sm">{address}</p>
@@ -51,7 +51,7 @@ const ContactBanner = ({
 
             {/* Phone */}
             <div className="contact-info-item">
-              <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">
+              <p className="text-xs text-muted uppercase tracking-wider mb-2">
                 CALL US
               </p>
               <p className="text-white text-base">{phone}</p>
@@ -65,7 +65,7 @@ const ContactBanner = ({
         {/* Title + Description */}
         <div className="bg-black text-white p-6 text-center">
           <h1 className="text-3xl font-bold mb-4 contact-title">{title}</h1>
-          <div className="contact-text-line text-white/45 text-sm leading-relaxed">
+          <div className="contact-text-line text-muted text-sm leading-relaxed">
             {description.split('\n').map((line, index) => (
               <span key={index}>
                 {line}
@@ -91,14 +91,14 @@ const ContactBanner = ({
           <h2 className="text-3xl font-bold text-white mb-6">정보</h2>
 
           <div className="mb-6 contact-info-item">
-            <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">
+            <p className="text-xs text-muted uppercase tracking-wider mb-2">
               ADDRESS
             </p>
             <p className="text-white text-sm">{address}</p>
           </div>
 
           <div className="contact-info-item">
-            <p className="text-xs text-gray-400 uppercase tracking-wider mb-2">
+            <p className="text-xs text-muted uppercase tracking-wider mb-2">
               CALL US
             </p>
             <p className="text-white text-base">{phone}</p>
