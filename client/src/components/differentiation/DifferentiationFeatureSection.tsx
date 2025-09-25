@@ -48,7 +48,7 @@ const DifferentiationFeatureSection = ({
             {number}
           </span>
           <h3 className="text-2xl md:text-3xl font-bold mb-2 group-hover:text-blue-400 transition-colors duration-300 ease-out">{title}</h3>
-          <p className="text-sm md:text-base opacity-70 leading-relaxed group-hover:opacity-90 group-hover:text-gray-200 transition-all duration-300 ease-out">
+          <p className="text-sm md:text-base text-muted-2 leading-relaxed group-hover:opacity-90 group-hover:text-gray-200 transition-all duration-300 ease-out">
             {description}
           </p>
         </div>
@@ -70,7 +70,7 @@ const DifferentiationFeatureSection = ({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <p className="text-sm text-gray-400">이미지를 불러올 수 없습니다</p>
+                <p className="text-sm text-muted">이미지를 불러올 수 없습니다</p>
               </div>
             </div>
           )}

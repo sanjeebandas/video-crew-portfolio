@@ -47,7 +47,7 @@ const Differentiation = () => {
               <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
                 {/* Left: Title Block */}
                 <div className="flex-1 diff-title-left">
-                  <h4 className="text-sm md:text-base font-medium opacity-70 mb-2">
+                  <h4 className="text-sm md:text-base text-muted mb-2">
                     왜 비디오크루를 선택해야 할까요?
                   </h4>
                   <h2 className="text-2xl md:text-4xl font-bold">
@@ -56,7 +56,7 @@ const Differentiation = () => {
                 </div>
 
                 {/* Right: Paragraph Block */}
-                <div className="flex-1 max-w-2xl text-sm md:text-base font-medium leading-relaxed opacity-90 md:text-right diff-title-right">
+                <div className="flex-1 max-w-2xl text-sm md:text-base leading-relaxed text-muted md:text-right diff-title-right">
                   <div className="diff-text-line">
                     컨설턴트가 스토리를 입히고, 전문 디자이너와 촬영감독, PD가
                     1:1 맞춤 설계된 영상을 제공하며, 차별화된 스토리와 다양한
@@ -76,7 +76,7 @@ const Differentiation = () => {
                   <h3 className="text-lg font-semibold mb-2">
                     차별화 섹션을 불러올 수 없습니다
                   </h3>
-                  <p className="text-gray-400">페이지를 새로고침해주세요.</p>
+                  <p className="text-muted">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
             }

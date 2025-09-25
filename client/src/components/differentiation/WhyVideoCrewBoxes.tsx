@@ -36,12 +36,14 @@ const WhyVideoCrewBoxes = () => {
       <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 py-10 md:py-14">
         {/* Q&A Section Header */}
         <div className="text-center mb-12 diff-why-header">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">자주 묻는 질문</h2>
-          <p className="text-sm md:text-base opacity-70 max-w-2xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+            자주 묻는 질문
+          </h2>
+          <p className="text-sm md:text-base text-muted-2 max-w-2xl mx-auto">
             고객님들이 가장 많이 궁금해하시는 질문들에 대한 답변입니다.
           </p>
         </div>
-        
+
         <div className="flex flex-col md:flex-row justify-between items-stretch gap-4">
           {items.map((item, index) => (
             <div
@@ -52,11 +54,13 @@ const WhyVideoCrewBoxes = () => {
                 <h3 className="text-base md:text-md font-semibold mb-2 leading-snug group-hover:text-blue-400 transition-colors duration-300 ease-out line-clamp-2">
                   {item.title}
                 </h3>
-                <p className="text-sm md:text-base font-medium opacity-70 leading-relaxed group-hover:opacity-90 group-hover:text-gray-200 transition-all duration-300 ease-out line-clamp-3">
-                  {item.description.split('\n').map((line, lineIndex) => (
+                <p className="text-sm md:text-base font-medium text-muted-2 leading-relaxed group-hover:opacity-90 group-hover:text-gray-200 transition-all duration-300 ease-out line-clamp-3">
+                  {item.description.split("\n").map((line, lineIndex) => (
                     <span key={lineIndex}>
                       {line}
-                      {lineIndex < item.description.split('\n').length - 1 && <br />}
+                      {lineIndex < item.description.split("\n").length - 1 && (
+                        <br />
+                      )}
                     </span>
                   ))}
                 </p>
