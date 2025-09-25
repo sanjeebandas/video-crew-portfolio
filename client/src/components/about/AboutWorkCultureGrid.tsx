@@ -29,7 +29,7 @@ const AboutWorkCultureGrid = () => {
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   const handleImageError = (src: string) => {
-    setImageErrors(prev => new Set([...prev, src]));
+    setImageErrors((prev) => new Set([...prev, src]));
   };
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const AboutWorkCultureGrid = () => {
     const timer = setTimeout(() => {
       // Work culture grid animations - optimized for mobile scroll performance
       stackIn(".work-culture-card", 0.06); // Reduced from 0.1s to 0.06s for faster desktop
-      
+
       // Mobile-optimized animations with faster stagger for smoother scroll experience
       staggerFadeIn(".work-culture-mobile-card", 0.06); // Reduced from 0.2s to 0.06s for snappier mobile
       staggerFadeIn(".work-culture-tablet-card", 0.06); // Reduced from 0.2s to 0.06s for smoother tablet
@@ -78,24 +78,34 @@ const AboutWorkCultureGrid = () => {
                   <div className="w-full h-full bg-gray-800 flex items-center justify-center">
                     <div className="text-center text-white">
                       <div className="w-12 h-12 mx-auto mb-2 bg-gray-600 rounded-full flex items-center justify-center">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        <svg
+                          className="w-6 h-6"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
                         </svg>
                       </div>
-                      <p className="text-xs text-gray-400">이미지 로드 실패</p>
+                      <p className="text-xs text-muted">이미지 로드 실패</p>
                     </div>
                   </div>
                 )}
                 {/* Overlay */}
                 <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 ease-out">
                   <div className="flex flex-col gap-2">
-                    <p className="work-culture-text text-md text-gray-400 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                    <p className="work-culture-text text-md text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                       {item.subtitle}
                     </p>
                     <h3 className="work-culture-text text-2xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
                       {item.title}
                     </h3>
-                    <p className="work-culture-text text-md text-gray-400 leading-relaxed group-hover:text-gray-200 transition-colors duration-300 ease-out">
+                    <p className="work-culture-text text-md text-muted leading-relaxed group-hover:text-gray-200 transition-colors duration-300 ease-out">
                       {item.description}
                     </p>
                   </div>
@@ -118,24 +128,34 @@ const AboutWorkCultureGrid = () => {
                 <div className="w-full h-full bg-gray-800 flex items-center justify-center">
                   <div className="text-center text-white">
                     <div className="w-12 h-12 mx-auto mb-2 bg-gray-600 rounded-full flex items-center justify-center">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
                       </svg>
                     </div>
-                    <p className="text-xs text-gray-400">이미지 로드 실패</p>
+                    <p className="text-xs text-muted">이미지 로드 실패</p>
                   </div>
                 </div>
               )}
               {/* Overlay */}
               <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 ease-out">
                 <div className="flex flex-col gap-2">
-                  <p className="work-culture-text text-md text-gray-400 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                  <p className="work-culture-text text-md text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                     {workCultureItems[2].subtitle}
                   </p>
                   <h3 className="work-culture-text text-2xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
                     {workCultureItems[2].title}
                   </h3>
-                  <p className="work-culture-text text-md text-gray-400 leading-relaxed max-w-2xl group-hover:text-gray-200 transition-colors duration-300 ease-out">
+                  <p className="work-culture-text text-md text-muted leading-relaxed max-w-2xl group-hover:text-gray-200 transition-colors duration-300 ease-out">
                     {workCultureItems[2].description}
                   </p>
                 </div>
@@ -164,24 +184,34 @@ const AboutWorkCultureGrid = () => {
                   <div className="w-full h-full bg-gray-800 flex items-center justify-center">
                     <div className="text-center text-white">
                       <div className="w-12 h-12 mx-auto mb-2 bg-gray-600 rounded-full flex items-center justify-center">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        <svg
+                          className="w-6 h-6"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
                         </svg>
                       </div>
-                      <p className="text-xs text-gray-400">이미지 로드 실패</p>
+                      <p className="text-xs text-muted">이미지 로드 실패</p>
                     </div>
                   </div>
                 )}
                 {/* Overlay */}
                 <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 ease-out">
                   <div className="flex flex-col gap-2">
-                    <p className="work-culture-ipad-text text-xs text-gray-300 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                    <p className="work-culture-ipad-text text-xs text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                       {item.subtitle}
                     </p>
                     <h3 className="work-culture-ipad-text text-lg font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
                       {item.title}
                     </h3>
-                    <p className="work-culture-ipad-text text-sm text-gray-200 leading-relaxed group-hover:text-gray-100 transition-colors duration-300 ease-out">
+                    <p className="work-culture-ipad-text text-sm text-muted leading-relaxed group-hover:text-gray-100 transition-colors duration-300 ease-out">
                       {item.description}
                     </p>
                   </div>
@@ -204,24 +234,34 @@ const AboutWorkCultureGrid = () => {
                 <div className="w-full h-full bg-gray-800 flex items-center justify-center">
                   <div className="text-center text-white">
                     <div className="w-12 h-12 mx-auto mb-2 bg-gray-600 rounded-full flex items-center justify-center">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
                       </svg>
                     </div>
-                    <p className="text-xs text-gray-400">이미지 로드 실패</p>
+                    <p className="text-xs text-muted">이미지 로드 실패</p>
                   </div>
                 </div>
               )}
               {/* Overlay */}
               <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 ease-out">
                 <div className="flex flex-col gap-2">
-                  <p className="work-culture-ipad-text text-xs text-gray-300 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                  <p className="work-culture-ipad-text text-xs text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                     {workCultureItems[2].subtitle}
                   </p>
                   <h3 className="work-culture-ipad-text text-xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
                     {workCultureItems[2].title}
                   </h3>
-                  <p className="work-culture-ipad-text text-base text-gray-200 leading-relaxed max-w-2xl group-hover:text-gray-100 transition-colors duration-300 ease-out">
+                  <p className="work-culture-ipad-text text-base text-muted leading-relaxed max-w-2xl group-hover:text-gray-100 transition-colors duration-300 ease-out">
                     {workCultureItems[2].description}
                   </p>
                 </div>
@@ -250,24 +290,34 @@ const AboutWorkCultureGrid = () => {
                   <div className="w-full h-full bg-gray-800 flex items-center justify-center">
                     <div className="text-center text-white">
                       <div className="w-12 h-12 mx-auto mb-2 bg-gray-600 rounded-full flex items-center justify-center">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        <svg
+                          className="w-6 h-6"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
                         </svg>
                       </div>
-                      <p className="text-xs text-gray-400">이미지 로드 실패</p>
+                      <p className="text-xs text-muted">이미지 로드 실패</p>
                     </div>
                   </div>
                 )}
                 {/* Overlay */}
                 <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 ease-out">
                   <div className="flex flex-col gap-1">
-                    <p className="work-culture-tablet-text text-xs text-gray-300 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                    <p className="work-culture-tablet-text text-xs text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                       {item.subtitle}
                     </p>
                     <h3 className="work-culture-tablet-text text-base font-bold mb-1 group-hover:text-white transition-colors duration-300 ease-out">
                       {item.title}
                     </h3>
-                    <p className="work-culture-tablet-text text-xs text-gray-200 leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out">
+                    <p className="work-culture-tablet-text text-xs text-muted leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out">
                       {item.description}
                     </p>
                   </div>
@@ -290,24 +340,34 @@ const AboutWorkCultureGrid = () => {
                 <div className="w-full h-full bg-gray-800 flex items-center justify-center">
                   <div className="text-center text-white">
                     <div className="w-12 h-12 mx-auto mb-2 bg-gray-600 rounded-full flex items-center justify-center">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
                       </svg>
                     </div>
-                    <p className="text-xs text-gray-400">이미지 로드 실패</p>
+                    <p className="text-xs text-muted">이미지 로드 실패</p>
                   </div>
                 </div>
               )}
               {/* Overlay */}
               <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 ease-out">
                 <div className="flex flex-col gap-1">
-                  <p className="work-culture-tablet-text text-xs text-gray-300 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                  <p className="work-culture-tablet-text text-xs text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                     {workCultureItems[2].subtitle}
                   </p>
                   <h3 className="work-culture-tablet-text text-lg font-bold mb-1 group-hover:text-white transition-colors duration-300 ease-out">
                     {workCultureItems[2].title}
                   </h3>
-                  <p className="work-culture-tablet-text text-sm text-gray-200 leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out">
+                  <p className="work-culture-tablet-text text-sm text-muted leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out">
                     {workCultureItems[2].description}
                   </p>
                 </div>
@@ -331,13 +391,13 @@ const AboutWorkCultureGrid = () => {
               {/* Overlay */}
               <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent group-hover:from-black/95 group-hover:via-black/60 transition-all duration-300 ease-out">
                 <div className="flex flex-col gap-1">
-                  <p className="work-culture-mobile-text text-xs text-gray-300 uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                  <p className="work-culture-mobile-text text-xs text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                     {item.subtitle}
                   </p>
                   <h3 className="work-culture-mobile-text text-base font-bold mb-1 group-hover:text-white transition-colors duration-300 ease-out">
                     {item.title}
                   </h3>
-                  <p className="work-culture-mobile-text text-xs text-gray-200 leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out">
+                  <p className="work-culture-mobile-text text-xs text-muted leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out">
                     {item.description}
                   </p>
                 </div>

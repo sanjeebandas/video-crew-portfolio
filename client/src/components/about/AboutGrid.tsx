@@ -78,7 +78,7 @@ const AboutGrid = () => {
                       />
                     </svg>
                   </div>
-                  <p className="text-xs text-gray-400">이미지 로드 실패</p>
+                  <p className="text-xs text-muted">이미지 로드 실패</p>
                 </div>
               </div>
             )}
@@ -89,7 +89,7 @@ const AboutGrid = () => {
                 <h3 className="text-base min-[768px]:text-base min-[1024px]:text-lg font-bold group-hover:text-blue-400 transition-colors duration-300 ease-out">
                   {service.title}
                 </h3>
-                <p className="text-xs min-[768px]:text-sm min-[1024px]:text-sm text-gray-200 leading-snug min-[768px]:leading-relaxed min-[1024px]:leading-relaxed group-hover:text-white transition-colors duration-300 ease-out whitespace-pre-line">
+                <p className="text-xs min-[768px]:text-sm min-[1024px]:text-sm text-muted leading-snug min-[768px]:leading-relaxed min-[1024px]:leading-relaxed group-hover:text-white transition-colors duration-300 ease-out whitespace-pre-line">
                   {service.description}
                 </p>
               </div>
@@ -130,7 +130,7 @@ const AboutGrid = () => {
                       />
                     </svg>
                   </div>
-                  <p className="text-xs text-gray-400">이미지 로드 실패</p>
+                  <p className="text-xs text-muted">이미지 로드 실패</p>
                 </div>
               </div>
             )}

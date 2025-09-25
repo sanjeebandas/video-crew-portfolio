@@ -72,7 +72,7 @@ const Home = () => {
                   <h3 className="text-xl font-semibold mb-2">
                     홈페이지를 불러올 수 없습니다
                   </h3>
-                  <p className="text-gray-400">페이지를 새로고침해주세요.</p>
+                  <p className="text-muted">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
             }
@@ -84,10 +84,10 @@ const Home = () => {
             <div className="max-w-[1248px] mx-auto flex flex-col md:flex-row justify-between items-start md:space-x-8 lg:space-x-12 xl:space-x-16 space-y-8 md:space-y-0">
               {/* Left Title Block — responsive width adjustments */}
               <div className="w-full md:w-[280px] lg:w-[320px] xl:w-[350px] text-center md:text-left home-title-left">
-                <p className="text-sm xs:text-base md:text-lg text-gray-400 mb-2 home-subtitle">
+                <p className="text-sm xs:text-base md:text-lg text-muted mb-2 home-subtitle">
                   비디오크루의 차별점
                 </p>
-                <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-3xl font-bold leading-snug">
+                <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl font-bold leading-snug">
                   영상제작,
                   <br />
                   어떻게 하고 계신가요?
@@ -95,7 +95,7 @@ const Home = () => {
               </div>
 
               {/* Right Paragraph Block — responsive text sizing */}
-              <div className="md:pl-28 w-full md:flex-1 text-md xs:text-base sm:text-lg md:text-base lg:text-md text-gray-300 leading-relaxed text-center md:text-right home-title-right">
+              <div className="md:pl-28 w-full md:flex-1 text-md xs:text-base sm:text-lg md:text-base lg:text-md text-muted leading-relaxed text-center md:text-right home-title-right">
                 <div className="home-text-line">
                   비디오크루는 단순한 영상 제작을 넘어,
                 </div>
@@ -124,7 +124,7 @@ const Home = () => {
                   <h3 className="text-lg font-semibold mb-2">
                     서비스 섹션을 불러올 수 없습니다
                   </h3>
-                  <p className="text-gray-400">페이지를 새로고침해주세요.</p>
+                  <p className="text-muted">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
             }
@@ -153,7 +153,7 @@ const Home = () => {
                   <h3 className="text-lg font-semibold mb-2">
                     포트폴리오 섹션을 불러올 수 없습니다
                   </h3>
-                  <p className="text-gray-400">페이지를 새로고침해주세요.</p>
+                  <p className="text-muted">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
             }

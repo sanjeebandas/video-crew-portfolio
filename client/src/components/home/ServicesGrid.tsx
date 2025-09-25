@@ -85,7 +85,7 @@ const ServicesGrid = () => {
                 <h3 className="text-xs xs:text-sm sm:text-base md:text-lg font-bold text-white drop-shadow-sm">
                   {service.title}
                 </h3>
-                <p className="text-xs xs:text-sm sm:text-sm md:text-sm text-gray-100 leading-snug md:leading-relaxed drop-shadow-sm">
+                <p className="text-xs xs:text-sm sm:text-sm md:text-sm text-muted leading-snug md:leading-relaxed drop-shadow-sm">
                   {service.description}
                 </p>
               </div>

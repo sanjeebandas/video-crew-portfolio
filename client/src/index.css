@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --color-muted: rgba(255, 255, 255, 0.6);
+}
+
 html,
 body {
   @apply bg-black text-white;
