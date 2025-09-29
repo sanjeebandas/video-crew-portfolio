@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://videocrew.kr/sitemap.xml
+
+# Disallow admin routes
+Disallow: /admin/
+Disallow: /admin/login
+Disallow: /admin/dashboard
+Disallow: /admin/contacts
+Disallow: /admin/portfolio
+
+# Allow all other pages
+Allow: /about
+Allow: /process
+Allow: /portfolio
+Allow: /differentiation
+Allow: /contact
+
+# Crawl delay (optional)
+Crawl-delay: 1

@@ -1,5 +1,5 @@
 export type PortfolioItem = {
-  _id: number;
+  _id: string;
   title: string;
   category: string;
   client?: string;

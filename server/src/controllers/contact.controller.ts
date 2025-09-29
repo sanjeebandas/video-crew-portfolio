@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import ContactInquiry from "../models/ContactInquiry";
+import { sendContactNotification, sendCustomerConfirmation } from "../services/emailService";
+import { createContactNotification } from "./notification.controller";
 
 //Submit a contact inquiry (Public)
 //POST /api/contact
@@ -15,6 +17,12 @@ export const submitContactForm = async (req: Request, res: Response) => {
       budget,
       service,
       preferredDate,
+      referenceVideos,
+      websiteLinks,
+      productionPurpose,
+      uploadPlatform,
+      videoCount,
+      runningTime,
     } = req.body;
 
     if (!name || !email || !subject || !message) {
@@ -33,7 +41,60 @@ export const submitContactForm = async (req: Request, res: Response) => {
       budget,
       service,
       preferredDate,
+      referenceVideos,
+      websiteLinks,
+      productionPurpose,
+      uploadPlatform,
+      videoCount,
+      runningTime,
     });
+
+    // Create notification for new contact inquiry
+    await createContactNotification("received", inquiry);
+
+    // Send email notifications
+    try {
+      // Send notification to admin
+      await sendContactNotification({
+        name,
+        email,
+        phone,
+        company,
+        budget,
+        preferredDate,
+        service,
+        subject,
+        message,
+        referenceVideos,
+        websiteLinks,
+        productionPurpose,
+        uploadPlatform,
+        videoCount,
+        runningTime,
+      });
+
+      // Send confirmation to customer
+      await sendCustomerConfirmation({
+        name,
+        email,
+        phone,
+        company,
+        budget,
+        preferredDate,
+        service,
+        subject,
+        message,
+        referenceVideos,
+        websiteLinks,
+        productionPurpose,
+        uploadPlatform,
+        videoCount,
+        runningTime,
+      });
+    } catch (emailError) {
+      console.error('Failed to send email notifications:', emailError);
+      // Don't fail the request if email fails, just log the error
+    }
 
     res.status(201).json({
       message: "Inquiry submitted successfully",
@@ -79,6 +140,11 @@ export const updateInquiry = async (req: Request, res: Response) => {
 
     if (!updated) {
       return res.status(404).json({ message: "Inquiry not found" });
+    }
+
+    // Create notification for status update if status was changed
+    if (status) {
+      await createContactNotification("status_updated", updated);
     }
 
     res.status(200).json({

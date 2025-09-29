@@ -5,7 +5,7 @@ import {
   updateInquiry,
   deleteInquiry,
 } from "../controllers/contact.controller";
-import { authenticateAdmin } from "../middlewares/auth.middleware";
+import { authenticateToken } from "../middlewares/auth.middleware";
 
 const router = express.Router();
 
@@ -15,14 +15,14 @@ router.post("/", submitContactForm);
 
 // @route   GET /api/contact
 // @desc    Authenticated: Get all inquiries
-router.get("/", authenticateAdmin, getAllInquiries);
+router.get("/", authenticateToken, getAllInquiries);
 
 // @route   PUT /api/contact/:id
 // @desc    Authenticated: Update inquiry status and notes
-router.put("/:id", authenticateAdmin, updateInquiry);
+router.put("/:id", authenticateToken, updateInquiry);
 
 // @route   DELETE /api/contact/:id
 // @desc    Authenticated: Delete inquiry
-router.delete("/:id", authenticateAdmin, deleteInquiry);
+router.delete("/:id", authenticateToken, deleteInquiry);
 
 export default router;

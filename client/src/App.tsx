@@ -1,7 +1,12 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { Toaster } from "react-hot-toast"; 
-
+import { Toaster } from "react-hot-toast";
+import { initGSAP } from "./utils/animations";
+import { incrementPageVisit } from "./services/api";
+import InstallPrompt from "./components/common/InstallPrompt";
+import OfflineIndicator from "./components/common/OfflineIndicator";
+import ContactButton from "./components/common/ContactButton";
+import { useAuth } from "./context/AuthContext";
 
 // Public Pages
 import Home from "./pages/Home";
@@ -20,19 +25,46 @@ import ContactManager from "./admin/ContactManager";
 import PortfolioManager from "./admin/PortfolioManager";
 import PrivateRoutes from "./routes/PrivateRoute";
 import EditPortfolioPage from "./pages/EditPortfolioPage";
+import AuthGuard from "./components/admin/AuthGuard";
+import AdminRouteGuard from "./components/admin/AdminRouteGuard";
+import NotFoundClean from "./pages/NotFoundClean";
 
 function LayoutWrapper() {
   const location = useLocation();
+  const { isAuthenticated, isLoading } = useAuth();
   const isAdminRoute = location.pathname.startsWith("/admin");
+  const isAdminLogin = location.pathname === "/admin/login";
+  const isAdminDashboard =
+    (location.pathname.startsWith("/admin/dashboard") ||
+      location.pathname.startsWith("/admin/contacts") ||
+      location.pathname.startsWith("/admin/portfolio")) &&
+    isAuthenticated;
+  const is404Page = !isAuthenticated && isAdminRoute && !isLoading;
 
   // Scroll to top on route change
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
+  // Track page visits for analytics (only for public pages)
+  useEffect(() => {
+    if (!isAdminRoute) {
+      incrementPageVisit();
+    }
+  }, [location.pathname, isAdminRoute]);
+
+  // Show loading screen while checking authentication for admin routes
+  if (isLoading && isAdminRoute && !isAdminLogin) {
+    return (
+      <div className="bg-black min-h-screen flex items-center justify-center">
+        <div className="text-white text-lg">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-black text-white min-h-screen">
-      {!isAdminRoute && <Navbar />}
+      {!isAdminDashboard && !isAdminLogin && !is404Page && <Navbar />}
 
       <Routes>
         {/* --------- PUBLIC ROUTES --------- */}
@@ -45,18 +77,61 @@ function LayoutWrapper() {
 
         {/* --------- ADMIN ROUTES --------- */}
         <Route path="/admin/login" element={<Login />} />
+        <Route
+          path="/admin"
+          element={
+            <AdminRouteGuard>
+              <NotFoundClean />
+            </AdminRouteGuard>
+          }
+        />
         <Route element={<PrivateRoutes />}>
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/contacts" element={<ContactManager />} />
-          <Route path="/admin/portfolio" element={<PortfolioManager />} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AuthGuard>
+                <Dashboard />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/admin/contacts"
+            element={
+              <AuthGuard>
+                <ContactManager />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/admin/portfolio"
+            element={
+              <AuthGuard>
+                <PortfolioManager />
+              </AuthGuard>
+            }
+          />
           <Route
             path="/admin/portfolio/edit/:id"
-            element={<EditPortfolioPage />}
+            element={
+              <AuthGuard>
+                <EditPortfolioPage />
+              </AuthGuard>
+            }
           />
         </Route>
+
+        {/* --------- 404 ROUTE --------- */}
+        <Route path="*" element={<NotFoundClean />} />
       </Routes>
 
-      {!isAdminRoute && <Footer />}
+      {!isAdminDashboard && !isAdminLogin && !is404Page && <Footer />}
+
+      {/* PWA Components */}
+      <InstallPrompt />
+      <OfflineIndicator />
+
+      {/* Contact Button - Only show on public pages */}
+      {!isAdminDashboard && !isAdminLogin && !is404Page && <ContactButton />}
 
       {/* Global Hot Toast Container */}
       <Toaster
@@ -75,6 +150,10 @@ function LayoutWrapper() {
 }
 
 function App() {
+  useEffect(() => {
+    initGSAP();
+  }, []);
+
   return (
     <BrowserRouter>
       <LayoutWrapper />
