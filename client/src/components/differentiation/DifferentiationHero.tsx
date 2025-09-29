@@ -51,7 +51,7 @@ const DifferentiationHero = () => {
 
   return (
     <section className="w-full bg-black text-white py-2 md:py-6">
-      <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-0">
+      <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6">
         <div className="flex justify-center md:justify-start">
           <div className="relative w-[302px] h-[265px] md:w-full md:h-[588px] rounded-xs overflow-hidden">
             {/* Carousel Images */}

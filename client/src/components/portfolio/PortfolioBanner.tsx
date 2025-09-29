@@ -223,7 +223,7 @@ const PortfolioBanner = ({
   return (
     <section className="text-center py-16 px-4 md:px-8 lg:px-0">
       <div ref={containerRef} className="max-w-[1248px] mx-auto">
-        <p className="portfolio-subtitle text-sm tracking-[0.25em] text-white opacity-60 mb-2">
+        <p className="portfolio-subtitle text-sm tracking-[0.25em] text-white mb-2">
           PORTFOLIO
         </p>
         <h1 className="portfolio-title text-3xl md:text-5xl font-semibold text-white leading-tight mb-8">

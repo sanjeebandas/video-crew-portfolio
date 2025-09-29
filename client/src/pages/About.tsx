@@ -57,7 +57,7 @@ const About = () => {
             <div className="max-w-[1248px] mx-auto flex flex-col md:flex-row justify-between items-start md:space-x-8 lg:space-x-12 space-y-10 md:space-y-0">
               {/* Left Title Block */}
               <div className="w-full md:flex-1 text-center md:text-left about-title-left">
-                <p className="text-sm text-gray-400 mb-2">
+                <p className="text-sm text-muted mb-2">
                   Who we are, Video Crew
                 </p>
                 <h2 className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold leading-snug">
@@ -69,7 +69,7 @@ const About = () => {
               </div>
 
               {/* Right Paragraph Block */}
-              <div className="w-full md:flex-1 text-sm md:text-sm lg:text-base text-gray-300 leading-relaxed text-center md:text-right md:mt-6 lg:mt-8 about-title-right">
+              <div className="w-full md:flex-1 text-sm md:text-sm lg:text-base text-muted leading-relaxed text-center md:text-right md:mt-6 lg:mt-8 about-title-right">
                 <div className="about-text-line">
                   우리는 영상이 단순히 기술적인 가치가 있다고 생각하지 않습니다.
                   우리에게는 각각 걸어온 하나의 경험을 나타냅니다. 브랜드
@@ -120,7 +120,7 @@ const About = () => {
               <h2 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug about-section-title">
                 Core Value
               </h2>
-              <div className="about-section-text text-sm sm:text-base md:text-base lg:text-lg text-gray-400 leading-relaxed">
+              <div className="about-section-text text-sm sm:text-base md:text-base lg:text-lg text-muted leading-relaxed">
                 <div className="about-text-line">
                   당신의 이야기에 생명을 불어넣는 영상,
                 </div>
@@ -142,7 +142,7 @@ const About = () => {
                   <h3 className="text-lg font-semibold mb-2">
                     Core Value 섹션을 불러올 수 없습니다
                   </h3>
-                  <p className="text-gray-400">페이지를 새로고침해주세요.</p>
+                  <p className="text-muted">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
             }
@@ -166,7 +166,7 @@ const About = () => {
               <h2 className="text-lg sm:text-3xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug about-section-title">
                 Work Culture
               </h2>
-              <div className="about-section-text text-sm sm:text-base md:text-base lg:text-lg text-gray-400 leading-relaxed">
+              <div className="about-section-text text-sm sm:text-base md:text-base lg:text-lg text-muted leading-relaxed">
                 <div className="about-text-line">
                   비디오크루의 업무 문화는 여러 차원에서 뛰어난 크리에이터들이
                   그들의 열정을 바탕으로 합니다.
@@ -182,7 +182,7 @@ const About = () => {
                   <h3 className="text-lg font-semibold mb-2">
                     Work Culture 섹션을 불러올 수 없습니다
                   </h3>
-                  <p className="text-gray-400">페이지를 새로고침해주세요.</p>
+                  <p className="text-muted">페이지를 새로고침해주세요.</p>
                 </div>
               </div>
             }

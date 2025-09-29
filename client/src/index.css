@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* theme colors which used in the project */
+@theme {
+  --color-muted: rgba(255, 255, 255, 0.6);
+  --color-muted-2: #7E7E7E;
+}
+
 html,
 body {
   @apply bg-black text-white;

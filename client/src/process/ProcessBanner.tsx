@@ -28,13 +28,13 @@ const ProcessBanner = () => {
             <h1 className="text-5xl font-bold mb-6 leading-tight process-banner-title">
               영상제작 프로세스
             </h1>
-            <p className="text-white/45 text-base leading-relaxed process-banner-text">
+            <p className="text-muted text-base leading-relaxed process-banner-text">
               비디오크루만의 영상제작 프로세스를 통해
             </p>
-            <p className="text-white/45 text-base leading-relaxed mb-4 process-banner-text">
+            <p className="text-muted text-base leading-relaxed mb-4 process-banner-text">
               고객의 니즈에 부합하는 최적의 콘텐츠를 디자인하여 제공합니다.
             </p>
-            <p className="text-xs text-white/45 mt-6 process-banner-text">
+            <p className="text-xs text-muted mt-6 process-banner-text">
               *과업의 형태에 따라 프로세스는 변동될 수 있습니다.
             </p>
           </div>
@@ -51,7 +51,7 @@ const ProcessBanner = () => {
       </div>
 
       {/* Tablet Layout - Including iPad Pro (1024x1366) */}
-      <div className="hidden md:flex xl:hidden justify-center">
+      <div className="hidden md:flex xl:hidden justify-center px-6 py-10">
         <div className="grid grid-cols-3 w-full max-w-[900px] h-[500px] border border-white/20 overflow-hidden">
           {/* Left side - Text */}
           <div className="col-span-1 bg-black text-white px-8 py-12 flex flex-col justify-center h-full">

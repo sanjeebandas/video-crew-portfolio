@@ -173,7 +173,7 @@ function ProcessFeatureCard({
               </div>
             )}
             <div className="flex flex-col">
-              <p className="opacity-80 text-gray-300 text-sm md:text-base transition-all duration-500 ease-in-out hover:opacity-100 font-suit leading-relaxed">
+              <p className="text-muted text-sm md:text-base transition-all duration-500 ease-in-out hover:opacity-100 font-suit leading-relaxed">
                 <span className="transition-all duration-500 ease-in-out inline">
                   {displayDesc}
                 </span>

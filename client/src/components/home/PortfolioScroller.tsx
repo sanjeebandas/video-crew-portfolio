@@ -71,14 +71,14 @@ const PortfolioScroller = () => {
       {/* Text Block */}
       <div className="w-full px-4 xs:px-6 md:px-8 lg:px-6">
         <div className="max-w-[1248px] mx-auto text-center text-white mb-4 xs:mb-6">
-          <h2 className="portfolio-title text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug">
+          <h2 className="portfolio-title text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold mb-2 leading-snug">
             비디오크루의 영상 제작 사례
           </h2>
           <div className="portfolio-subtitle">
-            <div className="portfolio-text-line text-sm xs:text-base sm:text-lg md:text-base text-gray-400 leading-relaxed">
+            <div className="portfolio-text-line text-sm xs:text-base sm:text-lg md:text-base text-muted leading-relaxed">
               당신의 이야기에 생명을 불어넣는 영상
             </div>
-            <div className="portfolio-text-line text-sm xs:text-base sm:text-lg md:text-base text-gray-400 leading-relaxed">
+            <div className="portfolio-text-line text-sm xs:text-base sm:text-lg md:text-base text-muted leading-relaxed">
               모든 프레임에 가치를 담다
             </div>
           </div>
