@@ -7,9 +7,9 @@ const getUploadDir = (): string => {
   // Platform-specific environment variables
   const platformPaths = {
     // Render Premium persistent disk
-    RENDER_PERSISTENT_DISK_PATH: process.env.RENDER_PERSISTENT_DISK_PATH, //make sure to add this in the .env file once RENDER subscription is activated
+    RENDER_PERSISTENT_DISK_PATH: process.env.RENDER_PERSISTENT_DISK_PATH || "", //make sure to add this in the .env file once RENDER subscription is activated
     // Generic volume mount
-    VOLUME_MOUNT_PATH: process.env.VOLUME_MOUNT_PATH,
+    VOLUME_MOUNT_PATH: process.env.VOLUME_MOUNT_PATH || "",
     // Local development fallback
     LOCAL_UPLOAD_PATH: path.join(__dirname, "../../uploads")
   };

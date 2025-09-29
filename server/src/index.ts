@@ -56,8 +56,8 @@ const PORT = process.env.PORT || 5000;
 //  Allowed CORS origins (add more if needed)
 const allowedOrigins = [
   "http://localhost:5173", // local dev
-  "https://video-crew-portfolio.onrender.com", // current render frontend
-  "https://video-crew-portfolio-backend.onrender.com", // your backend domain
+  "https://video-crew-portfolio-frontend.onrender.com", // current render frontend
+  "https://video-crew-portfolio-lqbp.onrender.com", // your backend domain
 ];
 
 //  Dynamic CORS handling
