@@ -37,8 +37,8 @@ const BackgroundBanner = () => {
         ease: "power2.out",
         scrollTrigger: {
           trigger: element,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
+          start: "top 90%",
+          toggleActions: "play none none none",
         },
         onUpdate: function () {
           const progress = this.progress();
