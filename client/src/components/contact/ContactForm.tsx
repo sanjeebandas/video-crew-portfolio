@@ -270,8 +270,15 @@ const ContactForm = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Name / Position */}
           <div>
+            <label
+              htmlFor="namePosition"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              성함/직책
+            </label>
             <input
               type="text"
+              id="namePosition"
               name="namePosition"
               placeholder=" 김영수 대표, John Smith CEO, 홍길동 123"
               value={formData.namePosition}
@@ -289,7 +296,14 @@ const ContactForm = () => {
 
           {/* Running Time */}
           <div>
+            <label
+              htmlFor="runningTime"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              러닝타임(분량)
+            </label>
             <select
+              id="runningTime"
               name="runningTime"
               value={formData.runningTime}
               onChange={handleInputChange}
@@ -305,7 +319,7 @@ const ContactForm = () => {
                 value=""
                 className="bg-gray-900 text-white hover:bg-gray-700"
               >
-                러닝 타임 (분량)
+                선택
               </option>
               <option
                 value="30sec"
@@ -369,8 +383,15 @@ const ContactForm = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Email Address */}
           <div>
+            <label
+              htmlFor="email"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              이메일 주소
+            </label>
             <input
               type="email"
+              id="email"
               name="email"
               placeholder="example@company.com"
               value={formData.email}
@@ -388,7 +409,14 @@ const ContactForm = () => {
 
           {/* Budget */}
           <div>
+            <label
+              htmlFor="budget"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              희망 예산
+            </label>
             <select
+              id="budget"
               name="budget"
               value={formData.budget}
               onChange={handleInputChange}
@@ -404,7 +432,7 @@ const ContactForm = () => {
                 value=""
                 className="bg-gray-900 text-white hover:bg-gray-700"
               >
-                희망 예산 (리프하게 선택해주세요.)
+                선택
               </option>
               <option
                 value="under-50"
@@ -456,8 +484,15 @@ const ContactForm = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Contact Number */}
           <div>
+            <label
+              htmlFor="contact"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              연락처
+            </label>
             <input
               type="tel"
+              id="contact"
               name="contact"
               placeholder=" +82 10-1234-5678, 010-1234-5678"
               value={formData.contact}
@@ -475,7 +510,14 @@ const ContactForm = () => {
 
           {/* Production Purpose */}
           <div>
+            <label
+              htmlFor="productionPurpose"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              제작 목적
+            </label>
             <select
+              id="productionPurpose"
               name="productionPurpose"
               value={formData.productionPurpose}
               onChange={handleInputChange}
@@ -491,7 +533,7 @@ const ContactForm = () => {
                 value=""
                 className="bg-gray-900 text-white hover:bg-gray-700"
               >
-                제작 목적
+                선택
               </option>
               <option
                 value="corporate-promotion"
@@ -549,8 +591,15 @@ const ContactForm = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Company Name / Channel Name */}
           <div>
+            <label
+              htmlFor="companyChannel"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              회사명/채널명
+            </label>
             <input
               type="text"
+              id="companyChannel"
               name="companyChannel"
               placeholder="회사명 / 채널명"
               value={formData.companyChannel}
@@ -561,7 +610,14 @@ const ContactForm = () => {
 
           {/* Upload Platform */}
           <div>
+            <label
+              htmlFor="uploadPlatform"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              업로드 채널
+            </label>
             <select
+              id="uploadPlatform"
               name="uploadPlatform"
               value={formData.uploadPlatform}
               onChange={handleInputChange}
@@ -577,7 +633,7 @@ const ContactForm = () => {
                 value=""
                 className="bg-gray-900 text-white hover:bg-gray-700"
               >
-                영상을 어디에 업로드 할 예정인가요?
+                선택
               </option>
               <option
                 value="youtube"
@@ -641,8 +697,15 @@ const ContactForm = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Number of Videos */}
           <div>
+            <label
+              htmlFor="videoCount"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              영상 제작 편수
+            </label>
             <input
               type="text"
+              id="videoCount"
               name="videoCount"
               placeholder=" 5 (숫자만 입력)"
               value={formData.videoCount}
@@ -660,8 +723,15 @@ const ContactForm = () => {
 
           {/* Reference Videos */}
           <div>
+            <label
+              htmlFor="referenceVideos"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              참고 영상 링크
+            </label>
             <input
               type="text"
+              id="referenceVideos"
               name="referenceVideos"
               placeholder="참고 영상 전달 (유튜브 링크, 전 작업물 등)"
               value={formData.referenceVideos}
@@ -675,8 +745,15 @@ const ContactForm = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Delivery Date */}
           <div>
+            <label
+              htmlFor="deliveryDate"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              희망 영상 납품 일시
+            </label>
             <input
               type="text"
+              id="deliveryDate"
               name="deliveryDate"
               placeholder=" 2024년 3월 15일, 3월 말, ASAP"
               value={formData.deliveryDate}
@@ -687,15 +764,41 @@ const ContactForm = () => {
 
           {/* Website/SNS Links */}
           <div>
+            <label
+              htmlFor="websiteLinks"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              현재 보유한 홈페이지, SNS
+            </label>
             <input
               type="text"
+              id="websiteLinks"
               name="websiteLinks"
-              placeholder="여기 문장이 잘려서 보이지 않아요"
+              placeholder="홈페이지, 인스타그램, 유튜브 등 링크를 입력해주세요"
               value={formData.websiteLinks}
               onChange={handleInputChange}
               className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-150 ease-out"
             />
           </div>
+        </div>
+
+        {/* Additional Information */}
+        <div>
+          <label
+            htmlFor="additionalInfo"
+            className="block text-white text-sm font-medium mb-2"
+          >
+            추가 정보
+          </label>
+          <textarea
+            id="additionalInfo"
+            name="additionalInfo"
+            rows={4}
+            placeholder="프로젝트에 대한 추가 정보나 특별한 요청사항이 있으시면 자유롭게 작성해주세요."
+            value={formData.additionalInfo}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-150 ease-out resize-none"
+          />
         </div>
 
         {/* Privacy Policy */}
@@ -725,12 +828,16 @@ const ContactForm = () => {
           <div className="flex items-start space-x-3">
             <input
               type="checkbox"
+              id="agreeToTerms"
               name="agreeToTerms"
               checked={formData.agreeToTerms}
               onChange={handleInputChange}
               className="mt-1 h-4 w-4 bg-transparent border border-gray-600 rounded focus:outline-none hover:border-blue-400 transition-colors duration-150 ease-out cursor-pointer"
             />
-            <label className="text-gray-400 text-sm">
+            <label
+              htmlFor="agreeToTerms"
+              className="text-gray-400 text-sm cursor-pointer"
+            >
               개인정보 수집 및 이용에 동의합니다
             </label>
           </div>
