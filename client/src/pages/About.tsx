@@ -21,6 +21,15 @@ const About = () => {
     parallaxEffect,
   } = useScrollAnimations();
 
+  // Description content for the right paragraph block with line breaks
+  const aboutDescription = [
+    "우리는 영상이 단순한 기록을 넘어 ",
+    "감동을 전달하고, 생각을 움직이며, 변화를 이끌어내는 가장 강력한 매체라고 믿습니다.",
+    "비디오크루는 모든 프로젝트에 진정성을 담아",
+    "고객의 메시지가 세상에 가장 효과적으로 전달될 수 있도록 창의적인 영상을 연구하고 실현합니다.",
+    '"모든 프레임에 가치를 담아" 고객과 함께 성장하는 파트너가 되겠습니다."',
+  ];
+
   useEffect(() => {
     // Reduced delay for faster animations while maintaining lazy loading compatibility
     const timer = setTimeout(() => {
@@ -70,17 +79,11 @@ const About = () => {
 
               {/* Right Paragraph Block */}
               <div className="w-full md:flex-1 text-sm md:text-sm lg:text-base text-muted leading-relaxed text-center md:text-right md:mt-6 lg:mt-8 about-title-right">
-                <div className="about-text-line">
-                  우리는 영상이 단순히 기술적인 가치가 있다고 생각하지 않습니다.
-                  우리에게는 각각 걸어온 하나의 경험을 나타냅니다. 브랜드
-                  비디오크루는, 브랜드 스토리를 강력하고 인상적인 모습의
-                  이야기로 일련의 작업물을 거쳐 제작한 내용들이 우리가 가지고
-                  있는 비전입니다.
-                </div>
-                <div className="about-text-line">
-                  "모든 프로젝트에 가치를 담아" 고객과 함께 성장하는 파트너가
-                  되겠습니다."
-                </div>
+                {aboutDescription.map((line, index) => (
+                  <div key={index} className="about-text-line">
+                    {line}
+                  </div>
+                ))}
               </div>
             </div>
           </section>
@@ -122,13 +125,14 @@ const About = () => {
               </h2>
               <div className="about-section-text text-sm sm:text-base md:text-base lg:text-lg text-muted leading-relaxed">
                 <div className="about-text-line">
-                  당신의 이야기에 생명을 불어넣는 영상,
+                  비디오크루가 지향하는 핵심가치는 고객중심, 문제해결,
+                  솔직함으로
                 </div>
                 <div className="about-text-line block sm:hidden">
                   비디오크루가 만듭니다.
                 </div>
                 <div className="about-text-line">
-                  모든 프레임에 가치를 담다, 비디오크루
+                  항상 진정성 있게 고객을 대하는 것을 목표로 합니다.
                 </div>
               </div>
             </div>
@@ -168,8 +172,11 @@ const About = () => {
               </h2>
               <div className="about-section-text text-sm sm:text-base md:text-base lg:text-lg text-muted leading-relaxed">
                 <div className="about-text-line">
-                  비디오크루의 업무 문화는 여러 차원에서 뛰어난 크리에이터들이
-                  그들의 열정을 바탕으로 합니다.
+                  비디오크루가 일하는 문화는
+                </div>
+                <div className="about-text-line">
+                  Agile Performance, Effectiveness, ​Knowledge sharing을
+                  기반으로 합니다.
                 </div>
               </div>
             </div>
