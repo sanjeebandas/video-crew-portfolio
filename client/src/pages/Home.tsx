@@ -18,9 +18,8 @@ const Home = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const {
-    slideInFromLeft,
-    slideInFromRight,
     fadeInUp,
+    slideUpFadeIn,
     stackIn,
     staggerFadeIn,
     parallaxEffect,
@@ -30,8 +29,8 @@ const Home = () => {
     // Reduced delay for faster animations while maintaining lazy loading compatibility
     const timer = setTimeout(() => {
       // Home page scroll animations
-      slideInFromLeft(".home-title-left");
-      slideInFromRight(".home-title-right");
+      slideUpFadeIn(".home-title-left");
+      slideUpFadeIn(".home-title-right");
       fadeInUp(".home-subtitle");
       staggerFadeIn(".home-text-line", 0.06); // Reduced stagger delay
       stackIn(".home-section-card", 0.1); // Reduced stagger delay

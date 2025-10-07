@@ -15,7 +15,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const PortfolioScroller = () => {
-  const { slideInFromLeft, staggerFadeIn } = useScrollAnimations();
+  const { slideUpFadeIn } = useScrollAnimations();
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   const handleImageError = (src: string) => {
@@ -27,8 +27,8 @@ const PortfolioScroller = () => {
     gsap.registerPlugin(ScrollTrigger);
 
     // Portfolio scroller animations
-    slideInFromLeft(".portfolio-title");
-    staggerFadeIn(".portfolio-text-line", 0.1);
+    slideUpFadeIn(".portfolio-title");
+    slideUpFadeIn(".portfolio-text-line");
 
     // Synchronized row animations - row 1 fades down, row 2 fades up
     gsap.fromTo(

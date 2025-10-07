@@ -185,6 +185,35 @@ export const useScrollAnimations = () => {
     );
   };
 
+  const slideUpFadeIn = (
+    elements: string | Element | Element[],
+    options: any = {}
+  ) => {
+    const responsiveValues = getResponsiveAnimationValues();
+
+    return gsap.fromTo(
+      elements,
+      {
+        y: responsiveValues.fadeDistance + 20, // Slightly more distance for slide up effect
+        opacity: 0,
+      },
+      {
+        y: 0,
+        opacity: 1,
+        duration: responsiveValues.duration * 1.8, // Slower timing (1.8x the original)
+        ease: "power2.out",
+        ...options,
+        scrollTrigger: {
+          trigger: elements,
+          start: "top 85%",
+          end: "bottom 15%",
+          toggleActions: "play none none reverse",
+          ...options.scrollTrigger,
+        },
+      }
+    );
+  };
+
   const stackIn = (
     elements: string | Element | Element[],
     options: any = {}
@@ -266,6 +295,7 @@ export const useScrollAnimations = () => {
     slideInFromLeft,
     slideInFromRight,
     fadeInUp,
+    slideUpFadeIn,
     stackIn,
     staggerFadeIn,
     parallaxEffect,
