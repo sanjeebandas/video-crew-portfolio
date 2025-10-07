@@ -11,9 +11,7 @@ const HeroSection = () => {
 
   // Array of banner images for the carousel
   const bannerImages = [
-    "/imgs/carousel_images_for_home/carousel-1.webp",
     "/imgs/carousel_images_for_home/carousel-2.webp",
-    "/imgs/carousel_images_for_home/carousel-3.webp",
     "/imgs/carousel_images_for_home/carousel-4.webp",
   ];
 
@@ -26,22 +24,15 @@ const HeroSection = () => {
   // Array of text content for each carousel slide
   const carouselContent = [
     {
-      subtitle:
-        '"이번엔 정말 제대로 된 업체를 찾고 싶다..."\n혹시 이런 마음으로 여기까지 오셨나요?\n축하드립니다!',
       title: "비디오크루가 정답입니다!",
     },
     {
-      subtitle:
-        "전문적인 영상 제작부터\n창의적인 스토리텔링까지\n모든 것을 담당합니다",
       title: "완벽한 영상 제작 서비스",
     },
     {
-      subtitle:
-        "고객의 비전을 현실로\n만들어내는 우리만의\n특별한 노하우가 있습니다",
       title: "창의력과 기술력의 조화",
     },
     {
-      subtitle: "함께 만들어가는\n성공적인 프로젝트\n지금 시작하세요",
       title: "당신의 아이디어를 현실로!",
     },
   ];
@@ -211,13 +202,13 @@ const HeroSection = () => {
             className="min-h-[100px] xs:min-h-[110px] sm:min-h-[120px] md:min-h-[100px] lg:min-h-[110px] flex flex-col justify-end"
           >
             <h1 className="hero-subtitle text-sm xs:text-lg sm:text-xl md:text-2xl lg:text-xl xl:text-2xl font-normal leading-snug max-w-2xl xs:max-w-3xl mx-auto md:mx-0 transition-all duration-500 ease-in-out">
-              {carouselContent[currentImageIndex].subtitle
+              {carouselContent[currentImageIndex].title
                 .split("\n")
                 .map((line, index) => (
                   <span key={index}>
                     {line}
                     {index <
-                      carouselContent[currentImageIndex].subtitle.split("\n")
+                      carouselContent[currentImageIndex].title.split("\n")
                         .length -
                         1 && <br />}
                   </span>
