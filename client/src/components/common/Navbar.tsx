@@ -22,13 +22,13 @@ const Navbar = () => {
             <img
               src="/imgs/Frame 362.png"
               alt="Logo"
-              className="h-12 w-auto group-hover:scale-110 transition-all duration-300 ease-out"
+              className="h-16 w-auto group-hover:scale-110 transition-all duration-300 ease-out"
             />
           </Link>
         </div>
 
         {/* Desktop Nav */}
-        <ul className="hidden md:flex space-x-8 text-sm font-medium">
+        <ul className="hidden md:flex space-x-12 text-xl font-medium">
           <li>
             <Link
               to="/about"
@@ -37,8 +37,8 @@ const Navbar = () => {
               }`}
             >
               회사소개
-              <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-400 transition-all duration-300 ease-out ${
-                location.pathname === "/about" ? "w-full" : "w-0 group-hover:w-full"
+              <span className={`absolute -top-2 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-blue-400 rounded-full transition-all duration-300 ease-out ${
+                location.pathname === "/about" ? "opacity-100" : "opacity-0"
               }`}></span>
             </Link>
           </li>
@@ -50,8 +50,8 @@ const Navbar = () => {
               }`}
             >
               프로세스
-              <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-400 transition-all duration-300 ease-out ${
-                location.pathname === "/process" ? "w-full" : "w-0 group-hover:w-full"
+              <span className={`absolute -top-2 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-blue-400 rounded-full transition-all duration-300 ease-out ${
+                location.pathname === "/process" ? "opacity-100" : "opacity-0"
               }`}></span>
             </Link>
           </li>
@@ -63,8 +63,8 @@ const Navbar = () => {
               }`}
             >
               차별점
-              <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-400 transition-all duration-300 ease-out ${
-                location.pathname === "/differentiation" ? "w-full" : "w-0 group-hover:w-full"
+              <span className={`absolute -top-2 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-blue-400 rounded-full transition-all duration-300 ease-out ${
+                location.pathname === "/differentiation" ? "opacity-100" : "opacity-0"
               }`}></span>
             </Link>
           </li>
@@ -76,8 +76,8 @@ const Navbar = () => {
               }`}
             >
               포트폴리오
-              <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-400 transition-all duration-300 ease-out ${
-                location.pathname === "/portfolio" ? "w-full" : "w-0 group-hover:w-full"
+              <span className={`absolute -top-2 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-blue-400 rounded-full transition-all duration-300 ease-out ${
+                location.pathname === "/portfolio" ? "opacity-100" : "opacity-0"
               }`}></span>
             </Link>
           </li>
@@ -89,8 +89,8 @@ const Navbar = () => {
               }`}
             >
               문의하기
-              <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-400 transition-all duration-300 ease-out ${
-                location.pathname === "/contact" ? "w-full" : "w-0 group-hover:w-full"
+              <span className={`absolute -top-2 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-blue-400 rounded-full transition-all duration-300 ease-out ${
+                location.pathname === "/contact" ? "opacity-100" : "opacity-0"
               }`}></span>
             </Link>
           </li>
@@ -102,11 +102,11 @@ const Navbar = () => {
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? (
-            <div className="text-2xl font-bold hover:text-blue-400 transition-colors duration-200">&times;</div> // Close icon
+            <div className="text-4xl font-bold hover:text-blue-400 transition-colors duration-200">&times;</div> // Close icon
           ) : (
-            <div className="flex flex-col space-y-[6px] group">
-              <div className="w-6 h-[2px] bg-white group-hover:bg-blue-400 transition-all duration-200"></div>
-              <div className="w-6 h-[2px] bg-white group-hover:bg-blue-400 transition-all duration-200"></div>
+            <div className="flex flex-col space-y-[8px] group">
+              <div className="w-8 h-[3px] bg-white group-hover:bg-blue-400 transition-all duration-200"></div>
+              <div className="w-8 h-[3px] bg-white group-hover:bg-blue-400 transition-all duration-200"></div>
             </div>
           )}
         </div>
@@ -114,7 +114,7 @@ const Navbar = () => {
 
       {/* Mobile Menu Overlay */}
       {isOpen && (
-        <div className="md:hidden fixed inset-0 bg-black/90 backdrop-blur-sm p-6 z-40 flex flex-col items-center justify-center space-y-6 text-sm font-medium">
+        <div className="md:hidden fixed inset-0 bg-black/90 backdrop-blur-sm p-6 z-40 flex flex-col items-start justify-center space-y-8 text-xl font-medium pl-8">
           <Link
             to="/about"
             onClick={() => setIsOpen(false)}
