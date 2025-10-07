@@ -37,7 +37,11 @@ const Home = () => {
       parallaxEffect(".home-parallax-bg", 0.3);
 
       // Trusted companies section animations
-      fadeInUp(".trusted-companies-title", 0.1); // Bottom to up animation
+      slideUpFadeIn(".trusted-companies-title", {
+        scrollTrigger: {
+          start: "top 95%", // Trigger much earlier - when element is 120% down the viewport
+        }
+      }); // Bottom to up animation
     }, 120); // Reduced from 200ms to 120ms
 
     // Cleanup on unmount
@@ -137,7 +141,7 @@ const Home = () => {
           <LazyImage
             src="/imgs/Image.webp"
             alt="비디오크루 서비스 섹션 구분 디자인 이미지"
-            className="w-full h-auto object-cover mb-4 xs:mb-6 home-parallax-bg relative z-0
+            className="w-full h-auto object-cover mb-0 home-parallax-bg relative z-0
                  -mt-16 xs:-mt-20 sm:-mt-24 md:-mt-20 lg:-mt-24 xl:-mt-28"
             onImageLoad={() => {
               // Re-trigger parallax animations after image loads
@@ -157,7 +161,7 @@ const Home = () => {
               </div>
             }
           >
-            <div className="home-section-card">
+            <div className="home-section-card -mt-8">
               <PortfolioScroller />
             </div>
           </ErrorBoundary>
@@ -186,7 +190,7 @@ const Home = () => {
           />
 
           {/* Trusted by Companies Text Block */}
-          <div className="w-full text-center text-white -mt-2 xs:-mt-4 sm:-mt-20 md:-mt-24 lg:-mt-32 mb-12 xs:mb-16 md:mb-20 px-4 xs:px-6 home-section-card">
+          <div className="w-full text-center text-white -mt-20 xs:-mt-24 sm:-mt-32 md:-mt-40 lg:-mt-64 mb-12 xs:mb-16 md:mb-20 px-4 xs:px-6 home-section-card">
             <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold leading-snug trusted-companies-title">
               이미 수많은 기업이 <br />
               비디오크루와 함께 하고 있습니다.
