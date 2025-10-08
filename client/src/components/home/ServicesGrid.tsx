@@ -23,13 +23,13 @@ import { useEffect, useState } from "react";
 import { useScrollAnimations } from "../../utils/animations";
 
 const ServicesGrid = () => {
-  const { stackIn } = useScrollAnimations();
+  const { slideUpFadeIn } = useScrollAnimations();
   const [imageErrors, setImageErrors] = useState<boolean[]>(
     new Array(services.length).fill(false)
   );
 
   useEffect(() => {
-    stackIn(".service-card", 0.1);
+    slideUpFadeIn(".service-card");
   }, []);
 
   const handleImageError = (index: number) => {
