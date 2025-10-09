@@ -2,13 +2,25 @@ import { useEffect } from "react";
 import { useScrollAnimations } from "../../utils/animations";
 
 const WhyVideoCrewBoxes = () => {
-  const { staggerFadeIn } = useScrollAnimations();
+  const { staggerFadeIn, slideUpFadeIn } = useScrollAnimations();
 
   useEffect(() => {
     const timer = setTimeout(() => {
       staggerFadeIn(".diff-why-header", 0.03);
-      staggerFadeIn(".diff-why-box", 0.06);
-    }, 120);
+      // Using slideUpFadeIn for cards with slower stagger for better visibility
+      slideUpFadeIn(".diff-why-box", {
+        stagger: 0.25, // 250ms delay - slower to see each card animate
+        duration: 0.6, // 0.6s duration - slightly longer for smoother effect
+        ease: "power1.out", // Smooth easing
+        scrollTrigger: {
+          start: "top 75%", // Even earlier trigger for mobile
+          end: "bottom 25%",
+          toggleActions: "play none none none", // No reverse animation
+          markers: false, // Disable debug markers
+          refreshPriority: -1, // Higher priority for mobile
+        },
+      });
+    }, 50); // Small delay to ensure initial state is set
 
     return () => {
       clearTimeout(timer);
@@ -48,7 +60,7 @@ const WhyVideoCrewBoxes = () => {
           {items.map((item, index) => (
             <div
               key={index}
-              className="diff-why-box bg-[#0A0A0A] w-full md:w-[397px] min-h-[192px] border border-neutral-800 p-6 hover:border-blue-400/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-out group cursor-pointer"
+              className="diff-why-box bg-[#0A0A0A] w-full md:w-[397px] min-h-[192px] border border-neutral-800 p-6 hover:border-blue-400/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-out group cursor-pointer opacity-0 translate-y-8"
             >
               <div className="w-full text-center md:text-left flex flex-col justify-start h-full">
                 <h3 className="text-base md:text-md font-semibold mb-2 leading-snug group-hover:text-blue-400 transition-colors duration-300 ease-out line-clamp-2">

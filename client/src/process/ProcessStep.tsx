@@ -11,7 +11,6 @@ interface FeatureCardData {
 interface FeatureCardProps {
   data: FeatureCardData;
   alignRight?: boolean;
-  isMobile?: boolean;
 }
 
 function ImgWithFallback({
@@ -86,14 +85,9 @@ function ImgWithFallback({
   );
 }
 
-function ProcessFeatureCard({
-  data,
-  alignRight = false,
-  isMobile = false,
-}: FeatureCardProps) {
+function ProcessFeatureCard({ data, alignRight = false }: FeatureCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -112,30 +106,6 @@ function ProcessFeatureCard({
 
     return () => observer.disconnect();
   }, []);
-
-  // Reset expanded state when screen size changes
-  useEffect(() => {
-    setIsExpanded(false);
-  }, [isMobile]);
-
-  // Responsive truncation based on screen size - percentage based
-  const truncatePercentage = isMobile ? 0.6 : 0.7; // 60% on mobile/tablet, 70% on desktop
-  const truncateLength = Math.floor(data.desc.length * truncatePercentage);
-  const shortDesc =
-    data.desc.length > truncateLength
-      ? data.desc.substring(0, truncateLength) + "..."
-      : data.desc;
-  const displayDesc = isExpanded ? data.desc : shortDesc;
-  const shouldShowToggle = data.desc.length > truncateLength;
-
-  // Debug logging
-  console.log(
-    `Card ${data.stepNum}: isMobile=${isMobile}, descLength=${
-      data.desc.length
-    }, truncateLength=${truncateLength} (${Math.round(
-      truncatePercentage * 100
-    )}%), shouldShowToggle=${shouldShowToggle}`
-  );
 
   return (
     <div
@@ -162,51 +132,39 @@ function ProcessFeatureCard({
         <div
           className="p-6 w-full flex flex-col text-left mr-auto items-start"
           data-card={data.stepNum}
+          onMouseEnter={() => {
+            const title = document.querySelector(
+              `[data-card="${data.stepNum}"] h3`
+            );
+            const subtitle = document.querySelector(
+              `[data-card="${data.stepNum}"] .subtitle`
+            );
+            if (title) title.classList.add("text-blue-400");
+            if (subtitle) subtitle.classList.add("text-blue-400");
+          }}
+          onMouseLeave={() => {
+            const title = document.querySelector(
+              `[data-card="${data.stepNum}"] h3`
+            );
+            const subtitle = document.querySelector(
+              `[data-card="${data.stepNum}"] .subtitle`
+            );
+            if (title) title.classList.remove("text-blue-400");
+            if (subtitle) subtitle.classList.remove("text-blue-400");
+          }}
         >
           <div className="see-more-group">
-            <h3 className="font-bold text-lg md:text-xl mb-2 transition-colors duration-300 hover:text-blue-400 font-suit">
+            <h3 className="font-bold text-lg md:text-xl mb-2 transition-colors duration-300 font-suit">
               {data.title}
             </h3>
             {data.subtitle && (
-              <div className="subtitle text-lg md:text-xl font-medium mb-2 transition-colors duration-300 hover:text-blue-400 font-montserrat">
+              <div className="subtitle text-lg md:text-xl font-medium mb-2 transition-colors duration-300 font-montserrat">
                 {data.subtitle}
               </div>
             )}
             <div className="flex flex-col">
-              <p className="text-muted text-sm md:text-base transition-all duration-500 ease-in-out hover:opacity-100 font-suit leading-relaxed">
-                <span className="transition-all duration-500 ease-in-out inline">
-                  {displayDesc}
-                </span>
-                {shouldShowToggle && (
-                  <button
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    className="text-white text-sm ml-1 transition-all duration-300 hover:text-blue-400 hover:translate-x-1 font-montserrat font-medium cursor-pointer inline"
-                    onMouseEnter={() => {
-                      const title = document.querySelector(
-                        `[data-card="${data.stepNum}"] h3`
-                      );
-                      const subtitle = document.querySelector(
-                        `[data-card="${data.stepNum}"] .subtitle`
-                      );
-                      if (title) title.classList.add("text-blue-400");
-                      if (subtitle)
-                        subtitle.classList.add("text-blue-400");
-                    }}
-                    onMouseLeave={() => {
-                      const title = document.querySelector(
-                        `[data-card="${data.stepNum}"] h3`
-                      );
-                      const subtitle = document.querySelector(
-                        `[data-card="${data.stepNum}"] .subtitle`
-                      );
-                      if (title) title.classList.remove("text-blue-400");
-                      if (subtitle)
-                        subtitle.classList.remove("text-blue-400");
-                    }}
-                  >
-                    {isExpanded ? "See less ←" : "See more →"}
-                  </button>
-                )}
+              <p className="text-muted text-sm md:text-base transition-all duration-500 ease-in-out font-suit leading-relaxed">
+                {data.desc}
               </p>
             </div>
           </div>
@@ -277,7 +235,7 @@ const ProcessStep = () => {
   const isMobile = useIsMobile();
 
   return (
-    <div className="bg-black pt-24 process_section text-white font-sans min-h-screen px-4 py-0 w-full">
+    <div className="bg-black process_section text-white font-sans min-h-screen px-4 py-0 w-full">
       {/* TIMELINE */}
       <div className="relative w-full max-w-6xl mx-auto pt-10 pb-16">
         <div
@@ -318,7 +276,6 @@ const ProcessStep = () => {
                   <ProcessFeatureCard
                     data={step}
                     alignRight={!isMobile && isRight} // changed this from false to isRight and included !isMobile
-                    isMobile={isMobile}
                   />
                 </div>
 

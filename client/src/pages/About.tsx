@@ -5,7 +5,7 @@ import {
   refreshGSAPAnimations,
 } from "../utils/animations";
 import AboutGrid from "../components/about/AboutGrid";
-import AboutHero from "../components/about/AboutHero";
+
 import AboutWorkCultureGrid from "../components/about/AboutWorkCultureGrid";
 import SEO from "../components/common/SEO";
 import LazyImage from "../components/common/LazyImage";
@@ -62,7 +62,7 @@ const About = () => {
             console.error("About page error:", error, errorInfo);
           }}
         >
-          <section className="bg-black text-white w-full px-6 py-12 md:py-16 lg:py-20">
+          <section className="bg-black text-white w-full px-6 py-12 md:py-16 lg:py-20 relative z-10">
             <div className="max-w-[1248px] mx-auto flex flex-col md:flex-row justify-between items-start md:space-x-8 lg:space-x-12 space-y-10 md:space-y-0">
               {/* Left Title Block */}
               <div className="w-full md:flex-1 text-center md:text-left about-title-left">
@@ -88,24 +88,8 @@ const About = () => {
             </div>
           </section>
 
-          {/* HeroSection of About Page */}
-          <ErrorBoundary
-            fallback={
-              <div className="min-h-[400px] flex items-center justify-center bg-black">
-                <div className="text-center text-white">
-                  <h3 className="text-xl font-semibold mb-2">
-                    회사 소개 섹션을 불러올 수 없습니다
-                  </h3>
-                  <p className="text-gray-400">페이지를 새로고침해주세요.</p>
-                </div>
-              </div>
-            }
-          >
-            <AboutHero />
-          </ErrorBoundary>
-
           {/* Decorative Centered Separator Image */}
-          <div className="w-full -mt-12 sm:mt-6 md:-mt-16 lg:-mt-28 ">
+          <div className="w-full -mt-16 sm:mt-6 md:-mt-32 lg:-mt-44">
             <LazyImage
               src="/imgs/Image.webp"
               alt="비디오크루 Core Value 섹션 구분 디자인 이미지"
@@ -165,7 +149,7 @@ const About = () => {
           />
 
           {/* Work Culture Text Block */}
-          <div className="w-full px-6 -mt-12 md:-mt-22 lg:-mt-44">
+          <div className="w-full px-6 -mt-16 md:-mt-48 lg:-mt-72">
             <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
               <h2 className="text-lg sm:text-3xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug about-section-title">
                 Work Culture
