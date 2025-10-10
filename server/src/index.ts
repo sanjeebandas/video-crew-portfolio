@@ -11,6 +11,7 @@ import contactRoutes from "./routes/contact";
 import uploadRoutes from "./routes/upload";
 import pageVisitRoutes from "./routes/pageVisit";
 import notificationRoutes from "./routes/notifications";
+import captchaRoutes from "./routes/captcha";
 
 dotenv.config();
 
@@ -95,6 +96,7 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/pagevisit", pageVisitRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/captcha", captchaRoutes);
 
 // Debug endpoint to test CORS
 app.get("/api/test-cors", (req, res) => {

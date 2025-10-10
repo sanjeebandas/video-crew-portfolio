@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import api from "../../services/api";
 import { useContactErrorHandler } from "../../hooks/useContactErrorHandler";
@@ -21,6 +21,8 @@ const ContactForm = () => {
     websiteLinks: "",
     additionalInfo: "",
     agreeToTerms: false,
+    captchaInput: "",
+    captchaSessionId: "",
   };
 
   // Form persistence and error handling
@@ -39,8 +41,51 @@ const ContactForm = () => {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaSvg, setCaptchaSvg] = useState<string>("");
+  const [isLoadingCaptcha, setIsLoadingCaptcha] = useState(false);
 
   // Removed title animation to prevent re-triggering during form interaction
+
+  // CAPTCHA functions
+  const generateCaptcha = async () => {
+    setIsLoadingCaptcha(true);
+    try {
+      const response = await api.get("/captcha/generate");
+      setCaptchaSvg(response.data.captchaSvg);
+      updateFormData((prev) => ({
+        ...prev,
+        captchaSessionId: response.data.sessionId,
+        captchaInput: "", // Clear previous input
+      }));
+
+      // Clear any CAPTCHA-related errors
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors.captchaInput;
+        return newErrors;
+      });
+    } catch (error) {
+      console.error("Failed to generate CAPTCHA:", error);
+      toast.error("보안 문자를 불러오는데 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsLoadingCaptcha(false);
+    }
+  };
+
+  const refreshCaptcha = async () => {
+    await generateCaptcha();
+    // Clear any existing CAPTCHA errors
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors.captchaInput;
+      return newErrors;
+    });
+  };
+
+  // Generate CAPTCHA on component mount
+  useEffect(() => {
+    generateCaptcha();
+  }, []);
 
   // Validation functions
   const validateName = (name: string): boolean => {
@@ -66,6 +111,11 @@ const ContactForm = () => {
   const validateVideoCount = (count: string): boolean => {
     if (!count.trim()) return true; // Optional field
     return /^\d+$/.test(count.trim());
+  };
+
+  const validateCaptcha = (captcha: string): boolean => {
+    if (!captcha.trim()) return false;
+    return captcha.trim().length >= 4; // CAPTCHA should be at least 4 characters
   };
 
   const validateForm = (): boolean => {
@@ -100,6 +150,13 @@ const ContactForm = () => {
       !validateVideoCount(formData.videoCount)
     ) {
       newErrors.videoCount = "영상 제작 편수는 숫자만 입력해주세요.";
+    }
+
+    // CAPTCHA validation
+    if (!formData.captchaInput.trim()) {
+      newErrors.captchaInput = "보안 문자를 입력해주세요.";
+    } else if (!validateCaptcha(formData.captchaInput)) {
+      newErrors.captchaInput = "보안 문자를 올바르게 입력해주세요.";
     }
 
     setErrors(newErrors);
@@ -144,8 +201,52 @@ const ContactForm = () => {
       return;
     }
 
+    // Check if CAPTCHA is filled
+    if (!formData.captchaInput.trim()) {
+      toast.error("보안 문자를 입력해주세요.");
+      setErrors((prev) => ({
+        ...prev,
+        captchaInput: "보안 문자를 입력해주세요.",
+      }));
+      return;
+    }
+
     setIsSubmitting(true);
     clearError();
+
+    try {
+      // First verify CAPTCHA
+      const captchaResponse = await api.post("/captcha/verify", {
+        sessionId: formData.captchaSessionId,
+        userInput: formData.captchaInput,
+      });
+
+      if (!captchaResponse.data.valid) {
+        toast.error(
+          "보안 문자가 올바르지 않습니다. 새로운 보안 문자가 생성되었습니다."
+        );
+        // Generate new CAPTCHA and clear input
+        await refreshCaptcha();
+        setErrors((prev) => ({
+          ...prev,
+          captchaInput: "보안 문자를 다시 입력해주세요.",
+        }));
+        setIsSubmitting(false); // Reset submitting state
+        return;
+      }
+    } catch (captchaError: any) {
+      console.error("CAPTCHA verification failed:", captchaError);
+      toast.error(
+        "보안 문자 확인에 실패했습니다. 새로운 보안 문자가 생성되었습니다."
+      );
+      await refreshCaptcha();
+      setErrors((prev) => ({
+        ...prev,
+        captchaInput: "보안 문자를 다시 입력해주세요.",
+      }));
+      setIsSubmitting(false); // Reset submitting state
+      return;
+    }
 
     try {
       const payload = {
@@ -180,6 +281,9 @@ const ContactForm = () => {
       // Clear form data and localStorage on successful submission
       clearFormData();
       setErrors({});
+
+      // Generate new CAPTCHA for next submission
+      await generateCaptcha();
     } catch (err: any) {
       toast.dismiss();
       handleError(err);
@@ -192,6 +296,40 @@ const ContactForm = () => {
   // Retry function for failed submissions
   const handleRetry = async () => {
     await retry(async () => {
+      try {
+        // First verify CAPTCHA
+        const captchaResponse = await api.post("/captcha/verify", {
+          sessionId: formData.captchaSessionId,
+          userInput: formData.captchaInput,
+        });
+
+        if (!captchaResponse.data.valid) {
+          toast.error(
+            "보안 문자가 올바르지 않습니다. 새로운 보안 문자가 생성되었습니다."
+          );
+          // Generate new CAPTCHA and clear input
+          await refreshCaptcha();
+          setErrors((prev) => ({
+            ...prev,
+            captchaInput: "보안 문자를 다시 입력해주세요.",
+          }));
+          setIsSubmitting(false); // Reset submitting state
+          return;
+        }
+      } catch (captchaError: any) {
+        console.error("CAPTCHA verification failed:", captchaError);
+        toast.error(
+          "보안 문자 확인에 실패했습니다. 새로운 보안 문자가 생성되었습니다."
+        );
+        await refreshCaptcha();
+        setErrors((prev) => ({
+          ...prev,
+          captchaInput: "보안 문자를 다시 입력해주세요.",
+        }));
+        setIsSubmitting(false); // Reset submitting state
+        return;
+      }
+
       const payload = {
         name: formData.namePosition,
         email: formData.email,
@@ -218,6 +356,9 @@ const ContactForm = () => {
       toast.success("문의가 성공적으로 제출되었습니다!");
       clearFormData();
       setErrors({});
+
+      // Generate new CAPTCHA for next submission
+      await generateCaptcha();
     });
   };
 
@@ -286,7 +427,7 @@ const ContactForm = () => {
               className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
                 errors.namePosition
                   ? "border-red-500 focus:border-red-400"
-                  : "border-gray-600 focus:border-gray-400 hover:border-blue-400/50"
+                  : "border-white focus:border-white hover:border-white/70"
               }`}
             />
             {errors.namePosition && (
@@ -307,7 +448,7 @@ const ContactForm = () => {
               name="runningTime"
               value={formData.runningTime}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white focus:outline-none focus:border-white appearance-none hover:border-white/70 transition-colors duration-150 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -399,7 +540,7 @@ const ContactForm = () => {
               className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
                 errors.email
                   ? "border-red-500 focus:border-red-400"
-                  : "border-gray-600 focus:border-gray-400 hover:border-blue-400/50"
+                  : "border-white focus:border-white hover:border-white/70"
               }`}
             />
             {errors.email && (
@@ -420,7 +561,7 @@ const ContactForm = () => {
               name="budget"
               value={formData.budget}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white focus:outline-none focus:border-white appearance-none hover:border-white/70 transition-colors duration-150 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -500,7 +641,7 @@ const ContactForm = () => {
               className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
                 errors.contact
                   ? "border-red-500 focus:border-red-400"
-                  : "border-gray-600 focus:border-gray-400 hover:border-blue-400/50"
+                  : "border-white focus:border-white hover:border-white/70"
               }`}
             />
             {errors.contact && (
@@ -521,7 +662,7 @@ const ContactForm = () => {
               name="productionPurpose"
               value={formData.productionPurpose}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white focus:outline-none focus:border-white appearance-none hover:border-white/70 transition-colors duration-150 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -604,7 +745,7 @@ const ContactForm = () => {
               placeholder="회사명 / 채널명"
               value={formData.companyChannel}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out"
             />
           </div>
 
@@ -621,7 +762,7 @@ const ContactForm = () => {
               name="uploadPlatform"
               value={formData.uploadPlatform}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white focus:outline-none focus:border-gray-400 appearance-none hover:border-blue-400/50 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white focus:outline-none focus:border-white appearance-none hover:border-white/70 transition-colors duration-150 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -713,7 +854,7 @@ const ContactForm = () => {
               className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
                 errors.videoCount
                   ? "border-red-500 focus:border-red-400"
-                  : "border-gray-600 focus:border-gray-400 hover:border-blue-400/50"
+                  : "border-white focus:border-white hover:border-white/70"
               }`}
             />
             {errors.videoCount && (
@@ -736,7 +877,7 @@ const ContactForm = () => {
               placeholder="참고 영상 전달 (유튜브 링크, 전 작업물 등)"
               value={formData.referenceVideos}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out"
             />
           </div>
         </div>
@@ -758,7 +899,7 @@ const ContactForm = () => {
               placeholder=" 2024년 3월 15일, 3월 말, ASAP"
               value={formData.deliveryDate}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out"
             />
           </div>
 
@@ -777,7 +918,7 @@ const ContactForm = () => {
               placeholder="홈페이지, 인스타그램, 유튜브 등 링크를 입력해주세요"
               value={formData.websiteLinks}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out"
             />
           </div>
         </div>
@@ -797,31 +938,153 @@ const ContactForm = () => {
             placeholder="프로젝트에 대한 추가 정보나 특별한 요청사항이 있으시면 자유롭게 작성해주세요."
             value={formData.additionalInfo}
             onChange={handleInputChange}
-            className="w-full px-4 py-3 bg-white/5 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gray-400 hover:border-blue-400/50 transition-colors duration-150 ease-out resize-none"
+            className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out resize-none"
           />
+        </div>
+
+        {/* CAPTCHA Section */}
+        <div className="space-y-4">
+          <div>
+            <label className="block text-white text-sm font-medium mb-2">
+              보안 문자
+            </label>
+            <div className="flex items-center space-x-4">
+              {/* CAPTCHA Image */}
+              <div className="flex-shrink-0">
+                {isLoadingCaptcha ? (
+                  <div className="w-32 h-12 bg-white/5 border border-white rounded flex items-center justify-center">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                ) : captchaSvg ? (
+                  <div
+                    className="border border-white rounded bg-white p-2"
+                    dangerouslySetInnerHTML={{ __html: captchaSvg }}
+                  />
+                ) : (
+                  <div className="w-32 h-12 bg-white/5 border border-white rounded flex items-center justify-center text-gray-400 text-xs">
+                    보안 문자 로딩 중...
+                  </div>
+                )}
+              </div>
+
+              {/* Refresh Button - Icon */}
+              <button
+                type="button"
+                onClick={refreshCaptcha}
+                disabled={isLoadingCaptcha}
+                className="p-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-800 text-white rounded transition-colors duration-150"
+                title="새로고침"
+              >
+                {isLoadingCaptcha ? (
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* CAPTCHA Input - Smaller */}
+          <div>
+            <label
+              htmlFor="captchaInput"
+              className="block text-white text-sm font-medium mb-2"
+            >
+              위의 문자를 입력해주세요
+            </label>
+            <input
+              type="text"
+              id="captchaInput"
+              name="captchaInput"
+              placeholder="보안 문자 입력"
+              value={formData.captchaInput}
+              onChange={handleInputChange}
+              className={`w-48 px-3 py-2 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
+                errors.captchaInput
+                  ? "border-red-500 focus:border-red-400 bg-red-500/10"
+                  : "border-white focus:border-white hover:border-white/70"
+              }`}
+            />
+            {errors.captchaInput && (
+              <p className="text-red-400 text-sm mt-1">{errors.captchaInput}</p>
+            )}
+          </div>
         </div>
 
         {/* Privacy Policy */}
         <div className="space-y-4">
           <div className="bg-white/5 border border-gray-600 p-4 text-xs text-gray-300 leading-relaxed max-h-40 overflow-y-auto hover:border-blue-400/30 transition-colors duration-150 ease-out">
             <h3 className="text-white text-sm font-medium mb-3">
-              개인정보 수집 및 이용 동의
+              개인정보 수집 및 이용 동의서
             </h3>
-            <p className="mb-2">
-              비디오크루(이하 '회사')는 영상 제작 문의에 대한 원활한 응대 및
-              견적 제공을 위해 다음과 같은 개인정보를 수집·이용하고자 합니다.
-              아래 내용을 충분히 확인하신 후 동의 여부를 결정해 주시기 바랍니다.
-            </p>
+            <h3 className="text-white text-sm font-medium mb-3">
+              {" "}
+              비디오크루(이하 ‘회사’)는 영상 제작 문의에 대한 원활한 응대 및
+              견적 제공을 위해 다음과 같은 개인정보를 수집·이용하고자
+              합니다.아래 내용을 충분히 읽어보신 후, 동의 여부를 선택해 주시기
+              바랍니다.
+            </h3>
+
             <div className="mb-2">
-              <p className="font-medium mb-1">1. 수집 항목</p>
+              <p className="font-bold mb-1">1. 수집 항목</p>
               <p className="mb-1">
                 * 필수 항목: 성함, 직책, 이메일 주소, 연락처, 회사명 또는
-                채널명, 예산, 희망 영상 편수 및 러닝타임, 납품일시, 제작 목적
+                채널명, 예산, 희망 영상 편수 및 러닝타임, 납품 희망일시, 제작
+                목적
               </p>
               <p>
-                * 선택 항목: 참고 자료 링크(유튜브, 기존 작업물), 홈페이지 및
-                SNS 주소 등
+                * 선택 항목: 참고 자료 링크(예: 유튜브, 기존 작업물 등),
+                홈페이지 및 SNS 주소
               </p>
+            </div>
+            <br />
+            <div className="mb-2">
+              <p className="font-bold mb-1">2. 수집 및 이용 목적</p>
+              <p className="mb-1">* 영상 제작 관련 문의 응대 및 상담 진행</p>
+              <p className="mb-1">* 견적 산출 및 제안서 제공</p>
+              <p className="mb-1">* 고객 요청사항 확인 및 프로젝트 진행 관리</p>
+              <p className="mb-1">* 고객 커뮤니케이션 이력 관리</p>
+            </div>
+            <br />
+            <div className="mb-2">
+              <p className="font-bold mb-1">3. 보유 및 이용 기간</p>
+              <p className="mb-1">
+                개인정보는 수집일로부터 3년간 보관하며, 목적 달성 후 즉시
+                파기합니다.
+              </p>
+              <p className="mb-1">
+                단, 관계 법령에 따라 보존이 필요한 경우 해당 법령에서 정한 기간
+                동안 보관할 수 있습니다.
+              </p>
+            </div>
+            <br />
+            <div className="mb-2">
+              <p className="font-bold mb-1">4. 동의 거부권 및 불이익 안내</p>
+              <p className="mb-1">
+                귀하는 개인정보 수집 및 이용에 대한 동의를 거부할 수 있습니다.
+              </p>
+              <p className="mb-1">
+                단, 필수항목 동의 거부 시 영상 제작 문의 접수 및 견적 제공이
+                불가능할 수 있습니다.
+              </p>
+            </div>
+            <br />
+            <div className="mb-2">
+              <p className="font-bold mb-1">5. 개인정보 처리 관련 문의</p>
+              <p className="mb-1">담당 부서: 비디오크루 고객지원팀</p>
+              <p className="mb-1">이메일: info@learning-crew.com</p>
             </div>
           </div>
 
