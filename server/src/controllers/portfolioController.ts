@@ -93,9 +93,9 @@ export const getPortfolioItemsByCategory = async (
 
     // Mapping Korean names to English slugs (as stored in DB)
     const categoryMap: Record<string, string> = {
-      "광고 · 홍보 영상": "advertisement/promotional",
       "이러닝 영상": "e-learning",
       "기업 행사 영상": "corporate-event",
+      "광고 · 홍보 영상": "advertisement/promotional",
     };
 
     const englishCategory = categoryMap[koreanCategory];

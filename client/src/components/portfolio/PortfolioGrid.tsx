@@ -33,9 +33,9 @@ type Props = {
 };
 
 const backendCategoryMap: Record<string, string> = {
-  "advertisement/promotional": "광고 · 홍보 영상",
   "e-learning": "이러닝 영상",
   "corporate-event": "기업 행사 영상",
+  "advertisement/promotional": "광고 · 홍보 영상",
 };
 
 // Dynamic items per page based on screen size

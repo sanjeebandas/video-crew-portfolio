@@ -673,11 +673,11 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
                       <option value="" disabled>
                         Select a category
                       </option>
+                      <option value="e-learning">이러닝 영상</option>
+                      <option value="corporate-event">기업 행사 영상</option>
                       <option value="advertisement/promotional">
                         광고 · 홍보 영상
                       </option>
-                      <option value="e-learning">이러닝 영상</option>
-                      <option value="corporate-event">기업 행사 영상</option>
                     </select>
                   </div>
 
