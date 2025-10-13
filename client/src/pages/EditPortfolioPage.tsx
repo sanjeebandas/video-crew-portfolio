@@ -35,9 +35,9 @@ const initialState: PortfolioFormData = {
 };
 
 const CATEGORY_OPTIONS = [
-  { value: "advertisement/promotional", label: "광고 · 홍보 영상" },
   { value: "e-learning", label: "이러닝 영상" },
   { value: "corporate-event", label: "기업 행사 영상" },
+  { value: "advertisement/promotional", label: "광고 · 홍보 영상" },
 ];
 
 const EditPortfolioPage = () => {

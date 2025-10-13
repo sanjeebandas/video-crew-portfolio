@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
-import { useScrollAnimations, cleanupAnimations } from "../utils/animations";
-import DifferentiationHero from "../components/differentiation/DifferentiationHero";
+import { useScrollAnimations, cleanupAnimations, refreshGSAPAnimations } from "../utils/animations";
 import WhyVideoCrewBoxes from "../components/differentiation/WhyVideoCrewBoxes";
 import DifferentiationFeatureSection from "../components/differentiation/DifferentiationFeatureSection";
 import DifferentiationBackgroundBanner from "../components/differentiation/DifferentiationBackgroundBanner";
 import SEO from "../components/common/SEO";
 import ErrorBoundary from "../components/common/ErrorBoundary";
+import LazyImage from "../components/common/LazyImage";
 
 const Differentiation = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -67,8 +67,18 @@ const Differentiation = () => {
             </div>
           </section>
 
-          <DifferentiationHero />
-
+          {/* Decorative Centered Separator Image */}
+          <div className="w-full -mt-16 sm:mt-6 md:-mt-24 lg:-mt-28">
+            <LazyImage
+              src="/imgs/Image.webp"
+              alt="비디오크루 Core Value 섹션 구분 디자인 이미지"
+              className="w-full h-auto object-cover diff-separator"
+              onImageLoad={() => {
+                // Re-trigger separator animations after image loads
+                refreshGSAPAnimations(".diff-separator");
+              }}
+            />
+          </div>
           <ErrorBoundary
             fallback={
               <div className="min-h-[200px] flex items-center justify-center bg-black">

@@ -2,19 +2,19 @@ const services = [
   {
     title: "Creative Solutions",
     description:
-      "틀에 박힌 형식이 아닌,메시지의 최적화를 돕는 독창적인 아이디어를 제시합니다.",
+      "틀에 박힌 형식이 아닌,메시지의 최적화를 돕는\n독창적인 아이디어를 제시합니다.",
     image: "/imgs/image 3.webp",
   },
   {
     title: "Professional Quality",
     description:
-      "대기업과 협업했던 전문 컨설턴트들이 기획하며, 최신 장비와 기술력을 바탕으로 모든 프로젝트에 최상의 퀄리티를 보장합니다.",
+      "대기업과 협업했던 전문 컨설턴트들이 기획하며, \n최신 장비와 기술력을 바탕으로\n모든 프로젝트에 최상의 퀄리티를 보장합니다.",
     image: "/imgs/image 2.webp",
   },
   {
     title: "All-in-One Service",
     description:
-      "복잡한 영상 제작 과정, 비디오크루에서는 기획부터 최종 발표까지원스톱으로 책임져 드립니다.",
+      "복잡한 영상 제작 과정,비디오크루에서는 \n기획부터 최종 발표까지 \n원스톱으로 책임져 드립니다.",
     image: "/imgs/image 1.webp",
   },
 ];
@@ -23,13 +23,13 @@ import { useEffect, useState } from "react";
 import { useScrollAnimations } from "../../utils/animations";
 
 const ServicesGrid = () => {
-  const { stackIn } = useScrollAnimations();
+  const { slideUpFadeIn } = useScrollAnimations();
   const [imageErrors, setImageErrors] = useState<boolean[]>(
     new Array(services.length).fill(false)
   );
 
   useEffect(() => {
-    stackIn(".service-card", 0.1);
+    slideUpFadeIn(".service-card");
   }, []);
 
   const handleImageError = (index: number) => {
@@ -85,7 +85,7 @@ const ServicesGrid = () => {
                 <h3 className="text-xs xs:text-sm sm:text-base md:text-lg font-bold text-white drop-shadow-sm">
                   {service.title}
                 </h3>
-                <p className="text-xs xs:text-sm sm:text-sm md:text-sm text-muted leading-snug md:leading-relaxed drop-shadow-sm">
+                <p className="text-xs xs:text-sm sm:text-sm md:text-sm text-muted leading-snug md:leading-relaxed drop-shadow-sm whitespace-pre-line">
                   {service.description}
                 </p>
               </div>

@@ -4,14 +4,15 @@ import {
   getAllInquiries,
   updateInquiry,
   deleteInquiry,
+  contactFormRateLimit,
 } from "../controllers/contact.controller";
 import { authenticateToken } from "../middlewares/auth.middleware";
 
 const router = express.Router();
 
 // @route   POST /api/contact
-// @desc    Publicly submit contact form
-router.post("/", submitContactForm);
+// @desc    Publicly submit contact form (with rate limiting)
+router.post("/", contactFormRateLimit, submitContactForm);
 
 // @route   GET /api/contact
 // @desc    Authenticated: Get all inquiries

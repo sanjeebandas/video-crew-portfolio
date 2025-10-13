@@ -1,6 +1,6 @@
 # Email Service
 
-This service handles email notifications for the Video Crew portfolio website using Resend.
+This service handles email notifications for the Video Crew portfolio website using Nodemailer.
 
 ## Features
 
@@ -9,12 +9,17 @@ This service handles email notifications for the Video Crew portfolio website us
 - **HTML Email Templates**: Beautiful, responsive email templates with professional design
 - **Error Handling**: Graceful error handling that doesn't break the main application flow
 - **Debug Logging**: Comprehensive logging for troubleshooting
+- **SMTP Configuration**: Flexible SMTP configuration supporting Gmail, Outlook, and custom SMTP servers
 
 ## Configuration
 
 The service uses the following environment variables:
 
-- `RESEND_API_KEY`: Your Resend API key for sending emails
+- `SMTP_HOST`: SMTP server hostname (e.g., smtp.gmail.com)
+- `SMTP_PORT`: SMTP server port (e.g., 587 for TLS, 465 for SSL)
+- `SMTP_SECURE`: Whether to use SSL/TLS (true for port 465, false for port 587)
+- `SMTP_USER`: Your email address for authentication
+- `SMTP_PASS`: Your email password or app password
 
 ## Usage
 
@@ -23,7 +28,7 @@ The service uses the following environment variables:
 When a user submits the contact form, the system automatically:
 
 1. Saves the inquiry to the database
-2. Sends an email notification to `sanjeeban@learning-crew.com` (Admin)
+2. Sends an email notification to `admin@videocrew.com` (Admin)
 3. Sends a confirmation email to the customer
 4. Both emails use beautifully formatted HTML templates
 
@@ -35,29 +40,36 @@ When a user submits the contact form, the system automatically:
 - Professional customer confirmations with personalized messages
 - Reply-to properly configured for easy communication
 
-## Testing
+## SMTP Setup
 
-### Current Testing Mode
-Due to Resend's domain verification requirements, the system currently operates in **test mode**:
+### Gmail Configuration
+1. Enable 2-Factor Authentication on your Google Account
+2. Generate an App Password for "Mail"
+3. Use the app password as `SMTP_PASS` (not your regular password)
 
-- **Admin notifications**: ✅ Work perfectly (sent to `sanjeeban@learning-crew.com`)
-- **Customer confirmations**: 🔄 Sent to admin email for testing (with clear TEST MODE indicators)
+### Environment Variables
+```env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password-here
+```
 
-### Test Email Addresses
-For testing email functionality, you can use Resend's test email addresses:
+### Testing
+The application automatically verifies SMTP configuration on startup:
+- ✅ "SMTP server is ready to send emails" - Configuration is correct
+- ❌ "SMTP configuration error" - Check your credentials and settings
 
-- **Successful delivery**: `delivered@resend.dev`
-- **Bounced emails**: `bounced@resend.dev`
-- **Spam marked**: `complained@resend.dev`
+## Supported SMTP Providers
 
-You can also use labels for testing: `delivered+test1@resend.dev`
+- **Gmail**: smtp.gmail.com:587
+- **Outlook**: smtp-mail.outlook.com:587
+- **Yahoo**: smtp.mail.yahoo.com:587
+- **Custom SMTP**: Any SMTP server with authentication
 
 ### Production Setup
-To enable customer confirmation emails in production, you need to:
-
-1. **Verify a domain** at [resend.com/domains](https://resend.com/domains)
-2. **Update the sender email** in `emailService.ts` to use your verified domain
-3. **Change `NODE_ENV`** to `production` in your `.env` file
+The email system is ready for production use with proper SMTP configuration. No additional domain verification is required as with third-party services.
 
 ## Error Handling
 

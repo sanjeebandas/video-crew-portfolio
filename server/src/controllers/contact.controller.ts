@@ -2,6 +2,19 @@ import { Request, Response } from "express";
 import ContactInquiry from "../models/ContactInquiry";
 import { sendContactNotification, sendCustomerConfirmation } from "../services/emailService";
 import { createContactNotification } from "./notification.controller";
+import rateLimit from "express-rate-limit";
+
+// Security: Rate limiting for contact form (simple for portfolio website)
+export const contactFormRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 requests per windowMs
+  message: {
+    error: "Too many contact form submissions, please try again later",
+    retryAfter: "15 minutes"
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 //Submit a contact inquiry (Public)
 //POST /api/contact
@@ -25,10 +38,31 @@ export const submitContactForm = async (req: Request, res: Response) => {
       runningTime,
     } = req.body;
 
+    // Security: Basic input validation for portfolio website
     if (!name || !email || !subject || !message) {
       return res
         .status(400)
         .json({ message: "Name, email, subject, and message are required" });
+    }
+
+    // Security: Length validation 
+    if (name.length > 100) {
+      return res.status(400).json({ message: "Name must be less than 100 characters" });
+    }
+    if (email.length > 254) {
+      return res.status(400).json({ message: "Email must be less than 254 characters" });
+    }
+    if (subject.length > 200) {
+      return res.status(400).json({ message: "Subject must be less than 200 characters" });
+    }
+    if (message.length > 2000) {
+      return res.status(400).json({ message: "Message must be less than 2000 characters" });
+    }
+
+    // Security: Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
     }
 
     const inquiry = await ContactInquiry.create({
@@ -53,9 +87,11 @@ export const submitContactForm = async (req: Request, res: Response) => {
     await createContactNotification("received", inquiry);
 
     // Send email notifications
+    console.log("📧 Starting email notification process...");
     try {
+      console.log("📧 Sending admin notification...");
       // Send notification to admin
-      await sendContactNotification({
+      const adminEmailResult = await sendContactNotification({
         name,
         email,
         phone,
@@ -72,9 +108,11 @@ export const submitContactForm = async (req: Request, res: Response) => {
         videoCount,
         runningTime,
       });
+      console.log("📧 Admin notification result:", adminEmailResult);
 
+      console.log("📧 Sending customer confirmation...");
       // Send confirmation to customer
-      await sendCustomerConfirmation({
+      const customerEmailResult = await sendCustomerConfirmation({
         name,
         email,
         phone,
@@ -91,8 +129,11 @@ export const submitContactForm = async (req: Request, res: Response) => {
         videoCount,
         runningTime,
       });
+      console.log("📧 Customer confirmation result:", customerEmailResult);
+      
+      console.log("✅ All emails sent successfully!");
     } catch (emailError) {
-      console.error('Failed to send email notifications:', emailError);
+      console.error('❌ Failed to send email notifications:', emailError);
       // Don't fail the request if email fails, just log the error
     }
 

@@ -5,14 +5,14 @@ import SEO from "../components/common/SEO";
 import ErrorBoundary from "../components/common/ErrorBoundary";
 
 const categories = [
-  { label: "광고 · 홍보 영상", value: "advertisement/promotional" },
   { label: "이러닝 영상", value: "e-learning" },
   { label: "기업 행사 영상", value: "corporate-event" },
+  { label: "광고 · 홍보 영상", value: "advertisement/promotional" },
 ];
 
 const Portfolio = () => {
   const [currentFilter, setCurrentFilter] = useState(
-    "advertisement/promotional"
+    "e-learning"
   );
 
   return (

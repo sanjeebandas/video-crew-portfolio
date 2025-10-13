@@ -4,7 +4,7 @@ const Footer = () => {
       <div className="max-w-[1248px] mx-auto flex flex-col gap-6">
         {/* Logo Section */}
         <div>
-          <img src="imgs/Frame 362.png" alt="Video Crew" className="h-8" />
+          <img src="imgs/Frame 362.png" alt="Video Crew" className="h-14" />
         </div>
 
         {/* Description */}
@@ -20,7 +20,8 @@ const Footer = () => {
           <p>
             사업자 등록번호. 393-88-01627
             <br />
-            주소. 서울 성동구 연무장5가길 7 (성수동2가, 성수역 현대테라스타워) W1001호-1003호
+            주소. 서울 성동구 연무장5가길 7 (성수동2가, 성수역 현대테라스타워)
+            W1001호-1003호
             <br />
             이메일.{" "}
             <a href="mailto:info@learning-crew.com" className="">
@@ -31,7 +32,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="text-xs text-gray-500">
-          © 2025. Learning Crew all rights reserved.Site byTHREEWAY
+          © 2022. Learning Crew all rights reserved
         </div>
       </div>
     </footer>

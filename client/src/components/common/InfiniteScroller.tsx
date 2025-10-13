@@ -57,7 +57,7 @@ function CompanyItem({ name, logo }: Company) {
         <img
           src={logo}
           alt={name}
-          className="h-auto w-auto object-contain hover:scale-110 hover:opacity-80 transition-transform duration-300 cursor-pointer"
+          className="h-auto w-auto object-contain hover:scale-110 hover:opacity-80 transition-transform duration-300"
           onError={() => setError(true)}
         />
       ) : (
