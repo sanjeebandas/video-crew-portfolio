@@ -220,7 +220,7 @@ export const sendContactNotification = async (contactData: ContactFormData) => {
             
             <div class="cta-section">
               <p style="margin-bottom: 20px; color: #374151;">👉 View full details in your Contact Manager:</p>
-              <a href="https://videocrew-portfolio.vercel.app/admin/contact" class="cta-button">
+              <a href="https://videocrew-portfolio.vercel.app/admin/login" class="cta-button">
                 View Submission
               </a>
             </div>
