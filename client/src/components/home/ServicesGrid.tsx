@@ -29,7 +29,25 @@ const ServicesGrid = () => {
   );
 
   useEffect(() => {
-    slideUpFadeIn(".service-card");
+    const timer = setTimeout(() => {
+      // Using slideUpFadeIn for cards with slower stagger for better visibility
+      slideUpFadeIn(".service-card", {
+        stagger: 0.25, // 250ms delay - slower to see each card animate
+        duration: 0.6, // 0.6s duration - slightly longer for smoother effect
+        ease: "power1.out", // Smooth easing
+        scrollTrigger: {
+          start: "top 75%", // Even earlier trigger for mobile
+          end: "bottom 25%",
+          toggleActions: "play none none none", // No reverse animation
+          markers: false, // Disable debug markers
+          refreshPriority: -1, // Higher priority for mobile
+        },
+      });
+    }, 50); // Small delay to ensure initial state is set
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   const handleImageError = (index: number) => {
@@ -46,7 +64,7 @@ const ServicesGrid = () => {
         {services.map((service, idx) => (
           <div
             key={idx}
-            className="service-card relative w-[85vw] xs:w-[90vw] max-w-[280px] xs:max-w-[302px] sm:max-w-[320px] md:max-w-[360px] lg:max-w-[380px] xl:max-w-[402px] h-[180px] xs:h-[195px] sm:h-[250px] md:h-[300px] lg:h-[350px] xl:h-[425px] rounded-md overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-out hover:-translate-y-2 xs:hover:-translate-y-3 hover:border-blue-400/30 hover:shadow-lg hover:shadow-blue-400/20 hover:bg-blue-400/5"
+            className="service-card relative w-[85vw] xs:w-[90vw] max-w-[280px] xs:max-w-[302px] sm:max-w-[320px] md:max-w-[360px] lg:max-w-[380px] xl:max-w-[402px] h-[180px] xs:h-[195px] sm:h-[250px] md:h-[300px] lg:h-[350px] xl:h-[425px] rounded-md overflow-hidden shadow-md border border-white/10 transition-all duration-300 ease-out hover:-translate-y-2 xs:hover:-translate-y-3 hover:border-blue-400/30 hover:shadow-lg hover:shadow-blue-400/20 hover:bg-blue-400/5 opacity-0 translate-y-8"
           >
             {/* Image fills the card */}
             {!imageErrors[idx] ? (
