@@ -142,7 +142,7 @@ const Home = () => {
             src="/imgs/Image.webp"
             alt="비디오크루 서비스 섹션 구분 디자인 이미지"
             className="w-full h-auto object-cover mb-0 home-parallax-bg relative z-0
-                 -mt-16 xs:-mt-20 sm:-mt-24 md:-mt-20 lg:-mt-24 xl:-mt-28"
+                 -mt-16 xs:-mt-20 sm:-mt-24 md:-mt-28 lg:-mt-32 xl:-mt-36"
             onImageLoad={() => {
               // Re-trigger parallax animations after image loads
               refreshGSAPAnimations(".home-parallax-bg");
