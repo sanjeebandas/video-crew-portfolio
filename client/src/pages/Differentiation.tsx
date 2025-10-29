@@ -1,5 +1,9 @@
 import { useEffect, useRef } from "react";
-import { useScrollAnimations, cleanupAnimations, refreshGSAPAnimations } from "../utils/animations";
+import {
+  useScrollAnimations,
+  cleanupAnimations,
+  refreshGSAPAnimations,
+} from "../utils/animations";
 import WhyVideoCrewBoxes from "../components/differentiation/WhyVideoCrewBoxes";
 import DifferentiationFeatureSection from "../components/differentiation/DifferentiationFeatureSection";
 import DifferentiationBackgroundBanner from "../components/differentiation/DifferentiationBackgroundBanner";
@@ -9,15 +13,16 @@ import LazyImage from "../components/common/LazyImage";
 
 const Differentiation = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { slideInFromLeft, slideInFromRight, staggerFadeIn, stackIn } =
+  const { slideUpFadeIn, fadeInUp, staggerFadeIn, stackIn } =
     useScrollAnimations();
 
   useEffect(() => {
     // Reduced delay for faster animations while maintaining lazy loading compatibility
     const timer = setTimeout(() => {
-      // Differentiation page scroll animations
-      slideInFromLeft(".diff-title-left");
-      slideInFromRight(".diff-title-right");
+      // Differentiation page scroll animations - matching ProcessBanner style
+      slideUpFadeIn(".diff-title-left");
+      slideUpFadeIn(".diff-title-right");
+      fadeInUp(".diff-subtitle");
       staggerFadeIn(".diff-text-line", 0.06); // Reduced stagger delay
       stackIn(".diff-feature-section", 0.2); // Reduced stagger delay
     }, 120); // Reduced from 200ms to 120ms
@@ -44,10 +49,10 @@ const Differentiation = () => {
         >
           <section className="w-full bg-black text-white">
             <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 py-10 md:py-14">
-              <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+              <div className="flex flex-col justify-center items-center space-y-8">
                 {/* Left: Title Block */}
-                <div className="flex-1 diff-title-left">
-                  <h4 className="text-sm md:text-base text-muted mb-2">
+                <div className="text-center diff-title-left">
+                  <h4 className="text-sm md:text-base text-muted mb-2 diff-subtitle">
                     왜 비디오크루를 선택해야 할까요?
                   </h4>
                   <h2 className="text-2xl md:text-4xl font-bold">
@@ -56,7 +61,7 @@ const Differentiation = () => {
                 </div>
 
                 {/* Right: Paragraph Block */}
-                <div className="flex-1 max-w-2xl text-sm md:text-base leading-relaxed text-muted md:text-right diff-title-right">
+                <div className="w-full text-sm md:text-base leading-relaxed text-muted text-center diff-title-right">
                   <div className="diff-text-line">
                     컨설턴트가 스토리를 입히고, 전문 디자이너와 촬영감독, PD가
                     1:1 맞춤 설계된 영상을 제공하며, 차별화된 스토리와 다양한
@@ -67,18 +72,6 @@ const Differentiation = () => {
             </div>
           </section>
 
-          {/* Decorative Centered Separator Image */}
-          <div className="w-full -mt-16 sm:mt-6 md:-mt-24 lg:-mt-28">
-            <LazyImage
-              src="/imgs/Image.webp"
-              alt="비디오크루 Core Value 섹션 구분 디자인 이미지"
-              className="w-full h-auto object-cover diff-separator"
-              onImageLoad={() => {
-                // Re-trigger separator animations after image loads
-                refreshGSAPAnimations(".diff-separator");
-              }}
-            />
-          </div>
           <ErrorBoundary
             fallback={
               <div className="min-h-[200px] flex items-center justify-center bg-black">
@@ -177,7 +170,7 @@ const Differentiation = () => {
               <DifferentiationFeatureSection
                 number="04"
                 title="결과에 대한 자신감"
-                description="100% 고객 만족 책임 완본제! 비디오크루는 제공하는 영상의 퀄리티와 고객 만족에 대해 업계 최고 수준의 자신감을 가지고 있습니다. 만약 최종적으로 전달된 영상이 사전에 정의된 기획 의도 및 약속된 기준에서 현저히 벗어나 고객님께서 만족하지 못하실 경우."
+                description="비디오크루는 제공하는 영상의 퀄리티와 고객 만족에 대해 업계 최고 수준의 자신감을 가지고 있습니다. 만약 최종적으로 전달된 영상이 사전에 정의된 기획 의도 및 약속된 기준에서 현저히 벗어나 고객님께서 만족하지 못하실 경우, 만족하실 때까지 재수정해드립니다."
                 imageUrl="imgs/differentiation/diff_feature_image.webp"
                 reverse
               />

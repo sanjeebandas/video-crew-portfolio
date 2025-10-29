@@ -6,14 +6,19 @@ const WhyVideoCrewBoxes = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      staggerFadeIn(".diff-why-header", 0.03);
+      staggerFadeIn(".diff-why-header", {
+        stagger: 0.03,
+        scrollTrigger: {
+          start: "top 120%", // Much earlier trigger to eliminate blank space
+        }
+      });
       // Using slideUpFadeIn for cards with slower stagger for better visibility
       slideUpFadeIn(".diff-why-box", {
         stagger: 0.25, // 250ms delay - slower to see each card animate
         duration: 0.6, // 0.6s duration - slightly longer for smoother effect
         ease: "power1.out", // Smooth easing
         scrollTrigger: {
-          start: "top 75%", // Even earlier trigger for mobile
+          start: "top 120%", // Much earlier trigger to eliminate blank space - uniform for desktop and mobile
           end: "bottom 25%",
           toggleActions: "play none none none", // No reverse animation
           markers: false, // Disable debug markers
@@ -29,17 +34,18 @@ const WhyVideoCrewBoxes = () => {
   const items = [
     {
       title: "예산을 초과하는 추가 비용이 발생하진 않을까?",
-      description: "추가 비용이 발생하지 않으며, \n처음부터 투명한 가격 제시",
+      description:
+        "추가 비용이 발생하지 않으며,\n처음부터 투명한 가격 제시합니다.",
     },
     {
-      title: "기성 영상 템플릿에 내용을 끼워 맞추지는 않을까? ",
+      title: "기성 영상 템플릿에 내용을 끼워 맞추지는 않을까?",
       description:
-        "맞춤형 제작 방식으로, 고객사의 니즈를 \n100% 반영한 독창적인 영상만을 제공",
+        "맞춤형 제작 방식으로, 고객사의 니즈를 \n100% 반영한 독창적인 영상만을 제공합니다.",
     },
     {
       title: "진행 상황을 중간에 확인할 수 있을까?",
       description:
-        "주기적 보고지 제공으로 \n프로젝트 진행 과정을 투명하게 공유",
+        "주기적 보고서 제공으로 \n프로젝트 진행 과정을 투명하게 공유합니다.",
     },
   ];
 
