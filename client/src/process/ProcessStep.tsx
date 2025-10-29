@@ -180,7 +180,7 @@ const processSteps: FeatureCardData[] = [
     image: "/imgs/process/Frame 395.webp",
     title: "상담 및 목표 설정",
     subtitle: "(Consultation & Goal Setting)",
-    desc: "비디오크루는 고객님의 입장에서 먼저 고민합니다. 영상제작의 궁극적인 목적에 따라 브랜드 인지도 향상, 제품 판매 증진, 정보 전달과 기대효과, 주요 타겟 시청자",
+    desc: "비디오크루는 고객님의 입장에서 먼저 고민합니다.",
   },
   {
     stepNum: "02",
@@ -194,28 +194,28 @@ const processSteps: FeatureCardData[] = [
     image: "/imgs/process/Frame 397.webp",
     title: "프리 프로덕션 및 구성안 확정",
     subtitle: "(Pre-Production & Storyboard/Script Confirmation)",
-    desc: "확정된 기획안을 바탕으로 영상의 실제 제작을 위한 모든 세부 사항을 준비하고 설계합니다. 촬영용 최종 스크립트 작성, 각 장면의 구도와 움직임을 시각화하는 스토리보드(콘티) 제작",
+    desc: "확정된 기획안을 바탕으로 영상의 실제 제작을 위한 모든 세부 사항을 준비하고 설계합니다.",
   },
   {
     stepNum: "04",
     image: "/imgs/process/Frame 396-1.webp",
     title: "제작 및 촬영",
     subtitle: "(Production & Filming)",
-    desc: "모든 준비가 완료된 프리 프로덕션 단계를 거쳐, 전문 촬영팀이 실제 영상 촬영을 진행합니다. 프로젝트의 성격과 규모에 최적화된 촬영 장비(카메라, 조명, 음향 등)를 활용하여",
+    desc: "모든 준비가 완료된 프리 프로덕션 단계를 거쳐, 전문 촬영팀이 실제 영상 촬영을 진행합니다.",
   },
   {
     stepNum: "05",
     image: "/imgs/process/Frame 423.webp",
     title: "편집 및 후반 작업",
     subtitle: "(Editing & Post-Production)",
-    desc: "촬영된 원본 영상을 편집하여 영상의 전체적인 흐름과 리듬을 만듭니다. 컷 편집, 색 보정(Color Grading), 사운드 믹싱, 필요한 경우 2D/3D 모션 그래픽 및 CG 작업",
+    desc: "촬영된 원본 영상을 편집하여 영상의 전체적인 흐름과 리듬을 만듭니다.",
   },
   {
     stepNum: "06",
     image: "/imgs/process/Frame 396-2.webp",
     title: "최종 검토, 전달 및 활용 지원",
     subtitle: "(Final Review, Delivery & Utilization Support)",
-    desc: "완성된 영상은 내부 QA(품질 관리) 및 고객님의 최종 검토를 거쳐 최상의 퀄리티로 약속된 파일 형식(예: MP4, MOV 등) 및 사양으로 전달됩니다. 여기서 끝이 아닙니다",
+    desc: "완성된 영상은 내부 QA(품질 관리) 및 고객님의 최종 검토를 거쳐 최상의 퀄리티로 약속된 파일 형식(예: MP4, MOV 등) 및 사양으로 전달됩니다.",
   },
 ];
 

@@ -2,8 +2,6 @@ import ProcessBanner from "../process/ProcessBanner";
 import ProcessStep from "../process/ProcessStep";
 import SEO from "../components/common/SEO";
 import ErrorBoundary from "../components/common/ErrorBoundary";
-import { refreshGSAPAnimations } from "../utils/animations";
-import LazyImage from "../components/common/LazyImage";
 
 const Process = () => {
   return (
@@ -15,18 +13,6 @@ const Process = () => {
       />
       <div className="bg-black text-white relative overflow-hidden">
         <ProcessBanner />
-        {/* Decorative Centered Separator Image */}
-        <div className="w-full -mt-16 sm:mt-6 md:-mt-24 lg:-mt-28">
-          <LazyImage
-            src="/imgs/Image.webp"
-            alt="비디오크루 Core Value 섹션 구분 디자인 이미지"
-            className="w-full h-auto object-cover process-separator"
-            onImageLoad={() => {
-              // Re-trigger separator animations after image loads
-              refreshGSAPAnimations(".process-separator");
-            }}
-          />
-        </div>
         <ErrorBoundary
           onError={(error, errorInfo) => {
             console.error("Process page error:", error, errorInfo);
