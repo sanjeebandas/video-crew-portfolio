@@ -17,13 +17,8 @@ import ErrorBoundary from "../components/common/ErrorBoundary";
 const Home = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const {
-    fadeInUp,
-    slideUpFadeIn,
-    stackIn,
-    staggerFadeIn,
-    parallaxEffect,
-  } = useScrollAnimations();
+  const { fadeInUp, slideUpFadeIn, stackIn, staggerFadeIn, parallaxEffect } =
+    useScrollAnimations();
 
   useEffect(() => {
     // Reduced delay for faster animations while maintaining lazy loading compatibility
@@ -39,8 +34,8 @@ const Home = () => {
       // Trusted companies section animations
       slideUpFadeIn(".trusted-companies-title", {
         scrollTrigger: {
-          start: "top 95%", // Trigger much earlier - when element is 120% down the viewport
-        }
+          start: "top 110%", // Trigger much earlier - when element is 120% down the viewport
+        },
       }); // Bottom to up animation
     }, 120); // Reduced from 200ms to 120ms
 
@@ -161,7 +156,7 @@ const Home = () => {
               </div>
             }
           >
-            <div className="home-section-card -mt-8">
+            <div className="home-section-card -mt-4 xs:-mt-8 sm:-mt-10 md:-mt-12 lg:-mt-14 xl:-mt-22">
               <PortfolioScroller />
             </div>
           </ErrorBoundary>
@@ -190,7 +185,7 @@ const Home = () => {
           />
 
           {/* Trusted by Companies Text Block */}
-          <div className="w-full text-center text-white -mt-20 xs:-mt-24 sm:-mt-32 md:-mt-40 lg:-mt-64 mb-12 xs:mb-16 md:mb-24 px-4 xs:px-6 home-section-card">
+          <div className="w-full text-center text-white -mt-20 xs:-mt-24 sm:-mt-32 md:-mt-40 lg:-mt-72 mb-12 xs:mb-16 md:mb-24 px-4 xs:px-6 home-section-card">
             <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold leading-snug trusted-companies-title">
               이미 수많은 기업이 <br />
               비디오크루와 함께 하고 있습니다.
