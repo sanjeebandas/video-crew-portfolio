@@ -2,14 +2,12 @@ import { useEffect, useRef } from "react";
 import {
   useScrollAnimations,
   cleanupAnimations,
-  refreshGSAPAnimations,
 } from "../utils/animations";
 import WhyVideoCrewBoxes from "../components/differentiation/WhyVideoCrewBoxes";
 import DifferentiationFeatureSection from "../components/differentiation/DifferentiationFeatureSection";
 import DifferentiationBackgroundBanner from "../components/differentiation/DifferentiationBackgroundBanner";
 import SEO from "../components/common/SEO";
 import ErrorBoundary from "../components/common/ErrorBoundary";
-import LazyImage from "../components/common/LazyImage";
 
 const Differentiation = () => {
   const containerRef = useRef<HTMLDivElement>(null);
