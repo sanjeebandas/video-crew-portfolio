@@ -2,14 +2,15 @@ import { useEffect } from "react";
 import { useScrollAnimations } from "../utils/animations";
 
 const ProcessBanner = () => {
-  const { slideInFromLeft, slideInFromRight, staggerFadeIn } =
+  const { slideUpFadeIn, fadeInUp, staggerFadeIn } =
     useScrollAnimations();
 
   useEffect(() => {
-    // Process banner animations
+    // Process banner animations - matching Home page style
     const timer = setTimeout(() => {
-      slideInFromLeft(".process-title-left");
-      slideInFromRight(".process-title-right");
+      slideUpFadeIn(".process-title-left");
+      slideUpFadeIn(".process-title-right");
+      fadeInUp(".process-subtitle");
       staggerFadeIn(".process-text-line", 0.06);
     }, 120);
 
@@ -21,10 +22,10 @@ const ProcessBanner = () => {
   return (
     <section className="w-full bg-black text-white">
       <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 py-10 md:py-14">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+        <div className="flex flex-col justify-center items-center space-y-8">
           {/* Left: Title Block */}
-          <div className="flex-1 process-title-left">
-            <h4 className="text-sm md:text-base text-muted mb-2">
+          <div className="text-center process-title-left">
+            <h4 className="text-sm md:text-base text-muted mb-2 process-subtitle">
               영상제작 프로세스​
             </h4>
             <h2 className="text-2xl md:text-4xl font-bold">
@@ -33,7 +34,7 @@ const ProcessBanner = () => {
           </div>
 
           {/* Right: Paragraph Block */}
-          <div className="flex-1 max-w-2xl text-sm md:text-base leading-relaxed text-muted md:text-right process-title-right">
+          <div className="w-full text-sm md:text-base leading-relaxed text-muted text-center process-title-right">
             <div className="process-text-line">
               비디오크루만의 영상제작 프로세스를 통해 고객의 니즈에 부합하는
               최적의 콘텐츠를 디자인하여 제공합니다.​

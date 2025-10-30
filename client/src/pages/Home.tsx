@@ -17,13 +17,8 @@ import ErrorBoundary from "../components/common/ErrorBoundary";
 const Home = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const {
-    fadeInUp,
-    slideUpFadeIn,
-    stackIn,
-    staggerFadeIn,
-    parallaxEffect,
-  } = useScrollAnimations();
+  const { fadeInUp, slideUpFadeIn, stackIn, staggerFadeIn, parallaxEffect } =
+    useScrollAnimations();
 
   useEffect(() => {
     // Reduced delay for faster animations while maintaining lazy loading compatibility
@@ -39,8 +34,8 @@ const Home = () => {
       // Trusted companies section animations
       slideUpFadeIn(".trusted-companies-title", {
         scrollTrigger: {
-          start: "top 95%", // Trigger much earlier - when element is 120% down the viewport
-        }
+          start: "top 110%", // Trigger much earlier - when element is 120% down the viewport
+        },
       }); // Bottom to up animation
     }, 120); // Reduced from 200ms to 120ms
 
@@ -84,9 +79,9 @@ const Home = () => {
           </ErrorBoundary>
 
           <section className="bg-black text-white w-full px-4 xs:px-6 md:px-8 lg:px-6 py-12 xs:py-16 md:py-20 home-section-card">
-            <div className="max-w-[1248px] mx-auto flex flex-col md:flex-row justify-between items-start md:space-x-8 lg:space-x-12 xl:space-x-16 space-y-8 md:space-y-0">
+            <div className="max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-8">
               {/* Left Title Block — responsive width adjustments */}
-              <div className="w-full md:w-[280px] lg:w-[320px] xl:w-[350px] text-center md:text-left home-title-left">
+              <div className="w-full md:w-[280px] lg:w-[320px] xl:w-[350px] text-center home-title-left">
                 <p className="text-sm xs:text-base md:text-lg text-muted mb-2 home-subtitle">
                   비디오크루의 차별점
                 </p>
@@ -98,7 +93,7 @@ const Home = () => {
               </div>
 
               {/* Right Paragraph Block — responsive text sizing */}
-              <div className="md:pl-28 w-full md:flex-1 text-md xs:text-base sm:text-lg md:text-base lg:text-md text-muted leading-relaxed text-center md:text-right home-title-right">
+              <div className="w-full text-md xs:text-base sm:text-lg md:text-base lg:text-md text-muted leading-relaxed text-center home-title-right">
                 <div className="home-text-line">
                   비디오크루는 단순한 영상 제작을 넘어,
                 </div>
@@ -142,7 +137,7 @@ const Home = () => {
             src="/imgs/Image.webp"
             alt="비디오크루 서비스 섹션 구분 디자인 이미지"
             className="w-full h-auto object-cover mb-0 home-parallax-bg relative z-0
-                 -mt-16 xs:-mt-20 sm:-mt-24 md:-mt-20 lg:-mt-24 xl:-mt-28"
+                 -mt-16 xs:-mt-20 sm:-mt-24 md:-mt-28 lg:-mt-32 xl:-mt-36"
             onImageLoad={() => {
               // Re-trigger parallax animations after image loads
               refreshGSAPAnimations(".home-parallax-bg");
@@ -161,7 +156,7 @@ const Home = () => {
               </div>
             }
           >
-            <div className="home-section-card -mt-8">
+            <div className="home-section-card -mt-4 xs:-mt-8 sm:-mt-10 md:-mt-12 lg:-mt-14 xl:-mt-22">
               <PortfolioScroller />
             </div>
           </ErrorBoundary>
@@ -190,7 +185,7 @@ const Home = () => {
           />
 
           {/* Trusted by Companies Text Block */}
-          <div className="w-full text-center text-white -mt-20 xs:-mt-24 sm:-mt-32 md:-mt-40 lg:-mt-64 mb-12 xs:mb-16 md:mb-24 px-4 xs:px-6 home-section-card">
+          <div className="w-full text-center text-white -mt-20 xs:-mt-24 sm:-mt-32 md:-mt-40 lg:-mt-72 mb-12 xs:mb-16 md:mb-24 px-4 xs:px-6 home-section-card">
             <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold leading-snug trusted-companies-title">
               이미 수많은 기업이 <br />
               비디오크루와 함께 하고 있습니다.

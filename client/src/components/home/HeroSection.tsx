@@ -7,7 +7,6 @@ const HeroSection = () => {
   const [imageLoadStates, setImageLoadStates] = useState<boolean[]>([]);
   const [imageErrors, setImageErrors] = useState<boolean[]>([]);
   const heroRef = useRef<HTMLElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
 
   // Array of banner images for the carousel
   const bannerImages = [
@@ -21,25 +20,10 @@ const HeroSection = () => {
     setImageErrors(new Array(bannerImages.length).fill(false));
   }, [bannerImages.length]);
 
-  // Array of text content for each carousel slide
-  const carouselContent = [
-    {
-      title: "비디오크루가 정답입니다!",
-    },
-    {
-      title: "완벽한 영상 제작 서비스",
-    },
-    {
-      title: "창의력과 기술력의 조화",
-    },
-    {
-      title: "당신의 아이디어를 현실로!",
-    },
-  ];
 
   // Hero section animations
   useEffect(() => {
-    if (heroRef.current && textRef.current) {
+    if (heroRef.current) {
       // Initial hero animation
       const heroTimeline = gsap.timeline();
 
@@ -48,18 +32,6 @@ const HeroSection = () => {
           heroRef.current,
           { opacity: 0 },
           { opacity: 1, duration: 1, ease: "power2.out" }
-        )
-        .fromTo(
-          ".hero-subtitle",
-          { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-          "-=0.5"
-        )
-        .fromTo(
-          ".hero-title",
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, duration: 0.1, ease: "power3.inOut" },
-          "-=0.3"
         )
         .fromTo(
           ".hero-dots",
@@ -83,21 +55,6 @@ const HeroSection = () => {
     }
   }, []);
 
-  // Text animation on carousel change
-  useEffect(() => {
-    if (textRef.current) {
-      gsap.fromTo(
-        textRef.current,
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power2.out",
-        }
-      );
-    }
-  }, [currentImageIndex]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -179,9 +136,7 @@ const HeroSection = () => {
           {!imageErrors[index] && (
             <LazyImage
               src={image}
-              alt={`비디오크루 배너 이미지 ${index + 1} - ${
-                carouselContent[index].title
-              }`}
+              alt={`비디오크루 배너 이미지 ${index + 1}`}
               className="absolute top-0 left-0 w-full h-full object-cover object-[center_30%] sm:object-[center_25%] md:object-top -translate-y-2 xs:-translate-y-3 sm:-translate-y-4 md:-translate-y-5"
               onLoad={() => handleImageLoad(index)}
               onError={() => handleImageError(index)}
@@ -193,33 +148,9 @@ const HeroSection = () => {
         </div>
       ))}
 
-      {/* HeroSection Content */}
+      {/* Carousel Dots */}
       <div className="relative z-20 flex flex-col h-[80vh] justify-end items-center md:items-start text-center md:text-left">
         <div className="max-w-[1248px] mx-auto px-4 xs:px-6 md:px-8 lg:px-6 -mb-6 xs:-mb-8 w-full">
-          {/* Fixed height container for text to prevent layout shifts */}
-          <div
-            ref={textRef}
-            className="min-h-[100px] xs:min-h-[110px] sm:min-h-[120px] md:min-h-[100px] lg:min-h-[110px] flex flex-col justify-end"
-          >
-            <h1 className="hero-subtitle text-sm xs:text-lg sm:text-xl md:text-2xl lg:text-xl xl:text-2xl font-normal leading-snug max-w-2xl xs:max-w-3xl mx-auto md:mx-0 transition-all duration-500 ease-in-out">
-              {carouselContent[currentImageIndex].title
-                .split("\n")
-                .map((line, index) => (
-                  <span key={index}>
-                    {line}
-                    {index <
-                      carouselContent[currentImageIndex].title.split("\n")
-                        .length -
-                        1 && <br />}
-                  </span>
-                ))}
-            </h1>
-            <p className="hero-title mt-4 xs:mt-6 text-lg xs:text-2xl sm:text-3xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mx-auto md:mx-0 transition-all duration-500 ease-in-out">
-              {carouselContent[currentImageIndex].title}
-            </p>
-          </div>
-
-          {/* Carousel Dots - Fixed position */}
           <div className="hero-dots flex items-center justify-center md:justify-start space-x-2 xs:space-x-3 mt-6 xs:mt-8">
             {bannerImages.map((_, index) => (
               <button
