@@ -13,13 +13,8 @@ import ErrorBoundary from "../components/common/ErrorBoundary";
 
 const About = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const {
-    slideInFromLeft,
-    slideInFromRight,
-    fadeInUp,
-    staggerFadeIn,
-    parallaxEffect,
-  } = useScrollAnimations();
+  const { slideUpFadeIn, fadeInUp, staggerFadeIn, parallaxEffect } =
+    useScrollAnimations();
 
   // Description content for the right paragraph block with line breaks
   const aboutDescription = [
@@ -33,9 +28,10 @@ const About = () => {
   useEffect(() => {
     // Reduced delay for faster animations while maintaining lazy loading compatibility
     const timer = setTimeout(() => {
-      // About page scroll animations
-      slideInFromLeft(".about-title-left");
-      slideInFromRight(".about-title-right");
+      // About page scroll animations - matching Home page style
+      slideUpFadeIn(".about-title-left");
+      slideUpFadeIn(".about-title-right");
+      fadeInUp(".about-subtitle");
       staggerFadeIn(".about-text-line", 0.06); // Reduced stagger delay
       parallaxEffect(".about-separator", 0.3);
       fadeInUp(".about-section-title", 0.06);
@@ -62,23 +58,21 @@ const About = () => {
             console.error("About page error:", error, errorInfo);
           }}
         >
-          <section className="bg-black text-white w-full px-6 py-12 md:py-16 lg:py-20 relative z-10">
-            <div className="max-w-[1248px] mx-auto flex flex-col md:flex-row justify-between items-start md:space-x-8 lg:space-x-12 space-y-10 md:space-y-0">
-              {/* Left Title Block */}
-              <div className="w-full md:flex-1 text-center md:text-left about-title-left">
-                <p className="text-sm text-muted mb-2">
+          <section className="bg-black text-white w-full px-4 xs:px-6 md:px-8 lg:px-6 py-12 xs:py-16 md:py-20 relative z-10">
+            <div className="max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-8">
+              {/* Left Title Block — responsive width adjustments */}
+              <div className="w-full md:w-[450px] lg:w-[600px] xl:w-[700px] text-center about-title-left">
+                <p className="text-sm xs:text-base md:text-lg text-muted mb-2 about-subtitle">
                   Who we are, Video Crew
                 </p>
-                <h2 className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold leading-snug">
-                  스토리로 말하는 영상
-                  <br />
-                  시선을 사로잡는 영상
+                <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl font-bold leading-snug">
+                  스토리로 말하는 영상, 시선을 사로잡는 영상
                   <br />더 이상 고민하지 마세요!
                 </h2>
               </div>
 
-              {/* Right Paragraph Block */}
-              <div className="w-full md:flex-1 text-sm md:text-sm lg:text-base text-muted leading-relaxed text-center md:text-right md:mt-6 lg:mt-8 about-title-right">
+              {/* Right Paragraph Block — responsive text sizing */}
+              <div className="w-full max-w-[800px] md:max-w-[900px] lg:max-w-[1000px] text-md xs:text-base sm:text-lg md:text-base lg:text-md text-muted leading-relaxed text-center about-title-right">
                 {aboutDescription.map((line, index) => (
                   <div key={index} className="about-text-line">
                     {line}
