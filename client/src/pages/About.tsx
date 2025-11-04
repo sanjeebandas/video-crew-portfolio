@@ -61,18 +61,18 @@ const About = () => {
           <section className="bg-black text-white w-full px-4 xs:px-6 md:px-8 lg:px-6 py-12 xs:py-16 md:py-20 relative z-10">
             <div className="max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-8">
               {/* Left Title Block — responsive width adjustments */}
-              <div className="w-full md:w-[450px] lg:w-[600px] xl:w-[700px] text-center about-title-left">
-                <p className="text-sm xs:text-base md:text-lg text-muted mb-2 about-subtitle">
+              <div className="w-full md:w-[450px] lg:w-[700px] xl:w-[850px] text-center about-title-left">
+                <p className="text-2xl xs:text-3xl sm:text-4xl md:text-3xl lg:text-5xl text-muted mb-2 about-subtitle">
                   Who we are, Video Crew
                 </p>
-                <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl font-bold leading-snug">
+                <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold leading-snug">
                   스토리로 말하는 영상, 시선을 사로잡는 영상
                   <br />더 이상 고민하지 마세요!
                 </h2>
               </div>
 
               {/* Right Paragraph Block — responsive text sizing */}
-              <div className="w-full max-w-[800px] md:max-w-[900px] lg:max-w-[1000px] text-md xs:text-base sm:text-lg md:text-base lg:text-md text-muted leading-relaxed text-center about-title-right">
+              <div className="w-full max-w-[800px] md:max-w-[900px] lg:max-w-[1000px] text-lg xs:text-lg sm:text-xl md:text-lg lg:text-lg text-muted leading-relaxed text-center about-title-right">
                 {aboutDescription.map((line, index) => (
                   <div key={index} className="about-text-line">
                     {line}
