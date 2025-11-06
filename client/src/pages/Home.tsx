@@ -81,11 +81,11 @@ const Home = () => {
           <section className="bg-black text-white w-full px-4 xs:px-6 md:px-8 lg:px-6 py-12 xs:py-16 md:py-20 home-section-card">
             <div className="max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-8">
               {/* Left Title Block — responsive width adjustments */}
-              <div className="w-full md:w-[280px] lg:w-[320px] xl:w-[350px] text-center home-title-left">
-                <p className="text-sm xs:text-base md:text-lg text-muted mb-2 home-subtitle">
+              <div className="w-full md:w-[450px] lg:w-[700px] xl:w-[850px] text-center home-title-left">
+                <p className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl text-muted mb-2 home-subtitle">
                   비디오크루의 차별점
                 </p>
-                <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl font-bold leading-snug">
+                <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold leading-snug">
                   영상제작,
                   <br />
                   어떻게 하고 계신가요?
@@ -93,7 +93,7 @@ const Home = () => {
               </div>
 
               {/* Right Paragraph Block — responsive text sizing */}
-              <div className="w-full text-md xs:text-base sm:text-lg md:text-base lg:text-md text-muted leading-relaxed text-center home-title-right">
+              <div className="w-full max-w-[800px] md:max-w-[900px] lg:max-w-[1000px] text-lg xs:text-lg sm:text-xl md:text-lg lg:text-lg text-muted leading-relaxed text-center home-title-right">
                 <div className="home-text-line">
                   비디오크루는 단순한 영상 제작을 넘어,
                 </div>

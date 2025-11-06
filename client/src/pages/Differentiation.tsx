@@ -51,17 +51,18 @@ const Differentiation = () => {
             <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 py-10 md:py-14">
               <div className="flex flex-col justify-center items-center space-y-8">
                 {/* Left: Title Block */}
-                <div className="text-center diff-title-left">
-                  <h4 className="text-sm md:text-base text-muted mb-2 diff-subtitle">
-                    왜 비디오크루를 선택해야 할까요?
+                <div className="w-full md:w-[450px] lg:w-[700px] xl:w-[850px] text-center diff-title-left">
+                  <h4 className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl text-muted mb-2 diff-subtitle">
+                  Why choose Video Crew?
+
                   </h4>
-                  <h2 className="text-2xl md:text-4xl font-bold">
+                  <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold">
                     비디오크루만의 특별함
                   </h2>
                 </div>
 
                 {/* Right: Paragraph Block */}
-                <div className="w-full text-sm md:text-base leading-relaxed text-muted text-center diff-title-right">
+                <div className="w-full max-w-[800px] md:max-w-[900px] lg:max-w-[1000px] text-lg xs:text-lg sm:text-xl md:text-lg lg:text-lg leading-relaxed text-muted text-center diff-title-right">
                   <div className="diff-text-line">
                     컨설턴트가 스토리를 입히고, 전문 디자이너와 촬영감독, PD가
                     1:1 맞춤 설계된 영상을 제공하며, 차별화된 스토리와 다양한
