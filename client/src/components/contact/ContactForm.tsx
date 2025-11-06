@@ -415,7 +415,7 @@ const ContactForm = () => {
               htmlFor="namePosition"
               className="block text-white text-sm font-medium mb-2"
             >
-              성함/직책
+              성함/직책 <span className="text-red-400">*</span>
             </label>
             <input
               type="text"
@@ -423,10 +423,10 @@ const ContactForm = () => {
               name="namePosition"
               value={formData.namePosition}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
+              className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-all duration-200 ease-out ${
                 errors.namePosition
-                  ? "border-red-500 focus:border-red-400"
-                  : "border-white focus:border-white hover:border-white/70"
+                  ? "border-red-500 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
+                  : "border-white focus:border-white hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20"
               }`}
             />
             {errors.namePosition && (
@@ -447,7 +447,7 @@ const ContactForm = () => {
               name="runningTime"
               value={formData.runningTime}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-white text-white focus:outline-none focus:border-white appearance-none hover:border-white/70 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white focus:outline-none focus:border-white appearance-none hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -527,7 +527,7 @@ const ContactForm = () => {
               htmlFor="email"
               className="block text-white text-sm font-medium mb-2"
             >
-              이메일 주소
+              이메일 주소 <span className="text-red-400">*</span>
             </label>
             <input
               type="email"
@@ -535,10 +535,10 @@ const ContactForm = () => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
+              className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-all duration-200 ease-out ${
                 errors.email
-                  ? "border-red-500 focus:border-red-400"
-                  : "border-white focus:border-white hover:border-white/70"
+                  ? "border-red-500 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
+                  : "border-white focus:border-white hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20"
               }`}
             />
             {errors.email && (
@@ -559,7 +559,7 @@ const ContactForm = () => {
               name="budget"
               value={formData.budget}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-white text-white focus:outline-none focus:border-white appearance-none hover:border-white/70 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white focus:outline-none focus:border-white appearance-none hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -627,7 +627,7 @@ const ContactForm = () => {
               htmlFor="contact"
               className="block text-white text-sm font-medium mb-2"
             >
-              연락처
+              연락처 <span className="text-red-400">*</span>
             </label>
             <input
               type="tel"
@@ -635,10 +635,10 @@ const ContactForm = () => {
               name="contact"
               value={formData.contact}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
+              className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-all duration-200 ease-out ${
                 errors.contact
-                  ? "border-red-500 focus:border-red-400"
-                  : "border-white focus:border-white hover:border-white/70"
+                  ? "border-red-500 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
+                  : "border-white focus:border-white hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20"
               }`}
             />
             {errors.contact && (
@@ -659,7 +659,7 @@ const ContactForm = () => {
               name="productionPurpose"
               value={formData.productionPurpose}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-white text-white focus:outline-none focus:border-white appearance-none hover:border-white/70 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white focus:outline-none focus:border-white appearance-none hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -741,7 +741,7 @@ const ContactForm = () => {
               name="companyChannel"
               value={formData.companyChannel}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 ease-out"
             />
           </div>
 
@@ -758,7 +758,7 @@ const ContactForm = () => {
               name="uploadPlatform"
               value={formData.uploadPlatform}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-white text-white focus:outline-none focus:border-white appearance-none hover:border-white/70 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white focus:outline-none focus:border-white appearance-none hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 ease-out"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: "right 0.5rem center",
@@ -846,10 +846,10 @@ const ContactForm = () => {
               name="videoCount"
               value={formData.videoCount}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
+              className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-all duration-200 ease-out ${
                 errors.videoCount
-                  ? "border-red-500 focus:border-red-400"
-                  : "border-white focus:border-white hover:border-white/70"
+                  ? "border-red-500 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
+                  : "border-white focus:border-white hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20"
               }`}
             />
             {errors.videoCount && (
@@ -871,7 +871,7 @@ const ContactForm = () => {
               name="referenceVideos"
               value={formData.referenceVideos}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 ease-out"
             />
           </div>
         </div>
@@ -892,7 +892,7 @@ const ContactForm = () => {
               name="deliveryDate"
               value={formData.deliveryDate}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 ease-out"
             />
           </div>
 
@@ -910,7 +910,7 @@ const ContactForm = () => {
               name="websiteLinks"
               value={formData.websiteLinks}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out"
+              className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 ease-out"
             />
           </div>
         </div>
@@ -930,7 +930,7 @@ const ContactForm = () => {
             placeholder="프로젝트에 대한 추가 정보나 특별한 요청사항이 있으시면 자유롭게 작성해주세요."
             value={formData.additionalInfo}
             onChange={handleInputChange}
-            className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out resize-none"
+            className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 ease-out resize-none"
           />
         </div>
 
@@ -994,7 +994,7 @@ const ContactForm = () => {
               htmlFor="captchaInput"
               className="block text-white text-sm font-medium mb-2"
             >
-              위의 문자를 입력해주세요
+              위의 문자를 입력해주세요 <span className="text-red-400">*</span>
             </label>
             <input
               type="text"
@@ -1002,10 +1002,10 @@ const ContactForm = () => {
               name="captchaInput"
               value={formData.captchaInput}
               onChange={handleInputChange}
-              className={`w-48 px-3 py-2 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
+              className={`w-48 px-3 py-2 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-all duration-200 ease-out ${
                 errors.captchaInput
-                  ? "border-red-500 focus:border-red-400 bg-red-500/10"
-                  : "border-white focus:border-white hover:border-white/70"
+                  ? "border-red-500 focus:border-red-400 bg-red-500/10 focus:ring-2 focus:ring-red-500/20"
+                  : "border-white focus:border-white hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20"
               }`}
             />
             {errors.captchaInput && (
@@ -1086,13 +1086,13 @@ const ContactForm = () => {
               name="agreeToTerms"
               checked={formData.agreeToTerms}
               onChange={handleInputChange}
-              className="mt-1 h-4 w-4 bg-transparent border border-gray-600 rounded focus:outline-none hover:border-blue-400 transition-colors duration-150 ease-out cursor-pointer"
+              className="mt-1 h-4 w-4 bg-transparent border border-gray-600 rounded focus:outline-none hover:border-blue-400/50 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/10 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 ease-out cursor-pointer"
             />
             <label
               htmlFor="agreeToTerms"
               className="text-gray-400 text-sm cursor-pointer"
             >
-              개인정보 수집 및 이용에 동의합니다
+              개인정보 수집 및 이용에 동의합니다 <span className="text-red-400">*</span>
             </label>
           </div>
         </div>
