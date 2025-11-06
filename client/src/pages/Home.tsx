@@ -93,7 +93,7 @@ const Home = () => {
               </div>
 
               {/* Right Paragraph Block — responsive text sizing */}
-              <div className="w-full max-w-[800px] md:max-w-[900px] lg:max-w-[1000px] text-lg xs:text-lg sm:text-xl md:text-lg lg:text-lg text-muted leading-relaxed text-center home-title-right">
+              <div className="w-full max-w-[800px] md:max-w-[900px] lg:max-w-[1000px] text-lg xs:text-lg sm:text-xl md:text-lg lg:text-xl text-muted leading-relaxed text-center home-title-right">
                 <div className="home-text-line">
                   비디오크루는 단순한 영상 제작을 넘어,
                 </div>

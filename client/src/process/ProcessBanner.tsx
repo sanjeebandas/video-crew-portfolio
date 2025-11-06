@@ -34,7 +34,7 @@ const ProcessBanner = () => {
           </div>
 
           {/* Right: Paragraph Block */}
-          <div className="w-full max-w-[800px] md:max-w-[900px] lg:max-w-[1000px] text-lg xs:text-lg sm:text-xl md:text-lg lg:text-lg leading-relaxed text-muted text-center process-title-right">
+          <div className="w-full max-w-[800px] md:max-w-[900px] lg:max-w-[1000px] text-lg xs:text-lg sm:text-xl md:text-lg lg:text-xl leading-relaxed text-muted text-center process-title-right">
             <div className="process-text-line">
               비디오크루만의 영상제작 프로세스를 통해 고객의 니즈에 부합하는
               최적의 콘텐츠를 디자인하여 제공합니다.​

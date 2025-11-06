@@ -421,7 +421,6 @@ const ContactForm = () => {
               type="text"
               id="namePosition"
               name="namePosition"
-              placeholder=" 김영수 대표, John Smith CEO, 홍길동 123"
               value={formData.namePosition}
               onChange={handleInputChange}
               className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
@@ -534,7 +533,6 @@ const ContactForm = () => {
               type="email"
               id="email"
               name="email"
-              placeholder="example@company.com"
               value={formData.email}
               onChange={handleInputChange}
               className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
@@ -635,7 +633,6 @@ const ContactForm = () => {
               type="tel"
               id="contact"
               name="contact"
-              placeholder=" +82 10-1234-5678, 010-1234-5678"
               value={formData.contact}
               onChange={handleInputChange}
               className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
@@ -742,7 +739,6 @@ const ContactForm = () => {
               type="text"
               id="companyChannel"
               name="companyChannel"
-              placeholder="회사명 / 채널명"
               value={formData.companyChannel}
               onChange={handleInputChange}
               className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out"
@@ -848,7 +844,6 @@ const ContactForm = () => {
               type="text"
               id="videoCount"
               name="videoCount"
-              placeholder=" 5 (숫자만 입력)"
               value={formData.videoCount}
               onChange={handleInputChange}
               className={`w-full px-4 py-3 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
@@ -874,7 +869,6 @@ const ContactForm = () => {
               type="text"
               id="referenceVideos"
               name="referenceVideos"
-              placeholder="참고 영상 전달 (유튜브 링크, 전 작업물 등)"
               value={formData.referenceVideos}
               onChange={handleInputChange}
               className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out"
@@ -896,7 +890,6 @@ const ContactForm = () => {
               type="text"
               id="deliveryDate"
               name="deliveryDate"
-              placeholder=" 2024년 3월 15일, 3월 말, ASAP"
               value={formData.deliveryDate}
               onChange={handleInputChange}
               className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out"
@@ -915,7 +908,6 @@ const ContactForm = () => {
               type="text"
               id="websiteLinks"
               name="websiteLinks"
-              placeholder="홈페이지, 인스타그램, 유튜브 등 링크를 입력해주세요"
               value={formData.websiteLinks}
               onChange={handleInputChange}
               className="w-full px-4 py-3 bg-white/5 border border-white text-white placeholder-gray-400 focus:outline-none focus:border-white hover:border-white/70 transition-colors duration-150 ease-out"
@@ -1008,7 +1000,6 @@ const ContactForm = () => {
               type="text"
               id="captchaInput"
               name="captchaInput"
-              placeholder="보안 문자 입력"
               value={formData.captchaInput}
               onChange={handleInputChange}
               className={`w-48 px-3 py-2 bg-white/5 border text-white placeholder-gray-400 focus:outline-none transition-colors duration-150 ease-out ${
