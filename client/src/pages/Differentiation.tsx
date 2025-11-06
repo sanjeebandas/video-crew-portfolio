@@ -1,15 +1,10 @@
 import { useEffect, useRef } from "react";
-import {
-  useScrollAnimations,
-  cleanupAnimations,
-  refreshGSAPAnimations,
-} from "../utils/animations";
+import { useScrollAnimations, cleanupAnimations } from "../utils/animations";
 import WhyVideoCrewBoxes from "../components/differentiation/WhyVideoCrewBoxes";
 import DifferentiationFeatureSection from "../components/differentiation/DifferentiationFeatureSection";
 import DifferentiationBackgroundBanner from "../components/differentiation/DifferentiationBackgroundBanner";
 import SEO from "../components/common/SEO";
 import ErrorBoundary from "../components/common/ErrorBoundary";
-import LazyImage from "../components/common/LazyImage";
 
 const Differentiation = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -53,8 +48,7 @@ const Differentiation = () => {
                 {/* Left: Title Block */}
                 <div className="w-full md:w-[450px] lg:w-[700px] xl:w-[850px] text-center diff-title-left">
                   <h4 className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl text-muted mb-2 diff-subtitle">
-                  Why choose Video Crew?
-
+                    Why choose Video Crew?
                   </h4>
                   <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold">
                     비디오크루만의 특별함
