@@ -149,12 +149,11 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
   const validateForm = (): boolean => {
     const newErrors: {[key: string]: string} = {};
 
-    // Title validation
+    // Title validation - allow special characters (e.g., "신세계I&C")
     if (!formData.title.trim()) {
       newErrors.title = "프로젝트 제목을 입력해주세요.";
-    } else if (!validateName(formData.title)) {
-      newErrors.title = "프로젝트 제목은 한글, 영문, 숫자를 포함할 수 있지만 특수문자는 사용할 수 없습니다.";
     }
+    // Title can now contain any characters including special characters
 
     // Client name validation (optional field)
     if (formData.client && formData.client.trim() && !validateName(formData.client)) {
