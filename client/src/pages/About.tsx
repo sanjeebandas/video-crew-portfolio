@@ -96,10 +96,10 @@ const About = () => {
           {/* Core Value Text Block */}
           <div className="w-full px-6 -mt-4 sm:-mt-12 md:-mt-14 lg:-mt-20">
             <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
-              <h2 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug about-section-title">
+              <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold mb-2 leading-snug about-section-title">
                 Core Value
               </h2>
-              <div className="about-section-text text-sm sm:text-base md:text-base lg:text-lg text-muted leading-relaxed">
+              <div className="about-section-text text-base xs:text-lg sm:text-xl md:text-lg text-muted leading-relaxed">
                 <div className="about-text-line">
                   비디오크루가 지향하는 핵심가치는 고객중심, 문제해결,
                   솔직함으로
@@ -143,10 +143,10 @@ const About = () => {
           {/* Work Culture Text Block */}
           <div className="w-full px-6 -mt-16 md:-mt-48 lg:-mt-72">
             <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
-              <h2 className="text-lg sm:text-3xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug about-section-title">
+              <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold mb-2 leading-snug about-section-title">
                 Work Culture
               </h2>
-              <div className="about-section-text text-sm sm:text-base md:text-base lg:text-lg text-muted leading-relaxed">
+              <div className="about-section-text text-base xs:text-lg sm:text-xl md:text-lg text-muted leading-relaxed">
                 <div className="about-text-line">
                   비디오크루가 일하는 문화는
                 </div>
