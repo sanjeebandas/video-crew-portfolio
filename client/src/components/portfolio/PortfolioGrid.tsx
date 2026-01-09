@@ -274,7 +274,7 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
                   loadingMore 
                     ? 'bg-blue-400 cursor-not-allowed' 
                     : 'bg-blue-500 hover:bg-blue-600'
-                } text-white font-semibold py-3 px-8 rounded-full transition duration-300 flex items-center gap-2`}
+                } text-white font-semibold py-4 px-14 text-lg rounded-full transition duration-300 flex items-center gap-2`}
               >
                 {loadingMore ? (
                   <>

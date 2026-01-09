@@ -52,7 +52,7 @@ const WhyVideoCrewBoxes = () => {
               key={index}
               className="diff-why-box bg-[#0A0A0A] w-full md:w-[397px] min-h-[192px] border border-neutral-800 p-6 hover:border-blue-400/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-out group cursor-pointer opacity-0 translate-y-8"
             >
-              <div className="w-full text-center flex flex-col justify-start h-full">
+              <div className="w-full text-center flex flex-col justify-center h-full">
                 <h3 className="text-base md:text-md font-semibold mb-2 leading-snug group-hover:text-blue-400 transition-colors duration-300 ease-out line-clamp-2">
                   {item.title}
                 </h3>

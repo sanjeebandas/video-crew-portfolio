@@ -133,7 +133,7 @@ const About = () => {
           <LazyImage
             src="/imgs/Image-1.webp"
             alt="비디오크루 Work Culture 섹션 구분 디자인 이미지"
-            className="w-full h-auto object-cover -mt-8 sm:mt-16 about-separator"
+            className="w-full h-auto object-cover -mt-16 sm:mt-4 about-separator"
             onImageLoad={() => {
               // Re-trigger separator animations after image loads
               refreshGSAPAnimations(".about-separator");
@@ -141,7 +141,7 @@ const About = () => {
           />
 
           {/* Work Culture Text Block */}
-          <div className="w-full px-6 -mt-16 md:-mt-48 lg:-mt-72">
+          <div className="w-full px-6 -mt-24 md:-mt-56 lg:-mt-82">
             <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
               <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold mb-2 leading-snug about-section-title">
                 Work Culture

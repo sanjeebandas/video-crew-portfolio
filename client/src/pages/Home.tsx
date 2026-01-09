@@ -156,7 +156,7 @@ const Home = () => {
             <div className="max-w-[1248px] w-full flex justify-center">
               <button
                 onClick={handlePortfolioClick}
-                className="bg-blue-600 hover:bg-blue-800 cursor-pointer text-white font-semibold py-2.5 xs:py-3 px-6 xs:px-8 rounded-full transition duration-300 text-sm xs:text-base relative z-10"
+                className="bg-blue-600 hover:bg-blue-800 cursor-pointer text-white font-semibold py-4 px-14 rounded-full transition duration-300 text-lg relative z-10"
               >
                 포트폴리오 둘러보기
               </button>
