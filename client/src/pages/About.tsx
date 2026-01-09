@@ -18,8 +18,6 @@ const About = () => {
 
   // Description content for the right paragraph block with line breaks
   const aboutDescription = [
-    "우리는 영상이 단순한 기록을 넘어 ",
-    "감동을 전달하고, 생각을 움직이며, 변화를 이끌어내는 가장 강력한 매체라고 믿습니다.",
     "비디오크루는 모든 프로젝트에 진정성을 담아",
     "고객의 메시지가 세상에 가장 효과적으로 전달될 수 있도록 창의적인 영상을 연구하고 실현합니다.",
     '"모든 프레임에 가치를 담아" 고객과 함께 성장하는 파트너가 되겠습니다."',
@@ -98,10 +96,10 @@ const About = () => {
           {/* Core Value Text Block */}
           <div className="w-full px-6 -mt-4 sm:-mt-12 md:-mt-14 lg:-mt-20">
             <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
-              <h2 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug about-section-title">
+              <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold mb-2 leading-snug about-section-title">
                 Core Value
               </h2>
-              <div className="about-section-text text-sm sm:text-base md:text-base lg:text-lg text-muted leading-relaxed">
+              <div className="about-section-text text-base xs:text-lg sm:text-xl md:text-lg text-muted leading-relaxed">
                 <div className="about-text-line">
                   비디오크루가 지향하는 핵심가치는 고객중심, 문제해결,
                   솔직함으로
@@ -135,7 +133,7 @@ const About = () => {
           <LazyImage
             src="/imgs/Image-1.webp"
             alt="비디오크루 Work Culture 섹션 구분 디자인 이미지"
-            className="w-full h-auto object-cover -mt-8 sm:mt-16 about-separator"
+            className="w-full h-auto object-cover -mt-16 sm:mt-4 about-separator"
             onImageLoad={() => {
               // Re-trigger separator animations after image loads
               refreshGSAPAnimations(".about-separator");
@@ -143,12 +141,12 @@ const About = () => {
           />
 
           {/* Work Culture Text Block */}
-          <div className="w-full px-6 -mt-16 md:-mt-48 lg:-mt-72">
+          <div className="w-full px-6 -mt-24 md:-mt-56 lg:-mt-82">
             <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
-              <h2 className="text-lg sm:text-3xl md:text-3xl lg:text-4xl font-bold mb-2 leading-snug about-section-title">
+              <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold mb-2 leading-snug about-section-title">
                 Work Culture
               </h2>
-              <div className="about-section-text text-sm sm:text-base md:text-base lg:text-lg text-muted leading-relaxed">
+              <div className="about-section-text text-base xs:text-lg sm:text-xl md:text-lg text-muted leading-relaxed">
                 <div className="about-text-line">
                   비디오크루가 일하는 문화는
                 </div>

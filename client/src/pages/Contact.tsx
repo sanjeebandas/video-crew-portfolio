@@ -12,8 +12,7 @@ const Contact = () => {
   // Description content for the right paragraph block
   const contactDescription = [
     "비디오크루 서비스에 대해 궁금한 점이 있으시거나",
-    "프로젝트에 대한 상의가 필요하신 경우 간략한 정보와 함께",
-    "문의를 남겨 주시면 상세히 회신 드리겠습니다.",
+    "프로젝트에 대한 상의가 필요하신 경우 문의를 남겨 주시면 상세히 회신 드리겠습니다.",
   ];
 
   useEffect(() => {

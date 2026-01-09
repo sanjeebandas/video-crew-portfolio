@@ -75,10 +75,10 @@ const PortfolioScroller = () => {
             비디오크루의 영상 제작 사례
           </h2>
           <div className="portfolio-subtitle">
-            <div className="portfolio-text-line text-sm xs:text-base sm:text-lg md:text-base text-muted leading-relaxed">
+            <div className="portfolio-text-line text-base xs:text-lg sm:text-xl md:text-lg text-muted leading-relaxed">
               당신의 이야기에 생명을 불어넣는 영상
             </div>
-            <div className="portfolio-text-line text-sm xs:text-base sm:text-lg md:text-base text-muted leading-relaxed">
+            <div className="portfolio-text-line text-base xs:text-lg sm:text-xl md:text-lg text-muted leading-relaxed">
               모든 프레임에 가치를 담다
             </div>
           </div>

@@ -95,20 +95,10 @@ const Home = () => {
               {/* Right Paragraph Block — responsive text sizing */}
               <div className="w-full max-w-[800px] md:max-w-[900px] lg:max-w-[1000px] text-lg xs:text-lg sm:text-xl md:text-lg lg:text-xl text-muted leading-relaxed text-center home-title-right">
                 <div className="home-text-line">
-                  비디오크루는 단순한 영상 제작을 넘어,
+                  비디오크루는 단순한 영상 제작을 넘어, 강력한 스토리텔링과 독창적인 표현으로
                 </div>
                 <div className="home-text-line">
-                  강력한 스토리텔링과 독창적인 시각적 표현으로
-                </div>
-                <div className="home-text-line">
-                  고객의 메시지 설명력을 높여주는 비디오 콘텐츠 전문 그룹입니다.
-                </div>
-                <div className="home-text-line">
-                  기획부터 촬영, 편집, 그리고 최종 결과물에 이르기까지,
-                </div>
-                <div className="home-text-line">
-                  각 분야의 전문가들이 고객의 비전을 현실도 높은 영상으로
-                  구현합니다.
+                  고객이 원하는 메시지의 설명력을 높여주는 비디오 콘텐츠 전문 그룹입니다.
                 </div>
               </div>
             </div>
@@ -166,7 +156,7 @@ const Home = () => {
             <div className="max-w-[1248px] w-full flex justify-center">
               <button
                 onClick={handlePortfolioClick}
-                className="bg-blue-600 hover:bg-blue-800 cursor-pointer text-white font-semibold py-2.5 xs:py-3 px-6 xs:px-8 rounded-full transition duration-300 text-sm xs:text-base relative z-10"
+                className="bg-blue-600 hover:bg-blue-800 cursor-pointer text-white font-semibold py-4 px-14 rounded-full transition duration-300 text-lg relative z-10"
               >
                 포트폴리오 둘러보기
               </button>

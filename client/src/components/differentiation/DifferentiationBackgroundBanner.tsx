@@ -54,7 +54,7 @@ const DifferentiationBackgroundBanner = () => {
         </h2>
         <button
           onClick={handleContactClick}
-          className="diff-banner-button bg-blue-600 hover:bg-blue-800 hover:scale-110 hover:shadow-lg transition-all duration-300 ease-out px-6 py-2 rounded-full text-sm font-semibold cursor-pointer opacity-0 translate-y-8"
+          className="diff-banner-button bg-blue-600 hover:bg-blue-800 hover:scale-110 hover:shadow-lg transition-all duration-300 ease-out py-4 px-14 rounded-full text-lg font-semibold cursor-pointer opacity-0 translate-y-8"
         >
           문의하기
         </button>
