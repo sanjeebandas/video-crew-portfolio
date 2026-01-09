@@ -58,9 +58,10 @@ const Differentiation = () => {
                 {/* Right: Paragraph Block */}
                 <div className="w-full max-w-[800px] md:max-w-[900px] lg:max-w-[1000px] text-lg xs:text-lg sm:text-xl md:text-lg lg:text-xl leading-relaxed text-muted text-center diff-title-right">
                   <div className="diff-text-line">
-                    컨설턴트가 스토리를 입히고, 전문 디자이너와 촬영감독, PD가
-                    1:1 맞춤 설계된 영상을 제공하며, 차별화된 스토리와 다양한
-                    선택지를 제시합니다.
+                    컨설턴트가 스토리를 입히고, 전문 디자이너와 촬영감독,
+                    <br />
+                    PD가 1:1 맞춤 설계된 영상을 제공하며, 차별화된 스토리와
+                    다양한 선택지를 제시합니다.
                   </div>
                 </div>
               </div>

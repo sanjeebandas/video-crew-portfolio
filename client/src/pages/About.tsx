@@ -18,8 +18,6 @@ const About = () => {
 
   // Description content for the right paragraph block with line breaks
   const aboutDescription = [
-    "우리는 영상이 단순한 기록을 넘어 ",
-    "감동을 전달하고, 생각을 움직이며, 변화를 이끌어내는 가장 강력한 매체라고 믿습니다.",
     "비디오크루는 모든 프로젝트에 진정성을 담아",
     "고객의 메시지가 세상에 가장 효과적으로 전달될 수 있도록 창의적인 영상을 연구하고 실현합니다.",
     '"모든 프레임에 가치를 담아" 고객과 함께 성장하는 파트너가 되겠습니다."',
