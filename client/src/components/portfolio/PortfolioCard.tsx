@@ -15,7 +15,7 @@ const PortfolioCard = ({ item }: Props) => {
   return (
     <>
       <div className="flex items-center justify-center py-8">
-        <div className="relative w-full max-w-[1120px] aspect-[2/1] rounded-2xl overflow-hidden bg-black shadow-none transition duration-300 group hover:shadow-[0_0_30px_rgba(255,255,255,0.30)]">
+        <div className="relative w-full max-w-[1120px] aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 shadow-none transition duration-300 group hover:shadow-[0_0_30px_rgba(255,255,255,0.30)]">
           <div
             className="w-full h-full cursor-pointer relative"
             onClick={() => {
@@ -24,6 +24,16 @@ const PortfolioCard = ({ item }: Props) => {
               setIsModalOpen(true);
             }}
           >
+            {/* Subtle blurred background layer for letterbox areas */}
+            <div 
+              className="absolute inset-0 scale-110 blur-2xl opacity-50"
+              style={{
+                backgroundImage: `url(${item.thumbnailUrl})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            />
+
             {/* Loading State */}
             {isImageLoading && !hasImageError && (
               <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center z-10">
@@ -58,7 +68,7 @@ const PortfolioCard = ({ item }: Props) => {
             <LazyImage
               src={item.thumbnailUrl}
               alt={`${item.title} - 비디오크루 포트폴리오 썸네일`}
-              className={`w-full h-full object-cover transition-opacity duration-300 ${
+              className={`w-full h-full object-contain relative z-[1] transition-opacity duration-300 ${
                 isImageLoading ? 'opacity-0' : 'opacity-100'
               }`}
               onLoad={() => {
@@ -72,28 +82,29 @@ const PortfolioCard = ({ item }: Props) => {
             />
 
             {/* Dark overlay */}
-            <div className="absolute inset-0 bg-black/30 transition duration-300" />
+            <div className="absolute inset-0 bg-black/30 transition duration-300 z-[2]" />
 
             {/* CTA block */}
-            <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3">
-              <div className="flex items-center gap-1 md:gap-2 bg-black/80 backdrop-blur-md px-2 py-1 md:px-2.5 md:py-1.5 rounded-full text-white transition duration-300 hover:shadow-[0_0_20px_6px_rgba(255,255,255,0.2)] hover:scale-[1.03] cursor-pointer">
+            <div className="absolute bottom-3 right-3 md:bottom-4 md:right-4 z-10">
+              {/* Full CTA pill with icon + title + label */}
+              <div className="flex items-center gap-3 bg-black/80 backdrop-blur-md pl-3 pr-4 py-2 md:pl-3.5 md:pr-5 md:py-2.5 rounded-full text-white transition duration-300 hover:shadow-[0_0_20px_6px_rgba(255,255,255,0.2)] hover:scale-[1.03] cursor-pointer max-w-[220px] md:max-w-[300px]">
                 {/* Play Icon Circle */}
-                <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-white/10 flex items-center justify-center">
+                <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="w-2.5 h-2.5 md:w-3 md:h-3 fill-white"
+                    className="w-3 h-3 md:w-3.5 md:h-3.5 fill-white"
                     viewBox="0 0 24 24"
                   >
                     <path d="M8 5v14l11-7z" />
                   </svg>
                 </div>
 
-                {/* Title + Subtitle */}
-                <div className="text-left">
-                  <p className="text-[10px] md:text-xs font-semibold">
+                {/* Title + Play Video label */}
+                <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+                  <p className="text-[11px] md:text-sm font-semibold truncate">
                     {item.title}
                   </p>
-                  <p className="text-[8px] md:text-[10px] text-gray-400">Play Video</p>
+                  <span className="text-[9px] md:text-xs text-gray-400">Play Video</span>
                 </div>
               </div>
             </div>
