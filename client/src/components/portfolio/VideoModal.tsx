@@ -47,8 +47,8 @@ const VideoModal = ({ item, isOpen, onClose }: Props) => {
         onClick={onClose}
       />
       
-      {/* Modal Content - Half the size, centered */}
-      <div className="relative w-full max-w-4xl aspect-[2/1] bg-black rounded-2xl overflow-hidden shadow-2xl transform transition-all duration-300 animate-in zoom-in-95 slide-in-from-bottom-4">
+      {/* Modal Content - Enlarged size, centered */}
+      <div className="relative w-full max-w-6xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl transform transition-all duration-300 animate-in zoom-in-95 slide-in-from-bottom-4">
         {/* Video Container */}
         <div className="relative w-full h-full">
           <video
