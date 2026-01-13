@@ -251,15 +251,10 @@ const PortfolioBanner = ({
                   : "text-white border-white"
               }`}
             >
-              {/* Gradient hover overlay for non-active buttons */}
+              {/* Hover overlay for non-active buttons */}
               {currentFilter !== value && (
                 <div
-                  className="hover-overlay absolute inset-0 opacity-0"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 100%)",
-                    backdropFilter: "blur(3px)",
-                  }}
+                  className="hover-overlay absolute inset-0 opacity-0 bg-white/15"
                 />
               )}
 
