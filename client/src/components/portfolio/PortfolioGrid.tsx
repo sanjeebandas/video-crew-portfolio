@@ -279,10 +279,10 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
                 {loadingMore ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>로딩 중...</span>
+                    <span>Loading...</span>
                   </>
                 ) : (
-                  <span>(Load More )더 보기</span>
+                  <span>Load More</span>
                 )}
               </button>
             </div>
