@@ -96,12 +96,12 @@ const AboutGrid = () => {
             )}
 
             {/* Overlay */}
-            <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/50 transition-all duration-300 ease-out">
-              <div className="flex flex-col justify-start gap-2 min-h-[100px]">
-                <h3 className="text-base min-[768px]:text-base min-[1024px]:text-lg font-bold group-hover:text-blue-400 transition-colors duration-300 ease-out">
+            <div className="absolute bottom-0 left-0 w-full p-5 min-[768px]:p-6 min-[1024px]:p-7 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/50 transition-all duration-300 ease-out">
+              <div className="flex flex-col justify-start gap-2.5 min-[768px]:gap-3 min-h-[100px]">
+                <h3 className="text-lg min-[768px]:text-lg min-[1024px]:text-xl font-bold group-hover:text-blue-400 transition-colors duration-300 ease-out">
                   {service.title}
                 </h3>
-                <p className="text-xs min-[768px]:text-sm min-[1024px]:text-sm text-muted leading-snug min-[768px]:leading-relaxed min-[1024px]:leading-relaxed group-hover:text-white transition-colors duration-300 ease-out whitespace-pre-line">
+                <p className="text-sm min-[768px]:text-base min-[1024px]:text-base text-muted leading-relaxed min-[768px]:leading-relaxed min-[1024px]:leading-relaxed group-hover:text-white transition-colors duration-300 ease-out whitespace-pre-line">
                   {service.description}
                 </p>
               </div>
