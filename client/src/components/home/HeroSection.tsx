@@ -158,8 +158,8 @@ const HeroSection = () => {
                 onClick={() => handleDotClick(index)}
                 className={`carousel-dot transition-all duration-300 ease-in-out ${
                   index === currentImageIndex
-                    ? "w-3 h-3 xs:w-4 xs:h-4 border-2 border-white rounded-full"
-                    : "w-2.5 h-2.5 xs:w-3 xs:h-3 border border-white rounded-full opacity-40 hover:opacity-60"
+                    ? "w-4 h-4 xs:w-5 xs:h-5 border-2 border-white rounded-full"
+                    : "w-3 h-3 xs:w-4 xs:h-4 border border-white rounded-full opacity-40 hover:opacity-60"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />

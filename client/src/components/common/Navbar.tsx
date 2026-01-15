@@ -14,7 +14,7 @@ const Navbar = () => {
   }, [isOpen]);
 
   return (
-    <nav className="w-full text-white py-4 shadow-md relative z-50">
+    <nav className="w-full text-white py-2 shadow-md relative z-50">
       <div className="max-w-[1248px] mx-auto px-2 flex items-center justify-between font-suit">
         {/* Logo */}
         <div className="flex items-center space-x-3">
@@ -22,7 +22,7 @@ const Navbar = () => {
             <img
               src="/imgs/Frame 362.png"
               alt="Logo"
-              className="h-16 w-auto group-hover:scale-110 transition-all duration-300 ease-out"
+              className="h-12 md:h-13 w-auto group-hover:scale-110 transition-all duration-300 ease-out"
             />
           </Link>
         </div>

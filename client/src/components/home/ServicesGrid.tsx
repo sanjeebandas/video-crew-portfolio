@@ -98,12 +98,12 @@ const ServicesGrid = () => {
             )}
 
             {/* Very subtle overlay for text readability */}
-            <div className="absolute bottom-0 left-0 w-full p-3 xs:p-4">
-              <div className="flex flex-col justify-start gap-1.5 xs:gap-2 min-h-[8px] xs:min-h-[10px] sm:min-h-[60px] md:min-h-[80px] lg:min-h-[100px]">
-                <h3 className="text-xs xs:text-sm sm:text-base md:text-lg font-bold text-white drop-shadow-sm">
+            <div className="absolute bottom-0 left-0 w-full p-4 xs:p-5 sm:p-5 md:p-6 lg:p-7 bg-gradient-to-t from-black/80 via-black/30 to-transparent">
+              <div className="flex flex-col gap-2 xs:gap-2.5 md:gap-3 min-h-[60px] xs:min-h-[70px] sm:min-h-[80px] md:min-h-[100px] lg:min-h-[120px]">
+                <h3 className="text-sm xs:text-base sm:text-lg md:text-xl font-bold text-white drop-shadow-sm flex-shrink-0">
                   {service.title}
                 </h3>
-                <p className="text-xs xs:text-sm sm:text-sm md:text-sm text-muted leading-snug md:leading-relaxed drop-shadow-sm whitespace-pre-line">
+                <p className="text-xs xs:text-sm sm:text-sm md:text-base text-muted leading-snug md:leading-relaxed drop-shadow-sm whitespace-pre-line flex-grow">
                   {service.description}
                 </p>
               </div>
