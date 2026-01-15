@@ -116,11 +116,11 @@ function ProcessFeatureCard({ data, alignRight = false }: FeatureCardProps) {
       style={{ willChange: "opacity, transform" }}
     >
       <div
-        className={`mb-2 group-hover:opacity-50 transition-opacity duration-300 w-full ${
+        className={`mb-3 group-hover:opacity-70 transition-opacity duration-300 w-full ${
           alignRight ? "text-right" : "text-left"
         }`}
       >
-        <span className="inline-block text-6xl md:text-8xl lg:text-9xl font-black text-white opacity-30 select-none transition-all duration-300 group-hover:opacity-60 group-hover:scale-105 font-suit">
+        <span className="inline-block text-6xl md:text-8xl lg:text-9xl font-black text-white select-none transition-all duration-300 group-hover:scale-105 font-suit">
           {data.stepNum}
         </span>
       </div>
@@ -130,7 +130,7 @@ function ProcessFeatureCard({ data, alignRight = false }: FeatureCardProps) {
         className="w-full max-w-2xl min-w-[320px]"
       >
         <div
-          className="p-6 w-full flex flex-col text-left mr-auto items-start"
+          className="p-5 md:p-6 lg:p-7 w-full flex flex-col text-left mr-auto items-start"
           data-card={data.stepNum}
           onMouseEnter={() => {
             const title = document.querySelector(
@@ -153,17 +153,17 @@ function ProcessFeatureCard({ data, alignRight = false }: FeatureCardProps) {
             if (subtitle) subtitle.classList.remove("text-blue-400");
           }}
         >
-          <div className="see-more-group">
-            <h3 className="font-bold text-lg md:text-xl mb-2 transition-colors duration-300 font-suit">
+          <div className="see-more-group flex flex-col gap-2 md:gap-2.5 lg:gap-3">
+            <h3 className="font-bold text-xl md:text-2xl lg:text-3xl transition-colors duration-300 font-suit">
               {data.title}
             </h3>
             {data.subtitle && (
-              <div className="subtitle text-lg md:text-xl font-medium mb-2 transition-colors duration-300 font-montserrat">
+              <div className="subtitle text-lg md:text-xl lg:text-2xl font-medium transition-colors duration-300 font-montserrat">
                 {data.subtitle}
               </div>
             )}
             <div className="flex flex-col">
-              <p className="text-muted text-sm md:text-base transition-all duration-500 ease-in-out font-suit leading-relaxed">
+              <p className="text-muted text-base md:text-lg lg:text-lg transition-all duration-500 ease-in-out font-suit leading-relaxed">
                 {data.desc}
               </p>
             </div>
