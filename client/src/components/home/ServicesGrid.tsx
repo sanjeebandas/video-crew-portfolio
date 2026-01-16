@@ -36,7 +36,7 @@ const ServicesGrid = () => {
         duration: 0.6, // 0.6s duration - slightly longer for smoother effect
         ease: "power1.out", // Smooth easing
         scrollTrigger: {
-          start: "top 75%", // Even earlier trigger for mobile
+          start: "top 95%", // Trigger earlier to match sub-hero content timing
           end: "bottom 25%",
           toggleActions: "play none none none", // No reverse animation
           markers: false, // Disable debug markers

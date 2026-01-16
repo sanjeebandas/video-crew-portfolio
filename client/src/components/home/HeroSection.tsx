@@ -10,8 +10,10 @@ const HeroSection = () => {
 
   // Array of banner images for the carousel
   const bannerImages = [
-    "/imgs/carousel_images_for_home/carousel-2.webp",
-    "/imgs/carousel_images_for_home/carousel-4.webp",
+    "/imgs/main_01.webp",
+    "/imgs/main_02.webp",
+    "/imgs/main_04.webp",
+    "/imgs/main_05.webp",
   ];
 
   // Initialize image load states
@@ -150,7 +152,7 @@ const HeroSection = () => {
 
       {/* Carousel Dots */}
       <div className="relative z-20 flex flex-col h-[80vh] justify-end items-center md:items-start text-center md:text-left">
-        <div className="max-w-[1248px] mx-auto px-4 xs:px-6 md:px-8 lg:px-6 -mb-6 xs:-mb-8 w-full">
+        <div className="max-w-[1248px] mx-auto px-4 xs:px-6 md:px-8 lg:px-2 -mb-6 xs:-mb-8 w-full">
           <div className="hero-dots flex items-center justify-center md:justify-start space-x-2 xs:space-x-3 mt-6 xs:mt-8">
             {bannerImages.map((_, index) => (
               <button

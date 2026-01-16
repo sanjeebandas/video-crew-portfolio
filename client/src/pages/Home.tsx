@@ -102,9 +102,6 @@ const Home = () => {
             <div className="max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-8">
               {/* Left Title Block — responsive width adjustments */}
               <div className="w-full md:w-[450px] lg:w-[700px] xl:w-[850px] text-center home-title-left">
-                <p className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl text-muted mb-2 home-subtitle">
-                  비디오크루의 차별점
-                </p>
                 <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold leading-snug">
                   영상제작,
                   <br />

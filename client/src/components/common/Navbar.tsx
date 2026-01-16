@@ -17,7 +17,7 @@ const Navbar = () => {
     <nav className="w-full text-white py-2 shadow-md relative z-50">
       <div className="max-w-[1248px] mx-auto px-2 flex items-center justify-between font-suit">
         {/* Logo */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 -ml-1 md:ml-0 lg:-ml-4">
           <Link to="/" className="group">
             <img
               src="/imgs/Frame 362.png"
@@ -28,7 +28,7 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Nav */}
-        <ul className="hidden md:flex space-x-12 text-xl font-medium">
+        <ul className="hidden md:flex space-x-12 text-xl font-medium -mr-1 md:mr-0 lg:-mr-4">
           <li>
             <Link
               to="/about"
