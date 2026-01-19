@@ -23,12 +23,32 @@ const Home = () => {
   useEffect(() => {
     // Reduced delay for faster animations while maintaining lazy loading compatibility
     const timer = setTimeout(() => {
-      // Home page scroll animations
-      slideUpFadeIn(".home-title-left");
-      slideUpFadeIn(".home-title-right");
-      fadeInUp(".home-subtitle");
-      staggerFadeIn(".home-text-line", 0.06); // Reduced stagger delay
-      stackIn(".home-section-card", 0.1); // Reduced stagger delay
+      // Home page scroll animations - trigger earlier to eliminate blank gap after hero
+      slideUpFadeIn(".home-title-left", {
+        scrollTrigger: {
+          start: "top 110%", // Trigger when element is still below viewport
+        },
+      });
+      slideUpFadeIn(".home-title-right", {
+        scrollTrigger: {
+          start: "top 110%",
+        },
+      });
+      fadeInUp(".home-subtitle", {
+        scrollTrigger: {
+          start: "top 110%",
+        },
+      });
+      staggerFadeIn(".home-text-line", {
+        scrollTrigger: {
+          start: "top 115%",
+        },
+      });
+      stackIn(".home-section-card", {
+        scrollTrigger: {
+          start: "top 105%", // Trigger as soon as element enters viewport area
+        },
+      });
       parallaxEffect(".home-parallax-bg", 0.3);
 
       // Trusted companies section animations
@@ -82,9 +102,6 @@ const Home = () => {
             <div className="max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-8">
               {/* Left Title Block — responsive width adjustments */}
               <div className="w-full md:w-[450px] lg:w-[700px] xl:w-[850px] text-center home-title-left">
-                <p className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl text-muted mb-2 home-subtitle">
-                  비디오크루의 차별점
-                </p>
                 <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold leading-snug">
                   영상제작,
                   <br />

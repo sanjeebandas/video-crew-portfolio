@@ -121,15 +121,15 @@ const AboutWorkCultureGrid = () => {
                   </div>
                 )}
                 {/* Overlay */}
-                <div className="absolute bottom-4 left-0 w-full h-48 p-6 transition-all duration-300 ease-out">
-                  <div className="flex flex-col gap-2 h-full">
-                    <p className="text-md text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                <div className="absolute bottom-4 left-0 w-full h-52 p-7 transition-all duration-300 ease-out">
+                  <div className="flex flex-col gap-3 h-full">
+                    <p className="text-base text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                       {item.subtitle}
                     </p>
-                    <h3 className="text-2xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
+                    <h3 className="text-3xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
                       {item.title}
                     </h3>
-                    <p className="text-md text-muted leading-relaxed group-hover:text-gray-200 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
+                    <p className="text-lg text-muted leading-relaxed group-hover:text-gray-200 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
                       {item.description}
                     </p>
                   </div>
@@ -171,15 +171,15 @@ const AboutWorkCultureGrid = () => {
                 </div>
               )}
               {/* Overlay */}
-              <div className="absolute bottom-4 left-0 w-full h-48 p-6 transition-all duration-300 ease-out">
-                <div className="flex flex-col gap-2 h-full">
-                  <p className="text-md text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+              <div className="absolute bottom-4 left-0 w-full h-52 p-7 transition-all duration-300 ease-out">
+                <div className="flex flex-col gap-3 h-full">
+                  <p className="text-base text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                     {workCultureItems[2].subtitle}
                   </p>
-                  <h3 className="text-2xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
+                  <h3 className="text-3xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
                     {workCultureItems[2].title}
                   </h3>
-                  <p className="text-md text-muted leading-relaxed max-w-2xl group-hover:text-gray-200 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
+                  <p className="text-lg text-muted leading-relaxed max-w-2xl group-hover:text-gray-200 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
                     {workCultureItems[2].description}
                   </p>
                 </div>
@@ -227,15 +227,15 @@ const AboutWorkCultureGrid = () => {
                   </div>
                 )}
                 {/* Overlay */}
-                <div className="absolute bottom-3 left-0 w-full h-40 p-6 transition-all duration-300 ease-out">
-                  <div className="flex flex-col gap-2 h-full">
-                    <p className="text-xs text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                <div className="absolute bottom-3 left-0 w-full h-44 p-7 transition-all duration-300 ease-out">
+                  <div className="flex flex-col gap-2.5 h-full">
+                    <p className="text-sm text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                       {item.subtitle}
                     </p>
-                    <h3 className="text-lg font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
+                    <h3 className="text-xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-muted leading-relaxed group-hover:text-gray-100 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
+                    <p className="text-base text-muted leading-relaxed group-hover:text-gray-100 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
                       {item.description}
                     </p>
                   </div>
@@ -277,15 +277,15 @@ const AboutWorkCultureGrid = () => {
                 </div>
               )}
               {/* Overlay */}
-              <div className="absolute bottom-3 left-0 w-full h-40 p-6 transition-all duration-300 ease-out">
-                <div className="flex flex-col gap-2 h-full">
-                  <p className="text-xs text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+              <div className="absolute bottom-3 left-0 w-full h-44 p-7 transition-all duration-300 ease-out">
+                <div className="flex flex-col gap-2.5 h-full">
+                  <p className="text-sm text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                     {workCultureItems[2].subtitle}
                   </p>
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
+                  <h3 className="text-2xl font-bold mb-2 group-hover:text-white transition-colors duration-300 ease-out">
                     {workCultureItems[2].title}
                   </h3>
-                  <p className="text-base text-muted leading-relaxed max-w-2xl group-hover:text-gray-100 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
+                  <p className="text-lg text-muted leading-relaxed max-w-2xl group-hover:text-gray-100 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
                     {workCultureItems[2].description}
                   </p>
                 </div>
@@ -333,15 +333,15 @@ const AboutWorkCultureGrid = () => {
                   </div>
                 )}
                 {/* Overlay */}
-                <div className="absolute bottom-2 left-0 w-full h-36 p-4 transition-all duration-300 ease-out">
-                  <div className="flex flex-col gap-1 h-full">
-                    <p className="text-xs text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+                <div className="absolute bottom-2 left-0 w-full h-40 p-5 transition-all duration-300 ease-out">
+                  <div className="flex flex-col gap-1.5 h-full">
+                    <p className="text-sm text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                       {item.subtitle}
                     </p>
-                    <h3 className="text-base font-bold mb-1 group-hover:text-white transition-colors duration-300 ease-out">
+                    <h3 className="text-lg font-bold mb-1 group-hover:text-white transition-colors duration-300 ease-out">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-muted leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
+                    <p className="text-sm text-muted leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
                       {item.description}
                     </p>
                   </div>
@@ -383,15 +383,15 @@ const AboutWorkCultureGrid = () => {
                 </div>
               )}
               {/* Overlay */}
-              <div className="absolute bottom-2 left-0 w-full h-36 p-4 transition-all duration-300 ease-out">
-                <div className="flex flex-col gap-1 h-full">
-                  <p className="text-xs text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+              <div className="absolute bottom-2 left-0 w-full h-40 p-5 transition-all duration-300 ease-out">
+                <div className="flex flex-col gap-1.5 h-full">
+                  <p className="text-sm text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                     {workCultureItems[2].subtitle}
                   </p>
-                  <h3 className="text-lg font-bold mb-1 group-hover:text-white transition-colors duration-300 ease-out">
+                  <h3 className="text-xl font-bold mb-1 group-hover:text-white transition-colors duration-300 ease-out">
                     {workCultureItems[2].title}
                   </h3>
-                  <p className="text-sm text-muted leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
+                  <p className="text-base text-muted leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
                     {workCultureItems[2].description}
                   </p>
                 </div>
@@ -413,15 +413,15 @@ const AboutWorkCultureGrid = () => {
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
               />
               {/* Overlay */}
-              <div className="absolute bottom-2 left-0 w-full h-32 p-4 transition-all duration-300 ease-out">
-                <div className="flex flex-col gap-1 h-full">
-                  <p className="text-xs text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
+              <div className="absolute bottom-2 left-0 w-full h-36 p-5 transition-all duration-300 ease-out">
+                <div className="flex flex-col gap-1.5 h-full">
+                  <p className="text-sm text-muted uppercase tracking-wide group-hover:text-blue-400 transition-colors duration-300 ease-out">
                     {item.subtitle}
                   </p>
-                  <h3 className="text-base font-bold mb-1 group-hover:text-white transition-colors duration-300 ease-out">
+                  <h3 className="text-lg font-bold mb-1 group-hover:text-white transition-colors duration-300 ease-out">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-muted leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
+                  <p className="text-sm text-muted leading-snug group-hover:text-gray-100 transition-colors duration-300 ease-out whitespace-pre-line flex-grow">
                     {item.description}
                   </p>
                 </div>

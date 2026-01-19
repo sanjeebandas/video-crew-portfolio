@@ -57,10 +57,10 @@ const About = () => {
           }}
         >
           <section className="bg-black text-white w-full px-4 xs:px-6 md:px-8 lg:px-6 pt-16 pb-12 xs:pt-24 xs:pb-16 md:pt-28 md:pb-20 relative z-10">
-            <div className="max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-8">
+            <div className="max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-10 md:space-y-12">
               {/* Left Title Block — responsive width adjustments */}
               <div className="w-full md:w-[450px] lg:w-[700px] xl:w-[850px] text-center about-title-left">
-                <p className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl text-muted mb-2 about-subtitle">
+                <p className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl text-muted mb-4 md:mb-5 about-subtitle">
                   Who we are, Video Crew
                 </p>
                 <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold leading-snug">

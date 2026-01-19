@@ -22,13 +22,13 @@ const ProcessBanner = () => {
   return (
     <section className="w-full bg-black text-white">
       <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 pt-14 pb-10 md:pt-20 md:pb-14">
-        <div className="flex flex-col justify-center items-center space-y-8">
+        <div className="flex flex-col justify-center items-center space-y-10 md:space-y-12">
           {/* Left: Title Block */}
           <div className="w-full md:w-[450px] lg:w-[700px] xl:w-[850px] text-center process-title-left">
-            <h4 className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl text-muted mb-2 process-subtitle">
+            <h4 className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl text-muted mb-4 md:mb-5 process-subtitle">
             Video Production Process
             </h4>
-            <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold">
+            <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold leading-snug">
               영상제작 프로세스​
             </h2>
           </div>
