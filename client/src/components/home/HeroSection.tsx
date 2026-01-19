@@ -1,32 +1,93 @@
 import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import LazyImage from "../common/LazyImage";
+
+// Skeleton Loader Component for Hero Banner
+const HeroBannerSkeleton = () => (
+  <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 overflow-hidden">
+    {/* Animated shimmer overlay */}
+    <div className="absolute inset-0 animate-pulse">
+      <div 
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
+        style={{
+          animation: "shimmer 2s infinite linear",
+          backgroundSize: "200% 100%",
+        }}
+      />
+    </div>
+    
+    {/* Subtle geometric pattern for visual interest */}
+    <div className="absolute inset-0 opacity-10">
+      <div className="absolute top-1/4 left-1/4 w-32 h-32 md:w-48 md:h-48 rounded-full bg-white/10 blur-3xl" />
+      <div className="absolute bottom-1/3 right-1/4 w-40 h-40 md:w-56 md:h-56 rounded-full bg-white/5 blur-3xl" />
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 md:w-32 md:h-32 rounded-full bg-white/8 blur-2xl" />
+    </div>
+
+    {/* Center loading indicator */}
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        {/* Play icon skeleton */}
+        <div className="relative">
+          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/10 animate-pulse flex items-center justify-center">
+            <svg
+              className="w-6 h-6 md:w-8 md:h-8 text-white/30"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+          {/* Rotating ring around play button */}
+          <div className="absolute inset-0 w-16 h-16 md:w-20 md:h-20 border-2 border-white/10 border-t-white/30 rounded-full animate-spin" style={{ animationDuration: "1.5s" }} />
+        </div>
+        
+        {/* Loading text */}
+        <div className="text-center">
+          <p className="text-white/40 text-sm md:text-base font-medium">영상 불러오는 중...</p>
+          <div className="mt-2 flex items-center justify-center gap-1">
+            <span className="w-1.5 h-1.5 bg-white/30 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+            <span className="w-1.5 h-1.5 bg-white/30 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+            <span className="w-1.5 h-1.5 bg-white/30 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Shimmer keyframe styles */}
+    <style>{`
+      @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+    `}</style>
+  </div>
+);
 
 const HeroSection = () => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [imageLoadStates, setImageLoadStates] = useState<boolean[]>([]);
-  const [imageErrors, setImageErrors] = useState<boolean[]>([]);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [hasVideoError, setHasVideoError] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Array of banner images for the carousel
-  const bannerImages = [
-    "/imgs/main_01.webp",
-    "/imgs/main_02.webp",
-    "/imgs/main_04.webp",
-    "/imgs/main_05.webp",
-  ];
+  // Video source - uses environment variable for production (Render storage)
+  // Falls back to local path for development
+  const videoSrc = import.meta.env.VITE_HERO_VIDEO_URL || "/vids/HomePage_Banner_Video_비디오크루_홍보영상(3D)_최종본.mp4";
 
-  // Initialize image load states
+  // Detect mobile for preload strategy and responsive behavior
   useEffect(() => {
-    setImageLoadStates(new Array(bannerImages.length).fill(false));
-    setImageErrors(new Array(bannerImages.length).fill(false));
-  }, [bannerImages.length]);
-
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Hero section animations
   useEffect(() => {
     if (heroRef.current) {
-      // Initial hero animation
       const heroTimeline = gsap.timeline();
 
       heroTimeline
@@ -36,85 +97,83 @@ const HeroSection = () => {
           { opacity: 1, duration: 1, ease: "power2.out" }
         )
         .fromTo(
-          ".hero-dots",
-          { opacity: 0, scale: 0.8 },
-          { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
-          "-=0.2"
+          ".hero-controls",
+          { opacity: 0, scale: 0.9 },
+          { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.7)" },
+          "-=0.4"
         );
-
-      // Carousel dot animations
-      gsap.fromTo(
-        ".carousel-dot",
-        { scale: 0.8, opacity: 0.5 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 0.3,
-          stagger: 0.1,
-          ease: "back.out(1.7)",
-        }
-      );
     }
   }, []);
 
-
+  // Auto-play video when it's ready
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) =>
-        prevIndex === bannerImages.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 3000);
+    const video = videoRef.current;
+    if (video && isVideoLoaded && !hasVideoError) {
+      video.play().catch((err) => {
+        console.warn("Video autoplay failed:", err);
+        // Autoplay might be blocked, video will show poster
+      });
+    }
+  }, [isVideoLoaded, hasVideoError]);
 
-    return () => clearInterval(interval);
-  }, [bannerImages.length]);
-
-  const handleDotClick = (index: number) => {
-    setCurrentImageIndex(index);
+  const handleReplay = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(console.warn);
+    }
   };
 
-  const handleImageLoad = (index: number) => {
-    setImageLoadStates((prev) => {
-      const newStates = [...prev];
-      newStates[index] = true;
-      return newStates;
-    });
+  const handleToggleMute = () => {
+    if (videoRef.current) {
+      const newMutedState = !isMuted;
+      videoRef.current.muted = newMutedState;
+      setIsMuted(newMutedState);
+    }
   };
 
-  const handleImageError = (index: number) => {
-    setImageErrors((prev) => {
-      const newErrors = [...prev];
-      newErrors[index] = true;
-      return newErrors;
-    });
+  const handleCanPlay = () => {
+    setIsVideoLoaded(true);
+  };
+
+  const handlePlaying = () => {
+    setIsVideoPlaying(true);
+  };
+
+  const handleVideoError = () => {
+    setHasVideoError(true);
+    setIsVideoLoaded(true); // Stop showing loader
+  };
+
+  const handleWaiting = () => {
+    setIsVideoPlaying(false);
   };
 
   return (
     <section
       ref={heroRef}
-      className="relative w-full h-screen bg-black text-white overflow-hidden"
+      className="relative w-full bg-black text-white overflow-hidden"
+      style={{
+        // Responsive height: full viewport on desktop, constrained on mobile to prevent extreme cropping
+        height: "100vh",
+        minHeight: isMobile ? "500px" : "600px",
+        maxHeight: isMobile ? "85vh" : "100vh",
+      }}
     >
-      {/* Carousel Images */}
-      {bannerImages.map((image, index) => (
-        <div
-          key={index}
-          className={`absolute top-0 left-0 w-full h-full z-0 transition-opacity duration-500 ease-in-out ${
-            index === currentImageIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-          }`}
-        >
-          {/* Loading state */}
-          {!imageLoadStates[index] && !imageErrors[index] && (
-            <div className="absolute top-0 left-0 w-full h-full bg-gray-800 flex items-center justify-center">
-              <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-            </div>
-          )}
+      {/* Video Banner Container - Responsive aspect handling */}
+      <div className="absolute inset-0 z-0">
+        {/* Skeleton Loading State - Shows while video is loading */}
+        {!isVideoLoaded && !hasVideoError && (
+          <HeroBannerSkeleton />
+        )}
 
-          {/* Error state */}
-          {imageErrors[index] && (
-            <div className="absolute top-0 left-0 w-full h-full bg-gray-800 flex items-center justify-center">
-              <div className="text-center text-white">
-                <div className="w-12 h-12 mx-auto mb-2 bg-gray-600 rounded-full flex items-center justify-center">
+        {/* Error state overlay */}
+        {hasVideoError && (
+          <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900">
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <div className="text-center text-white bg-black/40 backdrop-blur-sm px-8 py-6 rounded-2xl border border-white/10">
+                <div className="w-14 h-14 mx-auto mb-3 bg-white/10 rounded-full flex items-center justify-center">
                   <svg
-                    className="w-6 h-6"
+                    className="w-7 h-7 text-white/60"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -123,50 +182,122 @@ const HeroSection = () => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
                     />
                   </svg>
                 </div>
-                <p className="text-sm text-gray-400">
-                  이미지를 불러올 수 없습니다
-                </p>
+                <p className="text-base text-white/80 font-medium">영상을 불러올 수 없습니다</p>
+                <p className="text-sm text-white/50 mt-1">잠시 후 다시 시도해주세요</p>
               </div>
             </div>
-          )}
-
-          {/* Image */}
-          {!imageErrors[index] && (
-            <LazyImage
-              src={image}
-              alt={`비디오크루 배너 이미지 ${index + 1}`}
-              className="absolute top-0 left-0 w-full h-full object-cover object-[center_30%] sm:object-[center_25%] md:object-top -translate-y-2 xs:-translate-y-3 sm:-translate-y-4 md:-translate-y-5"
-              onLoad={() => handleImageLoad(index)}
-              onError={() => handleImageError(index)}
-            />
-          )}
-
-          {/* Dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/30"></div>
-        </div>
-      ))}
-
-      {/* Carousel Dots */}
-      <div className="relative z-20 flex flex-col h-[80vh] justify-end items-center md:items-start text-center md:text-left">
-        <div className="max-w-[1248px] mx-auto px-4 xs:px-6 md:px-8 lg:px-2 -mb-6 xs:-mb-8 w-full">
-          <div className="hero-dots flex items-center justify-center md:justify-start space-x-2 xs:space-x-3 mt-6 xs:mt-8">
-            {bannerImages.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => handleDotClick(index)}
-                className={`carousel-dot transition-all duration-300 ease-in-out ${
-                  index === currentImageIndex
-                    ? "w-4 h-4 xs:w-5 xs:h-5 border-2 border-white rounded-full"
-                    : "w-3 h-3 xs:w-4 xs:h-4 border border-white rounded-full opacity-40 hover:opacity-60"
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
           </div>
+        )}
+
+        {/* Video Element with responsive object-fit strategy */}
+        <video
+          ref={videoRef}
+          src={videoSrc}
+          className={`absolute inset-0 w-full h-full transition-opacity duration-700 ${
+            isVideoPlaying && !hasVideoError ? "opacity-100" : "opacity-0"
+          }`}
+          style={{
+            // Use cover but prioritize center-top on mobile to preserve important content
+            objectFit: "cover",
+            objectPosition: isMobile ? "center 30%" : "center center",
+          }}
+          autoPlay
+          muted
+          playsInline
+          preload={isMobile ? "metadata" : "auto"}
+          onCanPlay={handleCanPlay}
+          onPlaying={handlePlaying}
+          onWaiting={handleWaiting}
+          onError={handleVideoError}
+          onEnded={() => {
+            // Loop the video
+            if (videoRef.current) {
+              videoRef.current.currentTime = 0;
+              videoRef.current.play().catch(console.warn);
+            }
+          }}
+        />
+
+        {/* Subtle dark overlay for better UI contrast - only visible when video is playing */}
+        <div 
+          className={`absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30 pointer-events-none transition-opacity duration-700 ${
+            isVideoPlaying ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      </div>
+
+      {/* Minimal Video Controls - Top Right */}
+      <div className="hero-controls absolute top-4 right-4 md:top-6 md:right-6 z-20">
+        <div className="flex items-center gap-2">
+          {/* Replay Button */}
+          <button
+            onClick={handleReplay}
+            className="group flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/60 hover:border-white/30 transition-all duration-300 active:scale-95"
+            aria-label="Replay video"
+            title="다시 재생"
+          >
+            <svg
+              className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/70 group-hover:text-white transition-colors duration-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+          </button>
+
+          {/* Volume Toggle Button */}
+          <button
+            onClick={handleToggleMute}
+            className="group flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/60 hover:border-white/30 transition-all duration-300 active:scale-95"
+            aria-label={isMuted ? "소리 켜기" : "소리 끄기"}
+            title={isMuted ? "소리 켜기" : "소리 끄기"}
+          >
+            {isMuted ? (
+              <svg
+                className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/70 group-hover:text-white transition-colors duration-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/70 group-hover:text-white transition-colors duration-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                />
+              </svg>
+            )}
+          </button>
         </div>
       </div>
     </section>
