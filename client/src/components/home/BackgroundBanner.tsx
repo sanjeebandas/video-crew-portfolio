@@ -59,18 +59,24 @@ const BackgroundBanner = () => {
 
   return (
     <section
-      className="mt-16 xs:mt-20 sm:mt-24 mb-16 xs:mb-20 sm:mb-24 relative w-full h-auto py-8 xs:py-10 flex items-center justify-center text-white"
+      className="mt-16 xs:mt-20 sm:mt-24 mb-16 xs:mb-20 sm:mb-24 relative w-full h-auto py-8 xs:py-10 3xl:py-12 flex items-center justify-center text-white"
     >
-      <div className="w-full max-w-[1248px] px-4 xs:px-6 md:px-8 lg:px-6 flex flex-col sm:flex-row justify-between items-center text-center gap-y-6 xs:gap-y-8">
+      {/* 
+        Ultra-wide strategy:
+        - Expand max-width progressively on larger screens
+        - Scale typography for better readability at distance
+        - Increase spacing between stat items
+      */}
+      <div className="w-full max-w-[1248px] 2xl:max-w-[1400px] 3xl:max-w-[1600px] px-4 xs:px-6 md:px-8 lg:px-6 3xl:px-8 flex flex-col sm:flex-row justify-between items-center text-center gap-y-6 xs:gap-y-8 sm:gap-x-8 2xl:gap-x-12 3xl:gap-x-16">
         {stats.map((stat, i) => (
           <div
             key={i}
             className="stat-item flex-1"
           >
-            <p className="stat-value text-2xl xs:text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-bold mb-1">
+            <p className="stat-value text-2xl xs:text-3xl sm:text-4xl md:text-4xl lg:text-5xl 2xl:text-5xl 3xl:text-6xl font-bold mb-1 2xl:mb-2">
               {stat.value}
             </p>
-            <p className="text-xs xs:text-sm sm:text-base md:text-base lg:text-lg text-gray-200">{stat.label}</p>
+            <p className="text-xs xs:text-sm sm:text-base md:text-base lg:text-lg 2xl:text-lg 3xl:text-xl text-gray-200">{stat.label}</p>
           </div>
         ))}
       </div>

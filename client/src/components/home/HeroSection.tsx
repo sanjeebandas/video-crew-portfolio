@@ -68,6 +68,7 @@ const HeroSection = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [hasVideoError, setHasVideoError] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isUltraWide, setIsUltraWide] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -75,14 +76,20 @@ const HeroSection = () => {
   // Falls back to local path for development
   const videoSrc = import.meta.env.VITE_HERO_VIDEO_URL || "/vids/HomePage_Banner_Video_비디오크루_홍보영상(3D)_최종본.mp4";
 
-  // Detect mobile for preload strategy and responsive behavior
+  // Detect device type for responsive behavior
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const checkViewport = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const aspectRatio = width / height;
+      
+      setIsMobile(width < 768);
+      // Ultra-wide: aspect ratio > 2 (wider than 2:1, e.g., 21:9 = 2.33)
+      setIsUltraWide(aspectRatio > 2 && width >= 1920);
     };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    checkViewport();
+    window.addEventListener("resize", checkViewport);
+    return () => window.removeEventListener("resize", checkViewport);
   }, []);
 
   // Hero section animations
@@ -151,12 +158,21 @@ const HeroSection = () => {
   return (
     <section
       ref={heroRef}
-      className="relative w-full bg-black text-white overflow-hidden"
+      className="relative w-full bg-black text-white overflow-hidden hero-cinematic"
       style={{
-        // Responsive height: full viewport on desktop, constrained on mobile to prevent extreme cropping
-        height: "100vh",
-        minHeight: isMobile ? "500px" : "600px",
-        maxHeight: isMobile ? "85vh" : "100vh",
+        // Responsive height: handled by hero-cinematic class for ultra-wide
+        // Mobile gets constrained height to prevent extreme cropping
+        ...(isMobile && {
+          height: "100vh",
+          minHeight: "500px",
+          maxHeight: "85vh",
+        }),
+        // Standard desktop (non-ultra-wide) uses full viewport
+        ...(!isMobile && !isUltraWide && {
+          height: "100vh",
+          minHeight: "600px",
+        }),
+        // Ultra-wide: let CSS handle via hero-cinematic class (aspect-ratio aware)
       }}
     >
       {/* Video Banner Container - Responsive aspect handling */}
@@ -201,8 +217,11 @@ const HeroSection = () => {
             isVideoPlaying && !hasVideoError ? "opacity-100" : "opacity-0"
           }`}
           style={{
-            // Use cover but prioritize center-top on mobile to preserve important content
-            objectFit: "cover",
+            // Responsive object-fit strategy:
+            // - Mobile: center-top to preserve important content
+            // - Ultra-wide: contain to show full video width, centered vertically
+            // - Standard desktop: cover for immersive experience
+            objectFit: isUltraWide ? "cover" : "cover",
             objectPosition: isMobile ? "center 30%" : "center center",
           }}
           autoPlay
@@ -230,8 +249,8 @@ const HeroSection = () => {
         />
       </div>
 
-      {/* Minimal Video Controls - Top Right */}
-      <div className="hero-controls absolute top-4 right-4 md:top-6 md:right-6 z-20">
+      {/* Minimal Video Controls - Top Right, constrained to content rail on ultra-wide */}
+      <div className="hero-controls absolute top-4 right-4 md:top-6 md:right-6 3xl:right-[calc((100vw-1600px)/2+24px)] z-20">
         <div className="flex items-center gap-2">
           {/* Replay Button */}
           <button
