@@ -49,7 +49,7 @@ const DifferentiationFeatureSection = ({
   return (
     <section className="w-full bg-black text-white py-12">
       <div
-        className={`max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 flex flex-col md:flex-row items-center ${
+        className={`diff-content-rail max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 flex flex-col md:flex-row items-center ${
           reverse ? "md:flex-row-reverse" : ""
         } gap-8 diff-feature-section`}
       >

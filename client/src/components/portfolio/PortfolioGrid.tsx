@@ -245,7 +245,7 @@ const PortfolioGrid = ({ currentFilter }: Props) => {
   return (
     <section
       ref={containerRef}
-      className="max-w-[1248px] mx-auto px-4 py-10 mb-36 grid gap-6 text-white"
+      className="portfolio-grid-container max-w-[1248px] mx-auto px-4 py-10 mb-36 grid gap-6 text-white"
     >
       <LoadingStates
         isLoading={loading}

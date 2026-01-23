@@ -57,9 +57,9 @@ const AboutGrid = () => {
   };
 
   return (
-    <section className="w-full bg-black text-white px-6 py-14 sm:py-16 md:py-12 lg:py-14">
+    <section className="about-section-spacing w-full bg-black text-white px-6 py-14 sm:py-16 md:py-12 lg:py-14">
       {/* Mobile, Tablet, and Desktop Version */}
-      <div className="max-w-[1248px] mx-auto grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6 place-items-center">
+      <div className="about-grid-container max-w-[1248px] mx-auto grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6 place-items-center">
         {services.map((service, idx) => (
           <div
             key={idx}
@@ -96,7 +96,7 @@ const AboutGrid = () => {
             )}
 
             {/* Overlay */}
-            <div className="absolute bottom-0 left-0 w-full p-5 min-[768px]:p-6 min-[1024px]:p-7 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/50 transition-all duration-300 ease-out">
+            <div className="card-overlay absolute bottom-0 left-0 w-full p-5 min-[768px]:p-6 min-[1024px]:p-7 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/90 group-hover:via-black/50 transition-all duration-300 ease-out">
               <div className="flex flex-col justify-start gap-2.5 min-[768px]:gap-3 min-h-[100px]">
                 <h3 className="text-lg min-[768px]:text-lg min-[1024px]:text-xl font-bold group-hover:text-blue-400 transition-colors duration-300 ease-out">
                   {service.title}

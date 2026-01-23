@@ -222,7 +222,7 @@ const PortfolioBanner = ({
 
   return (
     <section className="text-center pt-24 pb-16 px-4 md:px-8 lg:px-0">
-      <div ref={containerRef} className="max-w-[1248px] mx-auto">
+      <div ref={containerRef} className="portfolio-content-rail max-w-[1248px] mx-auto">
         <p className="portfolio-subtitle text-sm tracking-[0.25em] text-white mb-2">
           PORTFOLIO
         </p>

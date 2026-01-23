@@ -45,7 +45,7 @@ const WhyVideoCrewBoxes = () => {
 
   return (
     <section className="w-full bg-black text-white">
-      <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 py-10 md:py-14">
+      <div className="diff-content-rail max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 py-10 md:py-14">
         <div className="flex flex-col md:flex-row justify-between items-stretch gap-4">
           {items.map((item, index) => (
             <div

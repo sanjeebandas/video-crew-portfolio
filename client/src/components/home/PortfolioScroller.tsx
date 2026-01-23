@@ -67,18 +67,18 @@ const PortfolioScroller = () => {
   }, []);
 
   return (
-    <section className="bg-black pt-0 pb-8 xs:pb-10 md:pb-12 3xl:pb-16 overflow-hidden w-full">
+    <section className="bg-black pt-0 pb-8 xs:pb-10 md:pb-12 overflow-hidden w-full">
       {/* Text Block - Constrained to content rail for readability */}
-      <div className="w-full px-4 xs:px-6 md:px-8 lg:px-6 3xl:px-8">
-        <div className="max-w-[1248px] 2xl:max-w-[1400px] 3xl:max-w-[1600px] mx-auto text-center text-white mb-4 xs:mb-6 2xl:mb-8">
-          <h2 className="portfolio-title text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl 2xl:text-5xl 3xl:text-6xl font-bold mb-2 3xl:mb-4 leading-snug">
+      <div className="w-full px-4 xs:px-6 md:px-8 lg:px-6">
+        <div className="portfolio-scroller-text max-w-[1248px] mx-auto text-center text-white mb-4 xs:mb-6">
+          <h2 className="portfolio-title text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold mb-2 leading-snug">
             비디오크루의 영상 제작 사례
           </h2>
           <div className="portfolio-subtitle">
-            <div className="portfolio-text-line text-base xs:text-lg sm:text-xl md:text-lg 2xl:text-xl 3xl:text-2xl text-muted leading-relaxed">
+            <div className="portfolio-text-line text-base xs:text-lg sm:text-xl md:text-lg text-muted leading-relaxed">
               당신의 이야기에 생명을 불어넣는 영상
             </div>
-            <div className="portfolio-text-line text-base xs:text-lg sm:text-xl md:text-lg 2xl:text-xl 3xl:text-2xl text-muted leading-relaxed">
+            <div className="portfolio-text-line text-base xs:text-lg sm:text-xl md:text-lg text-muted leading-relaxed">
               모든 프레임에 가치를 담다
             </div>
           </div>
@@ -86,13 +86,13 @@ const PortfolioScroller = () => {
       </div>
 
       {/* Carousel Rows - Full width scroll, cards scale on ultra-wide */}
-      <div className="space-y-3 xs:space-y-4 sm:space-y-6 2xl:space-y-8 mt-8 xs:mt-12 sm:mt-16 md:mt-20 lg:mt-24 3xl:mt-28">
+      <div className="space-y-3 xs:space-y-4 sm:space-y-6 mt-8 xs:mt-12 sm:mt-16 md:mt-20 lg:mt-24">
         {/* Row 1 - Left to Right */}
-        <div className="portfolio-row-1 flex gap-2 xs:gap-3 sm:gap-4 2xl:gap-5 3xl:gap-6 animate-scroll-left px-4 xs:px-6 sm:px-0 opacity-0">
+        <div className="portfolio-row-1 flex gap-2 xs:gap-3 sm:gap-4 animate-scroll-left px-4 xs:px-6 sm:px-0 opacity-0">
           {[...images, ...images].map((src, i) => (
             <div
               key={`row1-${i}`}
-              className="w-[180px] xs:w-[200px] sm:w-[220px] md:w-[280px] lg:w-[320px] xl:w-[360px] 2xl:w-[400px] 3xl:w-[440px] h-[110px] xs:h-[120px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[201px] 2xl:h-[225px] 3xl:h-[248px] rounded-md flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer overflow-hidden"
+              className="portfolio-scroller-card w-[180px] xs:w-[200px] sm:w-[220px] md:w-[280px] lg:w-[320px] xl:w-[360px] h-[110px] xs:h-[120px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[201px] rounded-md flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer overflow-hidden"
             >
               {!imageErrors.has(src) ? (
                 <img
@@ -128,11 +128,11 @@ const PortfolioScroller = () => {
         </div>
 
         {/* Row 2 - Right to Left */}
-        <div className="portfolio-row-2 flex gap-2 xs:gap-3 sm:gap-4 2xl:gap-5 3xl:gap-6 animate-scroll-right px-4 xs:px-6 sm:px-0 opacity-0">
+        <div className="portfolio-row-2 flex gap-2 xs:gap-3 sm:gap-4 animate-scroll-right px-4 xs:px-6 sm:px-0 opacity-0">
           {[...images, ...images].map((src, i) => (
             <div
               key={`row2-${i}`}
-              className="w-[180px] xs:w-[200px] sm:w-[220px] md:w-[280px] lg:w-[320px] xl:w-[360px] 2xl:w-[400px] 3xl:w-[440px] h-[110px] xs:h-[120px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[201px] 2xl:h-[225px] 3xl:h-[248px] rounded-md flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer overflow-hidden"
+              className="portfolio-scroller-card w-[180px] xs:w-[200px] sm:w-[220px] md:w-[280px] lg:w-[320px] xl:w-[360px] h-[110px] xs:h-[120px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[201px] rounded-md flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer overflow-hidden"
             >
               {!imageErrors.has(src) ? (
                 <img

@@ -46,7 +46,7 @@ const DifferentiationBackgroundBanner = () => {
 
   return (
     <section className="mt-14 relative w-full h-auto py-16 flex items-center justify-center text-white mb-16">
-      <div className="w-full max-w-[1248px] px-6 text-center flex flex-col items-center justify-center gap-6">
+      <div className="diff-content-rail w-full max-w-[1248px] px-6 text-center flex flex-col items-center justify-center gap-6">
         <h2 className="diff-banner-title text-xl sm:text-2xl md:text-3xl font-semibold leading-snug opacity-0 translate-y-8">
           업계 최고 수준의 맞춤형 영상 콘텐츠
           <br />

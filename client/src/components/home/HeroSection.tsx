@@ -68,7 +68,6 @@ const HeroSection = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [hasVideoError, setHasVideoError] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [isUltraWide, setIsUltraWide] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -76,16 +75,10 @@ const HeroSection = () => {
   // Falls back to local path for development
   const videoSrc = import.meta.env.VITE_HERO_VIDEO_URL || "/vids/HomePage_Banner_Video_비디오크루_홍보영상(3D)_최종본.mp4";
 
-  // Detect device type for responsive behavior
+  // Detect mobile for responsive behavior (rail-centering handled by CSS)
   useEffect(() => {
     const checkViewport = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const aspectRatio = width / height;
-      
-      setIsMobile(width < 768);
-      // Ultra-wide: aspect ratio > 2 (wider than 2:1, e.g., 21:9 = 2.33)
-      setIsUltraWide(aspectRatio > 2 && width >= 1920);
+      setIsMobile(window.innerWidth < 768);
     };
     checkViewport();
     window.addEventListener("resize", checkViewport);
@@ -158,25 +151,23 @@ const HeroSection = () => {
   return (
     <section
       ref={heroRef}
-      className="relative w-full bg-black text-white overflow-hidden hero-cinematic"
+      className="relative w-full bg-black text-white overflow-hidden hero-rail-centered"
       style={{
-        // Responsive height: handled by hero-cinematic class for ultra-wide
-        // Mobile gets constrained height to prevent extreme cropping
+        // Mobile gets constrained height
         ...(isMobile && {
           height: "100vh",
           minHeight: "500px",
           maxHeight: "85vh",
         }),
-        // Standard desktop (non-ultra-wide) uses full viewport
-        ...(!isMobile && !isUltraWide && {
+        // Desktop uses full viewport height
+        ...(!isMobile && {
           height: "100vh",
           minHeight: "600px",
         }),
-        // Ultra-wide: let CSS handle via hero-cinematic class (aspect-ratio aware)
       }}
     >
-      {/* Video Banner Container - Responsive aspect handling */}
-      <div className="absolute inset-0 z-0">
+      {/* Video Banner Container - Rail-centered on ultra-wide via CSS */}
+      <div className="hero-video-container z-0">
         {/* Skeleton Loading State - Shows while video is loading */}
         {!isVideoLoaded && !hasVideoError && (
           <HeroBannerSkeleton />
@@ -209,19 +200,16 @@ const HeroSection = () => {
           </div>
         )}
 
-        {/* Video Element with responsive object-fit strategy */}
+        {/* Video Element - cover to fill container without black bars */}
         <video
           ref={videoRef}
           src={videoSrc}
-          className={`absolute inset-0 w-full h-full transition-opacity duration-700 ${
+          className={`w-full h-full transition-opacity duration-700 ${
             isVideoPlaying && !hasVideoError ? "opacity-100" : "opacity-0"
           }`}
           style={{
-            // Responsive object-fit strategy:
-            // - Mobile: center-top to preserve important content
-            // - Ultra-wide: contain to show full video width, centered vertically
-            // - Standard desktop: cover for immersive experience
-            objectFit: isUltraWide ? "cover" : "cover",
+            // Cover fills container completely (no black bars)
+            objectFit: "cover",
             objectPosition: isMobile ? "center 30%" : "center center",
           }}
           autoPlay
@@ -247,20 +235,19 @@ const HeroSection = () => {
             isVideoPlaying ? "opacity-100" : "opacity-0"
           }`}
         />
-      </div>
 
-      {/* Minimal Video Controls - Top Right, constrained to content rail on ultra-wide */}
-      <div className="hero-controls absolute top-4 right-4 md:top-6 md:right-6 3xl:right-[calc((100vw-1600px)/2+24px)] z-20">
-        <div className="flex items-center gap-2">
-          {/* Replay Button */}
+        {/* Video Controls - Inside video container so they align with video on large screens */}
+        <div className="hero-controls absolute top-4 right-4 md:top-6 md:right-6 z-20">
+          <div className="flex items-center gap-2 3xl:gap-3">
+          {/* Replay Button - Scaled on ultra-wide */}
           <button
             onClick={handleReplay}
-            className="group flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/60 hover:border-white/30 transition-all duration-300 active:scale-95"
+            className="group flex items-center justify-center w-9 h-9 md:w-10 md:h-10 3xl:w-11 3xl:h-11 rounded-full bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/60 hover:border-white/30 transition-all duration-300 active:scale-95"
             aria-label="Replay video"
             title="다시 재생"
           >
             <svg
-              className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/70 group-hover:text-white transition-colors duration-300"
+              className="w-3.5 h-3.5 md:w-4 md:h-4 3xl:w-5 3xl:h-5 text-white/70 group-hover:text-white transition-colors duration-300"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -274,16 +261,16 @@ const HeroSection = () => {
             </svg>
           </button>
 
-          {/* Volume Toggle Button */}
+          {/* Volume Toggle Button - Scaled on ultra-wide */}
           <button
             onClick={handleToggleMute}
-            className="group flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/60 hover:border-white/30 transition-all duration-300 active:scale-95"
+            className="group flex items-center justify-center w-9 h-9 md:w-10 md:h-10 3xl:w-11 3xl:h-11 rounded-full bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/60 hover:border-white/30 transition-all duration-300 active:scale-95"
             aria-label={isMuted ? "소리 켜기" : "소리 끄기"}
             title={isMuted ? "소리 켜기" : "소리 끄기"}
           >
             {isMuted ? (
               <svg
-                className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/70 group-hover:text-white transition-colors duration-300"
+                className="w-3.5 h-3.5 md:w-4 md:h-4 3xl:w-5 3xl:h-5 text-white/70 group-hover:text-white transition-colors duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -303,7 +290,7 @@ const HeroSection = () => {
               </svg>
             ) : (
               <svg
-                className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/70 group-hover:text-white transition-colors duration-300"
+                className="w-3.5 h-3.5 md:w-4 md:h-4 3xl:w-5 3xl:h-5 text-white/70 group-hover:text-white transition-colors duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -317,6 +304,7 @@ const HeroSection = () => {
               </svg>
             )}
           </button>
+          </div>
         </div>
       </div>
     </section>

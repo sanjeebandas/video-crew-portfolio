@@ -41,14 +41,14 @@ const Contact = () => {
         description="비디오크루에 문의하세요. 영상 제작 문의, 견적 상담, 프로젝트 협의 등 다양한 문의사항을 편리하게 접수할 수 있습니다. 전문적인 영상 제작 서비스로 고객의 비즈니스를 성장시켜드립니다."
         keywords="비디오크루문의, 영상제작문의, 견적상담, 프로젝트협의, 영상제작업체문의, 비디오제작상담"
       />
-      <div ref={containerRef} className="relative overflow-hidden">
+      <div ref={containerRef} className="contact-page-container relative overflow-hidden">
         <ErrorBoundary
           onError={(error, errorInfo) => {
             console.error("Contact page error:", error, errorInfo);
           }}
         >
           <section className="bg-black text-white w-full px-4 xs:px-6 md:px-8 lg:px-6 pt-16 pb-12 xs:pt-24 xs:pb-16 md:pt-28 md:pb-20 relative z-10">
-            <div className="max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-8">
+            <div className="contact-content-rail max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-8">
               {/* Left Title Block — responsive width adjustments */}
               <div className="w-full md:w-[450px] lg:w-[700px] xl:w-[850px] text-center contact-title-left">
                 <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold leading-snug">

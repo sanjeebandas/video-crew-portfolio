@@ -36,14 +36,14 @@ const Differentiation = () => {
         description="비디오크루만의 특별한 차별화 포인트를 소개합니다. A/B 시안 제공, 100% 투명한 정찰제, 고객사 맞춤형 제작, 결과에 대한 자신감 등 다른 업체와 차별화된 서비스를 제공합니다."
         keywords="비디오크루차별화, AB시안제공, 투명한정찰제, 맞춤형제작, 고객만족, 영상제작차별화, 전문영상제작"
       />
-      <div ref={containerRef} className="relative overflow-hidden">
+      <div ref={containerRef} className="diff-page-container relative overflow-hidden">
         <ErrorBoundary
           onError={(error, errorInfo) => {
             console.error("Differentiation page error:", error, errorInfo);
           }}
         >
           <section className="w-full bg-black text-white">
-            <div className="max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 pt-14 pb-10 md:pt-20 md:pb-14">
+            <div className="diff-content-rail max-w-[1248px] mx-auto px-4 sm:px-6 md:px-6 pt-14 pb-10 md:pt-20 md:pb-14">
               <div className="flex flex-col justify-center items-center space-y-8">
                 {/* Left: Title Block */}
                 <div className="w-full md:w-[450px] lg:w-[700px] xl:w-[850px] text-center diff-title-left">

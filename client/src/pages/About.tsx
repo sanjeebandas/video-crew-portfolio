@@ -50,14 +50,14 @@ const About = () => {
         description="비디오크루는 스토리로 말하는 영상 콘텐츠를 제작하는 전문 회사입니다. 브랜드 스토리를 강력하고 인상적인 모습의 이야기로 만들어내는 우리만의 비전과 Core Value를 소개합니다."
         keywords="비디오크루, 회사소개, 영상제작회사, 브랜드스토리, Core Value, Work Culture, 영상콘텐츠제작"
       />
-      <div ref={containerRef} className="relative overflow-hidden">
+      <div ref={containerRef} className="about-page-container relative overflow-hidden">
         <ErrorBoundary
           onError={(error, errorInfo) => {
             console.error("About page error:", error, errorInfo);
           }}
         >
-          <section className="bg-black text-white w-full px-4 xs:px-6 md:px-8 lg:px-6 pt-16 pb-12 xs:pt-24 xs:pb-16 md:pt-28 md:pb-20 relative z-10">
-            <div className="max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-10 md:space-y-12">
+          <section className="about-hero-section bg-black text-white w-full px-4 xs:px-6 md:px-8 lg:px-6 pt-16 pb-12 xs:pt-24 xs:pb-16 md:pt-28 md:pb-20 relative z-10">
+            <div className="about-hero-content about-content-rail max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-10 md:space-y-12">
               {/* Left Title Block — responsive width adjustments */}
               <div className="w-full md:w-[450px] lg:w-[700px] xl:w-[850px] text-center about-title-left">
                 <p className="text-xl xs:text-2xl sm:text-3xl md:text-2xl lg:text-4xl text-muted mb-4 md:mb-5 about-subtitle">
@@ -94,7 +94,7 @@ const About = () => {
           </div>
 
           {/* Core Value Text Block */}
-          <div className="w-full px-6 -mt-4 sm:-mt-12 md:-mt-14 lg:-mt-20">
+          <div className="w-full px-6 -mt-4 sm:-mt-12 md:-mt-14 lg:-mt-20 about-content-rail">
             <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
               <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold mb-2 leading-snug about-section-title">
                 Core Value
@@ -141,7 +141,7 @@ const About = () => {
           />
 
           {/* Work Culture Text Block */}
-          <div className="w-full px-6 -mt-24 md:-mt-56 lg:-mt-82">
+          <div className="w-full px-6 -mt-24 md:-mt-56 lg:-mt-82 about-content-rail">
             <div className="max-w-[1248px] mx-auto text-center text-white mb-6">
               <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold mb-2 leading-snug about-section-title">
                 Work Culture

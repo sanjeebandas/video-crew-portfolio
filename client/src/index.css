@@ -6,6 +6,36 @@
   --color-muted-2: #7E7E7E;
 }
 
+/* =========================================
+   CSS CUSTOM PROPERTIES FOR ULTRA-WIDE SCALING
+   ========================================= */
+:root {
+  /* Content rail max-width */
+  --content-max-width: 1248px;
+  /* Scale factor for typography and spacing (1 = base) */
+  --scale-factor: 1;
+  /* Component scale for buttons, icons */
+  --component-scale: 1;
+}
+
+/* Ultra-wide breakpoint: 1920px+ */
+@media (min-width: 1920px) {
+  :root {
+    --content-max-width: 1600px;
+    --scale-factor: 1.15;
+    --component-scale: 1.1;
+  }
+}
+
+/* Super ultra-wide: 2560px+ */
+@media (min-width: 2560px) {
+  :root {
+    --content-max-width: 1800px;
+    --scale-factor: 1.25;
+    --component-scale: 1.2;
+  }
+}
+
 html,
 body {
   @apply bg-black text-white;
@@ -390,32 +420,73 @@ body {
   }
 
   /* =========================================
-     ULTRA-WIDE DISPLAY UTILITIES (21:9+)
+     ULTRA-WIDE DISPLAY UTILITIES (1920px+)
      ========================================= */
 
-  /* Cinematic Hero Container - Preserves aspect ratio on ultra-wide */
-  .hero-cinematic {
+  /* Rail-centered content container */
+  .rail-centered {
     width: 100%;
-    height: 100vh;
-    min-height: 500px;
+    max-width: var(--content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
-  /* On ultra-wide (21:9+), cap height to preserve video aspect ratio */
-  @media (min-aspect-ratio: 2/1) {
-    .hero-cinematic {
-      /* Cap height to maintain ~16:9 video aspect without extreme cropping */
-      height: min(100vh, 56.25vw);
-      min-height: 450px;
-      max-height: 80vh;
+  /* Hero section with rail-centered video on ultra-wide */
+  .hero-rail-centered {
+    position: relative;
+    width: 100%;
+    background: black;
+  }
+
+  /* Video container - full width by default */
+  .hero-video-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Ultra-wide (1920px+): Rail-center the video */
+  @media (min-width: 1920px) {
+    .hero-video-container {
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: var(--content-max-width);
     }
-  }
 
-  /* Super ultra-wide (32:9) - even more conservative */
-  @media (min-aspect-ratio: 2.5/1) {
-    .hero-cinematic {
-      height: min(85vh, 50vw);
-      min-height: 400px;
-      max-height: 70vh;
+    /* Ambient gradient on sides for cinematic feel */
+    .hero-rail-centered::before,
+    .hero-rail-centered::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: calc((100vw - var(--content-max-width)) / 2);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-rail-centered::before {
+      left: 0;
+      background: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+    }
+
+    .hero-rail-centered::after {
+      right: 0;
+      background: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+    }
+
+    /* Scaled typography for ultra-wide */
+    .ultrawide-text-scale {
+      font-size: calc(1em * var(--scale-factor));
+      line-height: calc(1.5 * var(--scale-factor));
+    }
+
+    /* Scaled spacing for ultra-wide */
+    .ultrawide-space-scale {
+      padding: calc(1rem * var(--scale-factor));
     }
   }
 
@@ -425,6 +496,10 @@ body {
     .animate-scroll-right {
       animation-duration: 50s;
     }
+    
+    .company-animate-scroll-left {
+      animation-duration: 35s;
+    }
   }
 
   @media (min-width: 2560px) {
@@ -432,5 +507,614 @@ body {
     .animate-scroll-right {
       animation-duration: 60s;
     }
+    
+    .company-animate-scroll-left {
+      animation-duration: 45s;
+    }
+  }
+}
+
+/* =========================================
+   ABOUT PAGE - ULTRA-WIDE PROGRESSIVE SCALING
+   Applies only to screens wider than 1920px
+   ========================================= */
+
+/* About page container scaling */
+.about-page-container {
+  --about-scale: 1;
+  --about-max-width: 1248px;
+  --about-card-scale: 1;
+}
+
+/* Large Desktop: 1920px - 2099px */
+@media (min-width: 1920px) and (max-width: 2099px) {
+  .about-page-container {
+    --about-scale: 1.1;
+    --about-max-width: 1400px;
+    --about-card-scale: 1.1;
+  }
+}
+
+/* Ultra-wide: 2100px - 2559px */
+@media (min-width: 2100px) and (max-width: 2559px) {
+  .about-page-container {
+    --about-scale: 1.2;
+    --about-max-width: 1600px;
+    --about-card-scale: 1.2;
+  }
+}
+
+/* Super ultra-wide: 2560px+ */
+@media (min-width: 2560px) {
+  .about-page-container {
+    --about-scale: 1.35;
+    --about-max-width: 1800px;
+    --about-card-scale: 1.3;
+  }
+}
+
+/* About Page Hero Section */
+.about-hero-section {
+  padding-top: calc(7rem * var(--about-scale));
+  padding-bottom: calc(5rem * var(--about-scale));
+}
+
+.about-hero-content {
+  max-width: var(--about-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* About Page Typography Scaling */
+@media (min-width: 1920px) {
+  /* Main title scaling */
+  .about-title-left h2 {
+    font-size: calc(3rem * var(--about-scale));
+    line-height: 1.2;
+  }
+  
+  .about-title-left p,
+  .about-subtitle {
+    font-size: calc(2rem * var(--about-scale));
+    margin-bottom: calc(1.25rem * var(--about-scale));
+  }
+  
+  /* Description text scaling */
+  .about-title-right,
+  .about-text-line {
+    font-size: calc(1.25rem * var(--about-scale));
+    line-height: 1.7;
+  }
+  
+  /* Section titles (Core Value, Work Culture) */
+  .about-section-title {
+    font-size: calc(3rem * var(--about-scale)) !important;
+    margin-bottom: calc(0.75rem * var(--about-scale));
+  }
+  
+  .about-section-text {
+    font-size: calc(1.125rem * var(--about-scale));
+    line-height: 1.7;
+  }
+}
+
+/* About Page Content Rails */
+@media (min-width: 1920px) {
+  .about-content-rail {
+    max-width: var(--about-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: calc(1.5rem * var(--about-scale));
+    padding-right: calc(1.5rem * var(--about-scale));
+  }
+}
+
+/* About Grid (Core Value Cards) */
+@media (min-width: 1920px) {
+  .about-grid-container {
+    max-width: var(--about-max-width);
+    gap: calc(1.5rem * var(--about-scale));
+  }
+  
+  /* Scale the cards progressively */
+  .about-card {
+    width: calc(402px * var(--about-card-scale)) !important;
+    height: calc(425px * var(--about-card-scale)) !important;
+  }
+  
+  .about-card .card-overlay {
+    padding: calc(1.75rem * var(--about-scale));
+  }
+  
+  .about-card h3 {
+    font-size: calc(1.25rem * var(--about-scale));
+  }
+  
+  .about-card p {
+    font-size: calc(1rem * var(--about-scale));
+  }
+}
+
+/* Work Culture Grid */
+@media (min-width: 1920px) {
+  .work-culture-grid-container {
+    max-width: var(--about-max-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Scale grid gaps */
+  .work-culture-grid-container .xl\:grid {
+    gap: calc(1.5rem * var(--about-scale)) !important;
+  }
+  
+  .work-culture-grid-container .grid-cols-2 {
+    gap: calc(1.5rem * var(--about-scale)) !important;
+  }
+  
+  /* Scale card heights (width is now w-full, controlled by grid) */
+  .work-culture-card-top {
+    height: calc(548px * var(--about-card-scale)) !important;
+  }
+  
+  .work-culture-card-bottom {
+    height: calc(560px * var(--about-card-scale)) !important;
+  }
+  
+  .work-culture-card h3 {
+    font-size: calc(1.875rem * var(--about-scale));
+  }
+  
+  .work-culture-card p.subtitle {
+    font-size: calc(1rem * var(--about-scale));
+  }
+  
+  .work-culture-card p.description {
+    font-size: calc(1.125rem * var(--about-scale));
+  }
+  
+  .work-culture-card .card-overlay {
+    padding: calc(1.75rem * var(--about-scale));
+    height: calc(13rem * var(--about-scale));
+  }
+}
+
+/* About Page Section Spacing */
+@media (min-width: 1920px) {
+  .about-section-spacing {
+    padding-top: calc(3.5rem * var(--about-scale));
+    padding-bottom: calc(3.5rem * var(--about-scale));
+  }
+  
+  .about-section-gap {
+    margin-top: calc(3rem * var(--about-scale));
+    margin-bottom: calc(3rem * var(--about-scale));
+  }
+}
+
+/* =========================================
+   PORTFOLIO PAGE - ULTRA-WIDE PROGRESSIVE SCALING
+   Applies only to screens wider than 1920px
+   ========================================= */
+
+/* Portfolio page container scaling */
+.portfolio-page-container {
+  --portfolio-scale: 1;
+  --portfolio-max-width: 1248px;
+}
+
+/* Large Desktop: 1920px - 2099px */
+@media (min-width: 1920px) and (max-width: 2099px) {
+  .portfolio-page-container {
+    --portfolio-scale: 1.1;
+    --portfolio-max-width: 1400px;
+  }
+}
+
+/* Ultra-wide: 2100px - 2559px */
+@media (min-width: 2100px) and (max-width: 2559px) {
+  .portfolio-page-container {
+    --portfolio-scale: 1.2;
+    --portfolio-max-width: 1600px;
+  }
+}
+
+/* Super ultra-wide: 2560px+ */
+@media (min-width: 2560px) {
+  .portfolio-page-container {
+    --portfolio-scale: 1.35;
+    --portfolio-max-width: 1800px;
+  }
+}
+
+/* Portfolio Page Content Rails */
+@media (min-width: 1920px) {
+  .portfolio-content-rail {
+    max-width: var(--portfolio-max-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Banner typography scaling */
+  .portfolio-subtitle {
+    font-size: calc(0.875rem * var(--portfolio-scale));
+    letter-spacing: calc(0.25em * var(--portfolio-scale));
+  }
+  
+  .portfolio-title {
+    font-size: calc(3rem * var(--portfolio-scale));
+    margin-bottom: calc(2rem * var(--portfolio-scale));
+  }
+  
+  /* Category buttons scaling */
+  .portfolio-button {
+    width: calc(274px * var(--portfolio-scale)) !important;
+    height: calc(70px * var(--portfolio-scale)) !important;
+    font-size: calc(1.25rem * var(--portfolio-scale)) !important;
+  }
+  
+  /* Grid container scaling */
+  .portfolio-grid-container {
+    max-width: var(--portfolio-max-width);
+    gap: calc(1.5rem * var(--portfolio-scale));
+  }
+  
+  /* Card scaling */
+  .portfolio-card {
+    min-height: calc(280px * var(--portfolio-scale));
+  }
+  
+  .portfolio-card h3 {
+    font-size: calc(1.125rem * var(--portfolio-scale));
+  }
+  
+  .portfolio-card p {
+    font-size: calc(0.875rem * var(--portfolio-scale));
+  }
+  
+  /* Load more button scaling */
+  .portfolio-load-more {
+    font-size: calc(1.125rem * var(--portfolio-scale));
+    padding: calc(1rem * var(--portfolio-scale)) calc(3.5rem * var(--portfolio-scale));
+  }
+}
+
+/* =========================================
+   DIFFERENTIATION PAGE - ULTRA-WIDE PROGRESSIVE SCALING
+   Applies only to screens wider than 1920px
+   ========================================= */
+
+/* Differentiation page container scaling */
+.diff-page-container {
+  --diff-scale: 1;
+  --diff-max-width: 1248px;
+}
+
+/* Large Desktop: 1920px - 2099px */
+@media (min-width: 1920px) and (max-width: 2099px) {
+  .diff-page-container {
+    --diff-scale: 1.1;
+    --diff-max-width: 1400px;
+  }
+}
+
+/* Ultra-wide: 2100px - 2559px */
+@media (min-width: 2100px) and (max-width: 2559px) {
+  .diff-page-container {
+    --diff-scale: 1.2;
+    --diff-max-width: 1600px;
+  }
+}
+
+/* Super ultra-wide: 2560px+ */
+@media (min-width: 2560px) {
+  .diff-page-container {
+    --diff-scale: 1.35;
+    --diff-max-width: 1800px;
+  }
+}
+
+/* Differentiation Page Content Rails */
+@media (min-width: 1920px) {
+  .diff-content-rail {
+    max-width: var(--diff-max-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Hero typography scaling */
+  .diff-title-left h4,
+  .diff-subtitle {
+    font-size: calc(2rem * var(--diff-scale));
+  }
+  
+  .diff-title-left h2 {
+    font-size: calc(3rem * var(--diff-scale));
+  }
+  
+  .diff-title-right,
+  .diff-text-line {
+    font-size: calc(1.25rem * var(--diff-scale));
+    line-height: 1.7;
+  }
+  
+  /* Why Video Crew boxes scaling */
+  .diff-why-box {
+    width: calc(397px * var(--diff-scale)) !important;
+    min-height: calc(192px * var(--diff-scale)) !important;
+    padding: calc(1.5rem * var(--diff-scale));
+  }
+  
+  .diff-why-box h3 {
+    font-size: calc(1rem * var(--diff-scale));
+  }
+  
+  .diff-why-box p {
+    font-size: calc(0.875rem * var(--diff-scale));
+  }
+  
+  /* Feature section scaling */
+  .diff-feature-section {
+    padding-top: calc(3rem * var(--diff-scale));
+    padding-bottom: calc(3rem * var(--diff-scale));
+  }
+  
+  .diff-feature-section .diff-content-rail {
+    gap: calc(2rem * var(--diff-scale));
+  }
+  
+  .diff-feature-section span {
+    font-size: calc(96px * var(--diff-scale));
+  }
+  
+  .diff-feature-section h3 {
+    font-size: calc(1.875rem * var(--diff-scale));
+  }
+  
+  .diff-feature-section p {
+    font-size: calc(1rem * var(--diff-scale));
+  }
+  
+  /* Banner scaling */
+  .diff-banner-title {
+    font-size: calc(1.875rem * var(--diff-scale));
+  }
+  
+  .diff-banner-button {
+    font-size: calc(1.125rem * var(--diff-scale));
+    padding: calc(1rem * var(--diff-scale)) calc(3.5rem * var(--diff-scale));
+  }
+}
+
+/* =========================================
+   CONTACT PAGE - ULTRA-WIDE PROGRESSIVE SCALING
+   Applies only to screens wider than 1920px
+   ========================================= */
+
+/* Contact page container scaling */
+.contact-page-container {
+  --contact-scale: 1;
+  --contact-max-width: 1248px;
+}
+
+/* Large Desktop: 1920px - 2099px */
+@media (min-width: 1920px) and (max-width: 2099px) {
+  .contact-page-container {
+    --contact-scale: 1.1;
+    --contact-max-width: 1400px;
+  }
+}
+
+/* Ultra-wide: 2100px - 2559px */
+@media (min-width: 2100px) and (max-width: 2559px) {
+  .contact-page-container {
+    --contact-scale: 1.2;
+    --contact-max-width: 1600px;
+  }
+}
+
+/* Super ultra-wide: 2560px+ */
+@media (min-width: 2560px) {
+  .contact-page-container {
+    --contact-scale: 1.35;
+    --contact-max-width: 1800px;
+  }
+}
+
+/* Contact Page Content Rails */
+@media (min-width: 1920px) {
+  .contact-content-rail {
+    max-width: var(--contact-max-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Hero typography scaling */
+  .contact-title-left h2 {
+    font-size: calc(3rem * var(--contact-scale));
+  }
+  
+  .contact-title-right,
+  .contact-text-line {
+    font-size: calc(1.25rem * var(--contact-scale));
+    line-height: 1.7;
+  }
+  
+  /* Contact form container scaling */
+  .contact-form-container {
+    max-width: var(--contact-max-width);
+    padding: calc(2rem * var(--contact-scale));
+  }
+  
+  /* Form section scaling */
+  .contact-form-section h3 {
+    font-size: calc(1.5rem * var(--contact-scale));
+  }
+  
+  .contact-form-row label {
+    font-size: calc(0.875rem * var(--contact-scale));
+  }
+  
+  .contact-form-row input,
+  .contact-form-row textarea,
+  .contact-form-row select {
+    font-size: calc(1rem * var(--contact-scale));
+    padding: calc(0.75rem * var(--contact-scale)) calc(1rem * var(--contact-scale));
+  }
+  
+  /* Submit button scaling */
+  .contact-submit-btn {
+    font-size: calc(1.125rem * var(--contact-scale));
+    padding: calc(1rem * var(--contact-scale)) calc(2.5rem * var(--contact-scale));
+  }
+}
+
+/* =========================================
+   HOME PAGE - ULTRA-WIDE PROGRESSIVE SCALING
+   Applies only to screens wider than 1920px
+   ========================================= */
+
+/* Home page container scaling */
+.home-page-container {
+  --home-scale: 1;
+  --home-max-width: 1248px;
+  --home-card-scale: 1;
+}
+
+/* Large Desktop: 1920px - 2099px */
+@media (min-width: 1920px) and (max-width: 2099px) {
+  .home-page-container {
+    --home-scale: 1.1;
+    --home-max-width: 1400px;
+    --home-card-scale: 1.1;
+  }
+}
+
+/* Ultra-wide: 2100px - 2559px */
+@media (min-width: 2100px) and (max-width: 2559px) {
+  .home-page-container {
+    --home-scale: 1.2;
+    --home-max-width: 1600px;
+    --home-card-scale: 1.15;
+  }
+}
+
+/* Super ultra-wide: 2560px+ */
+@media (min-width: 2560px) {
+  .home-page-container {
+    --home-scale: 1.35;
+    --home-max-width: 1800px;
+    --home-card-scale: 1.25;
+  }
+}
+
+/* Home Page Content Rails */
+@media (min-width: 1920px) {
+  .home-content-rail {
+    max-width: var(--home-max-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Sub-hero section typography scaling */
+  .home-title-left h2 {
+    font-size: calc(3rem * var(--home-scale));
+    line-height: 1.2;
+  }
+  
+  .home-title-right,
+  .home-text-line {
+    font-size: calc(1.25rem * var(--home-scale));
+    line-height: 1.7;
+  }
+  
+  /* Trusted companies title */
+  .trusted-companies-title {
+    font-size: calc(1.875rem * var(--home-scale)) !important;
+  }
+}
+
+/* Services Grid Scaling */
+@media (min-width: 1920px) {
+  .services-grid-container {
+    max-width: var(--home-max-width);
+    gap: calc(1.5rem * var(--home-scale));
+  }
+  
+  /* Service card scaling */
+  .service-card {
+    max-width: calc(402px * var(--home-card-scale)) !important;
+    height: calc(425px * var(--home-card-scale)) !important;
+  }
+  
+  .service-card h3 {
+    font-size: calc(1.25rem * var(--home-scale));
+  }
+  
+  .service-card p {
+    font-size: calc(1rem * var(--home-scale));
+  }
+  
+  .service-card .card-overlay {
+    padding: calc(1.75rem * var(--home-scale));
+  }
+}
+
+/* Portfolio Scroller Scaling */
+@media (min-width: 1920px) {
+  .portfolio-scroller-text {
+    max-width: var(--home-max-width);
+  }
+  
+  .portfolio-title {
+    font-size: calc(3rem * var(--home-scale)) !important;
+    margin-bottom: calc(0.5rem * var(--home-scale));
+  }
+  
+  .portfolio-text-line {
+    font-size: calc(1.25rem * var(--home-scale)) !important;
+  }
+  
+  /* Scroller cards scaling */
+  .portfolio-scroller-card {
+    width: calc(360px * var(--home-card-scale)) !important;
+    height: calc(201px * var(--home-card-scale)) !important;
+  }
+}
+
+/* Background Banner (Stats) Scaling */
+@media (min-width: 1920px) {
+  .stats-container {
+    max-width: var(--home-max-width);
+    gap: calc(2rem * var(--home-scale));
+  }
+  
+  .stat-value {
+    font-size: calc(3rem * var(--home-scale)) !important;
+  }
+  
+  .stat-item p:last-child {
+    font-size: calc(1.125rem * var(--home-scale));
+  }
+}
+
+/* Infinite Scroller (Company Logos) Scaling */
+@media (min-width: 1920px) {
+  .company-scroller-container {
+    padding-top: calc(1.25rem * var(--home-scale));
+    padding-bottom: calc(1.25rem * var(--home-scale));
+  }
+  
+  .company-scroller-container .scroll-track {
+    gap: calc(5rem * var(--home-scale));
+  }
+  
+  /* Scale logos up significantly on ultra-wide */
+  .company-logo {
+    height: calc(3rem * var(--home-scale)) !important;
+  }
+  
+  .company-logo-fallback {
+    font-size: calc(1.5rem * var(--home-scale)) !important;
   }
 }

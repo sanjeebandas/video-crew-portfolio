@@ -1,9 +1,9 @@
 const Footer = () => {
   return (
-    <footer className="bg-[#111111] text-white px-6 py-10 text-sm">
-      <div className="max-w-[1248px] mx-auto flex flex-col gap-6">
+    <footer className="bg-[#111111] text-white px-2 3xl:px-4 py-10 text-sm">
+      <div className="max-w-[1248px] 2xl:max-w-[1380px] 3xl:max-w-[1600px] mx-auto flex flex-col gap-6">
         {/* Logo Section */}
-        <div className="-ml-4">
+        <div className="-ml-1 md:ml-0 lg:-ml-4 3xl:ml-0">
           <img src="imgs/Frame 362.png" alt="Video Crew" className="h-14" />
         </div>
 
