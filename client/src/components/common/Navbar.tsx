@@ -24,9 +24,9 @@ const Navbar = () => {
         <div className="flex items-center space-x-3 -ml-1 md:ml-0 lg:-ml-4 3xl:ml-0">
           <Link to="/" className="group">
             <img
-              src="/imgs/Frame 362.png"
+              src="/imgs/Video_Crew_Logo_W.svg"
               alt="Logo"
-              className="h-12 md:h-13 w-auto group-hover:scale-110 transition-all duration-300 ease-out"
+              className="h-10 md:h-8 w-auto group-hover:scale-110 transition-all duration-300 ease-out"
             />
           </Link>
         </div>
