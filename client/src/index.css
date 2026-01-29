@@ -448,13 +448,54 @@ body {
     height: 100%;
   }
 
-  /* Ultra-wide (1920px+): Rail-center the video */
-  @media (min-width: 1920px) {
-    .hero-video-container {
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: var(--content-max-width);
+  /* Locked-width video banner with proportional scaling */
+  .hero-video-locked-width {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 1920px; /* Fixed max-width on desktop */
+  }
+
+  /* Video element - scales proportionally with viewport width, maintains aspect ratio */
+  .hero-video-element {
+    width: 100%;
+    height: 100%;
+    max-width: 1920px; /* Locked max-width on desktop */
+    max-height: 100%;
+    object-fit: contain; /* Show complete video without cropping */
+  }
+
+  /* Responsive scaling: video shrinks proportionally on smaller viewports */
+  @media (max-width: 1920px) {
+    .hero-video-locked-width {
+      width: 100%; /* Scale with container width */
+      max-width: 100%;
     }
+    
+    .hero-video-element {
+      width: 100%; /* Scale with container width */
+      max-width: 100%;
+      height: 100%; /* Fill container height */
+    }
+  }
+
+  /* Desktop: Fixed max-width (1920px), centered */
+  @media (min-width: 1920px) {
+    .hero-video-locked-width {
+      width: 1920px; /* Locked width on desktop */
+      max-width: 1920px;
+    }
+    
+    .hero-video-element {
+      width: 1920px; /* Locked width on desktop */
+      max-width: 1920px;
+      height: 100%; /* Fill container height */
+    }
+  }
 
     /* Ambient gradient on sides for cinematic feel */
     .hero-rail-centered::before,
@@ -512,7 +553,6 @@ body {
       animation-duration: 45s;
     }
   }
-}
 
 /* =========================================
    ABOUT PAGE - ULTRA-WIDE PROGRESSIVE SCALING

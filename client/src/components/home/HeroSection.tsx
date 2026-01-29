@@ -73,7 +73,7 @@ const HeroSection = () => {
 
   // Video source - uses environment variable for production (Render storage)
   // Falls back to local path for development
-  const videoSrc = import.meta.env.VITE_HERO_VIDEO_URL || "/vids/HomePage_Banner_Video_비디오크루_홍보영상(3D)_최종본.mp4";
+  const videoSrc = import.meta.env.VITE_HERO_VIDEO_URL || "/vids/HomePage_Hero_Banner.mp4";
 
   // Detect mobile for responsive behavior (rail-centering handled by CSS)
   useEffect(() => {
@@ -166,8 +166,8 @@ const HeroSection = () => {
         }),
       }}
     >
-      {/* Video Banner Container - Rail-centered on ultra-wide via CSS */}
-      <div className="hero-video-container z-0">
+      {/* Video Banner Container - Locked-width with proportional scaling */}
+      <div className="hero-video-container hero-video-locked-width z-0">
         {/* Skeleton Loading State - Shows while video is loading */}
         {!isVideoLoaded && !hasVideoError && (
           <HeroBannerSkeleton />
@@ -200,17 +200,17 @@ const HeroSection = () => {
           </div>
         )}
 
-        {/* Video Element - cover to fill container without black bars */}
+        {/* Video Element - locked-width with proportional scaling, no cropping */}
         <video
           ref={videoRef}
           src={videoSrc}
-          className={`w-full h-full transition-opacity duration-700 ${
+          className={`hero-video-element transition-opacity duration-700 ${
             isVideoPlaying && !hasVideoError ? "opacity-100" : "opacity-0"
           }`}
           style={{
-            // Cover fills container completely (no black bars)
-            objectFit: "cover",
-            objectPosition: isMobile ? "center 30%" : "center center",
+            // Locked-width approach: video scales proportionally, maintains aspect ratio, no cropping
+            objectFit: "contain",
+            objectPosition: "center center",
           }}
           autoPlay
           muted
