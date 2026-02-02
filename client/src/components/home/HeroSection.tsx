@@ -71,9 +71,30 @@ const HeroSection = () => {
   const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Video source - uses environment variable for production (Render storage)
-  // Falls back to local path for development
-  const videoSrc = import.meta.env.VITE_HERO_VIDEO_URL || "/vids/HomePage_Hero_Banner.mp4";
+  // Cloudinary CDN configuration for optimized video delivery
+  const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+  const videoPublicId = import.meta.env.VITE_CLOUDINARY_VIDEO_PUBLIC_ID;
+
+  // Generate Cloudinary video URL with automatic format and quality optimization
+  // f_auto: automatic format selection (WebM for Chrome, MP4 for Safari)
+  // q_auto: automatic quality optimization (reduces file size 40-60%)
+  const videoSrc = cloudName && videoPublicId
+    ? `https://res.cloudinary.com/${cloudName}/video/upload/f_auto,q_auto/${videoPublicId}`
+    : "/vids/HomePage_Hero_Banner.mp4"; // Fallback for development
+
+  // Generate poster frame from Cloudinary (first frame of video)
+  // so_0: start offset 0 seconds (first frame)
+  // Provides instant visual rendering while video buffers
+  const posterSrc = cloudName && videoPublicId
+    ? `https://res.cloudinary.com/${cloudName}/video/upload/f_auto,q_auto,so_0/${videoPublicId}.jpg`
+    : undefined;
+
+  // Debug: Log video source configuration (remove in production)
+  console.log('🎬 Video Banner - Cloud Name:', cloudName || '❌ NOT SET');
+  console.log('🎬 Video Banner - Public ID:', videoPublicId || '❌ NOT SET');
+  console.log('🎬 Video Banner - Video URL:', videoSrc);
+  console.log('🎬 Video Banner - Poster URL:', posterSrc || '❌ No poster');
+  console.log('🎬 Video Banner - Using Cloudinary:', !!(cloudName && videoPublicId) ? '✅ YES' : '❌ NO (fallback)');
 
   // Detect mobile for responsive behavior (rail-centering handled by CSS)
   useEffect(() => {
@@ -168,8 +189,9 @@ const HeroSection = () => {
     >
       {/* Video Banner Container - Locked-width with proportional scaling */}
       <div className="hero-video-container hero-video-locked-width z-0">
-        {/* Skeleton Loading State - Shows while video is loading */}
-        {!isVideoLoaded && !hasVideoError && (
+        {/* Skeleton Loading State - Only shows when no poster frame is available (fallback mode) */}
+        {/* When Cloudinary poster is configured, it provides instant visual rendering */}
+        {!posterSrc && !isVideoLoaded && !hasVideoError && (
           <HeroBannerSkeleton />
         )}
 
@@ -201,11 +223,16 @@ const HeroSection = () => {
         )}
 
         {/* Video Element - locked-width with proportional scaling, no cropping */}
+        {/* When poster is available (Cloudinary), show immediately for instant visual */}
+        {/* When no poster (fallback), use opacity transition after loading */}
         <video
           ref={videoRef}
           src={videoSrc}
+          poster={posterSrc}
           className={`hero-video-element transition-opacity duration-700 ${
-            isVideoPlaying && !hasVideoError ? "opacity-100" : "opacity-0"
+            posterSrc 
+              ? (hasVideoError ? "opacity-0" : "opacity-100")  // Poster: visible immediately
+              : (isVideoPlaying && !hasVideoError ? "opacity-100" : "opacity-0")  // No poster: wait for playing
           }`}
           style={{
             // Locked-width approach: video scales proportionally, maintains aspect ratio, no cropping
