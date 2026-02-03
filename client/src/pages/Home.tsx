@@ -17,7 +17,7 @@ import ErrorBoundary from "../components/common/ErrorBoundary";
 const Home = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const { fadeInUp, slideUpFadeIn, stackIn, staggerFadeIn, parallaxEffect } =
+  const {slideUpFadeIn, stackIn, staggerFadeIn, parallaxEffect } =
     useScrollAnimations();
 
   useEffect(() => {
