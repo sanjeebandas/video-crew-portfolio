@@ -66,6 +66,7 @@ const HeroSection = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [hasStartedPlaying, setHasStartedPlaying] = useState(false); // Track if video ever started (for buffering state)
   const [hasVideoError, setHasVideoError] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
@@ -75,11 +76,12 @@ const HeroSection = () => {
   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const videoPublicId = import.meta.env.VITE_CLOUDINARY_VIDEO_PUBLIC_ID;
 
-  // Generate Cloudinary video URL with automatic format and quality optimization
+  // Generate Cloudinary video URL with automatic format, quality, and codec optimization
   // f_auto: automatic format selection (WebM for Chrome, MP4 for Safari)
   // q_auto: automatic quality optimization (reduces file size 40-60%)
+  // vc_auto: automatic video codec selection (VP9, H.265, etc. based on browser support)
   const videoSrc = cloudName && videoPublicId
-    ? `https://res.cloudinary.com/${cloudName}/video/upload/f_auto,q_auto/${videoPublicId}`
+    ? `https://res.cloudinary.com/${cloudName}/video/upload/f_auto,q_auto,vc_auto/${videoPublicId}`
     : "/vids/HomePage_Hero_Banner.mp4"; // Fallback for development
 
   // Generate poster frame from Cloudinary (first frame of video)
@@ -88,13 +90,6 @@ const HeroSection = () => {
   const posterSrc = cloudName && videoPublicId
     ? `https://res.cloudinary.com/${cloudName}/video/upload/f_auto,q_auto,so_0/${videoPublicId}.jpg`
     : undefined;
-
-  // Debug: Log video source configuration (remove in production)
-  console.log('🎬 Video Banner - Cloud Name:', cloudName || '❌ NOT SET');
-  console.log('🎬 Video Banner - Public ID:', videoPublicId || '❌ NOT SET');
-  console.log('🎬 Video Banner - Video URL:', videoSrc);
-  console.log('🎬 Video Banner - Poster URL:', posterSrc || '❌ No poster');
-  console.log('🎬 Video Banner - Using Cloudinary:', !!(cloudName && videoPublicId) ? '✅ YES' : '❌ NO (fallback)');
 
   // Detect mobile for responsive behavior (rail-centering handled by CSS)
   useEffect(() => {
@@ -158,6 +153,7 @@ const HeroSection = () => {
 
   const handlePlaying = () => {
     setIsVideoPlaying(true);
+    setHasStartedPlaying(true); // Track that video has started at least once
   };
 
   const handleVideoError = () => {
@@ -224,7 +220,7 @@ const HeroSection = () => {
 
         {/* Video Element - locked-width with proportional scaling, no cropping */}
         {/* When poster is available (Cloudinary), show immediately for instant visual */}
-        {/* When no poster (fallback), use opacity transition after loading */}
+        {/* When no poster (fallback), fade in after first play, stay visible during buffering */}
         <video
           ref={videoRef}
           src={videoSrc}
@@ -232,7 +228,7 @@ const HeroSection = () => {
           className={`hero-video-element transition-opacity duration-700 ${
             posterSrc 
               ? (hasVideoError ? "opacity-0" : "opacity-100")  // Poster: visible immediately
-              : (isVideoPlaying && !hasVideoError ? "opacity-100" : "opacity-0")  // No poster: wait for playing
+              : ((isVideoPlaying || hasStartedPlaying) && !hasVideoError ? "opacity-100" : "opacity-0")  // Fallback: stay visible once started (handles buffering)
           }`}
           style={{
             // Locked-width approach: video scales proportionally, maintains aspect ratio, no cropping
@@ -242,7 +238,7 @@ const HeroSection = () => {
           autoPlay
           muted
           playsInline
-          preload={isMobile ? "metadata" : "auto"}
+          preload="metadata" // Always metadata - poster handles initial visual, avoids blocking LCP
           onCanPlay={handleCanPlay}
           onPlaying={handlePlaying}
           onWaiting={handleWaiting}

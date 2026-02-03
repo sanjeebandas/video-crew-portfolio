@@ -34,11 +34,7 @@ const Home = () => {
           start: "top 110%",
         },
       });
-      fadeInUp(".home-subtitle", {
-        scrollTrigger: {
-          start: "top 110%",
-        },
-      });
+      // Note: .home-subtitle animation removed - element doesn't exist in current layout
       staggerFadeIn(".home-text-line", {
         scrollTrigger: {
           start: "top 115%",
