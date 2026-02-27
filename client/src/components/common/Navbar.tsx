@@ -26,7 +26,7 @@ const Navbar = () => {
             <img
               src="/imgs/Video_Crew_Logo_W.svg"
               alt="Logo"
-              className="h-10 md:h-8 w-auto group-hover:scale-110 transition-all duration-300 ease-out"
+              className="h-7 w-auto md:h-8 group-hover:scale-110 transition-all duration-300 ease-out"
             />
           </Link>
         </div>

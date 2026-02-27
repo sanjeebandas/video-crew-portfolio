@@ -4,28 +4,30 @@ import fs from "fs";
 
 // Environment-aware upload directory configuration
 const getUploadDir = (): string => {
-  // Platform-specific environment variables
-  const platformPaths = {
-    // Render Premium persistent disk
-    RENDER_PERSISTENT_DISK_PATH: process.env.RENDER_PERSISTENT_DISK_PATH || "", //make sure to add this in the .env file once RENDER subscription is activated
-    // Generic volume mount
-    VOLUME_MOUNT_PATH: process.env.VOLUME_MOUNT_PATH || "",
-    // Local development fallback
-    LOCAL_UPLOAD_PATH: path.join(__dirname, "../../uploads")
-  };
+  const isDev = process.env.NODE_ENV !== "production";
+  const localPath = path.join(__dirname, "../../uploads");
 
-  // Find first available platform path
-  for (const [key, value] of Object.entries(platformPaths)) {
-    if (value) {
-      console.log(`📁 Using upload directory for ${key}: ${value}`);
-      return value;
-    }
+  // In development, always use a local path to avoid permission issues (e.g. /var/data on Render)
+  if (isDev) {
+    console.log(`📁 Using local upload directory (development): ${localPath}`);
+    return localPath;
   }
 
-  // Final fallback (should never reach here)
-  const fallbackPath = path.join(__dirname, "../../uploads");
-  console.log(`📁 Using fallback upload directory: ${fallbackPath}`);
-  return fallbackPath;
+  // Production: use platform paths if set
+  const renderPath = process.env.RENDER_PERSISTENT_DISK_PATH || "";
+  const volumePath = process.env.VOLUME_MOUNT_PATH || "";
+
+  if (renderPath) {
+    console.log(`Using upload directory for RENDER_PERSISTENT_DISK_PATH: ${renderPath}`);
+    return renderPath;
+  }
+  if (volumePath) {
+    console.log(`Using upload directory for VOLUME_MOUNT_PATH: ${volumePath}`);
+    return volumePath;
+  }
+
+  console.log(`📁 Using fallback upload directory: ${localPath}`);
+  return localPath;
 };
 
 const uploadDir = getUploadDir();

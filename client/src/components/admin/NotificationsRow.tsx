@@ -11,9 +11,16 @@ interface Notification {
   title: string;
   message: string;
   isRead: boolean;
-  data?: any;
+  data?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
+}
+
+/** Shape of API/axios-like errors for consistent error handling */
+interface ApiErrorLike {
+  response?: { status?: number };
+  message?: string;
+  code?: string;
 }
 
 interface NotificationResponse {
@@ -52,8 +59,9 @@ const NotificationsRow = () => {
       setNotifications(response.notifications);
       setUnreadCount(response.unreadCount);
       setLoading(false);
-    } catch (error: any) {
-      console.error("Error loading notifications:", error);
+    } catch (err: unknown) {
+      const error = err as ApiErrorLike;
+      console.error("Error loading notifications:", err);
       
       let errorMessage = "Failed to load notifications";
       
@@ -64,7 +72,7 @@ const NotificationsRow = () => {
         errorMessage = "Access denied. You don't have permission to view notifications.";
       } else if (error?.response?.status === 404) {
         errorMessage = "Notification service not found. Please contact support.";
-      } else if (error?.response?.status >= 500) {
+      } else if ((error?.response?.status ?? 0) >= 500) {
         errorMessage = "Server error. Our team has been notified.";
       } else if (error?.message?.includes('Network Error') || error?.code === 'NETWORK_ERROR') {
         errorMessage = "Network connection failed. Please check your internet connection.";
@@ -92,8 +100,9 @@ const NotificationsRow = () => {
       );
       
       setUnreadCount(prev => Math.max(0, prev - 1));
-    } catch (error: any) {
-      console.error("Error marking notification as read:", error);
+    } catch (err: unknown) {
+      const error = err as ApiErrorLike;
+      console.error("Error marking notification as read:", err);
       
       let errorMessage = "Failed to mark notification as read";
       
@@ -103,7 +112,7 @@ const NotificationsRow = () => {
         errorMessage = "Access denied. You don't have permission to update this notification.";
       } else if (error?.response?.status === 404) {
         errorMessage = "Notification not found. It may have been deleted.";
-      } else if (error?.response?.status >= 500) {
+      } else if ((error?.response?.status ?? 0) >= 500) {
         errorMessage = "Server error. Please try again later.";
       } else if (error?.message?.includes('Network Error')) {
         errorMessage = "Network connection failed. Please check your internet connection.";
@@ -126,8 +135,9 @@ const NotificationsRow = () => {
       );
       
       setUnreadCount(0);
-    } catch (error: any) {
-      console.error("Error marking all notifications as read:", error);
+    } catch (err: unknown) {
+      const error = err as ApiErrorLike;
+      console.error("Error marking all notifications as read:", err);
       
       let errorMessage = "Failed to mark all notifications as read";
       
@@ -137,7 +147,7 @@ const NotificationsRow = () => {
         errorMessage = "Access denied. You don't have permission to update notifications.";
       } else if (error?.response?.status === 404) {
         errorMessage = "Notification service not found. Please contact support.";
-      } else if (error?.response?.status >= 500) {
+      } else if ((error?.response?.status ?? 0) >= 500) {
         errorMessage = "Server error. Please try again later.";
       } else if (error?.message?.includes('Network Error')) {
         errorMessage = "Network connection failed. Please check your internet connection.";
