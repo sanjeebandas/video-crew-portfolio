@@ -59,13 +59,11 @@ const PortfolioBanner = ({
       allButtons.forEach((btn) => {
         gsap.set(btn, { scale: 1 });
 
-        const overlay = btn.querySelector(".hover-overlay") as HTMLElement;
         const activeOverlay = btn.querySelector(
           ".active-hover-overlay"
         ) as HTMLElement;
         const text = btn.querySelector(".button-text") as HTMLElement;
 
-        if (overlay) gsap.set(overlay, { opacity: 0 });
         if (activeOverlay) gsap.set(activeOverlay, { opacity: 0 });
         if (text) gsap.set(text, { textShadow: "none" });
       });
@@ -94,19 +92,10 @@ const PortfolioBanner = ({
         });
 
         // Reset overlays for other buttons
-        const otherOverlay = btn.querySelector(".hover-overlay") as HTMLElement;
         const otherActiveOverlay = btn.querySelector(
           ".active-hover-overlay"
         ) as HTMLElement;
         const otherText = btn.querySelector(".button-text") as HTMLElement;
-
-        if (otherOverlay) {
-          gsap.to(otherOverlay, {
-            opacity: 0,
-            duration: 0.12, // Reduced from 0.15s to 0.12s
-            ease: "power2.out",
-          });
-        }
 
         if (otherActiveOverlay) {
           gsap.to(otherActiveOverlay, {
@@ -131,15 +120,6 @@ const PortfolioBanner = ({
       duration: 0.2, // Reduced from 0.25s to 0.2s
       ease: "power2.out",
     });
-
-    const overlay = button.querySelector(".hover-overlay") as HTMLElement;
-    if (overlay) {
-      gsap.to(overlay, {
-        opacity: 1,
-        duration: 0.2, // Reduced from 0.25s to 0.2s
-        ease: "power2.out",
-      });
-    }
 
     // Enhanced text glow effect
     const text = button.querySelector(".button-text") as HTMLElement;
@@ -167,16 +147,6 @@ const PortfolioBanner = ({
       duration: 0.2, // Reduced from 0.25s to 0.2s
       ease: "power2.out",
     });
-
-    // Reset non-active button hover effects
-    const overlay = button.querySelector(".hover-overlay") as HTMLElement;
-    if (overlay) {
-      gsap.to(overlay, {
-        opacity: 0,
-        duration: 0.15, // Reduced from 0.2s to 0.15s
-        ease: "power2.out",
-      });
-    }
 
     const text = button.querySelector(".button-text") as HTMLElement;
     if (text) {
@@ -251,13 +221,6 @@ const PortfolioBanner = ({
                   : "text-white border-white"
               }`}
             >
-              {/* Hover overlay for non-active buttons */}
-              {currentFilter !== value && (
-                <div
-                  className="hover-overlay absolute inset-0 opacity-0 bg-white/15"
-                />
-              )}
-
               {/* Active state indicator - pressed look */}
               {currentFilter === value && (
                 <div
