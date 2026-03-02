@@ -11,12 +11,14 @@ type ErrorState = {
   component?: string;
 };
 
+type EditPortfolioData = PortfolioFormData & { _id: string };
+
 type Props = {
   onCreated?: () => void;
   onUpdated?: () => void;
   onClose: () => void;
   editMode?: boolean;
-  editData?: any;
+  editData?: EditPortfolioData;
 };
 
 type PortfolioFormData = {
@@ -68,7 +70,33 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
   const MAX_RETRIES = 3;
   const RETRY_DELAY = 2000; // 2 seconds
 
-  // Network status detection 
+  // Retry handler (same pattern as Dashboard) - declared before useEffect that depends on it
+  const handleRetry = useCallback(async () => {
+    if (retryCount >= MAX_RETRIES) return;
+
+    try {
+      setIsRetrying(true);
+      const newRetryCount = retryCount + 1;
+      setRetryCount(newRetryCount);
+
+      // Clear errors and retry
+      setError(null);
+      setThumbnailError(null);
+      setVideoError(null);
+
+      // Simulate retry delay
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * newRetryCount));
+
+      // Reset retry count on success
+      setRetryCount(0);
+    } catch (error) {
+      console.error("Retry failed:", error);
+    } finally {
+      setIsRetrying(false);
+    }
+  }, [retryCount]);
+
+  // Network status detection
   useEffect(() => {
     const handleOnline = () => {
       setIsOffline(false);
@@ -102,33 +130,7 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, [error, retryCount]);
-
-  // Retry handler (same pattern as Dashboard)
-  const handleRetry = useCallback(async () => {
-    if (retryCount >= MAX_RETRIES) return;
-
-    try {
-      setIsRetrying(true);
-      const newRetryCount = retryCount + 1;
-      setRetryCount(newRetryCount);
-
-      // Clear errors and retry
-      setError(null);
-      setThumbnailError(null);
-      setVideoError(null);
-
-      // Simulate retry delay
-      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * newRetryCount));
-
-      // Reset retry count on success
-      setRetryCount(0);
-    } catch (error) {
-      console.error("Retry failed:", error);
-    } finally {
-      setIsRetrying(false);
-    }
-  }, [retryCount]);
+  }, [error, retryCount, handleRetry]);
 
   // Character limit helper functions
   const getCharLimitColor = (currentLength: number, maxLength: number) => {
@@ -323,7 +325,8 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
       }
 
       return uploaded;
-    } catch (uploadErr: any) {
+    } catch (uploadErr: unknown) {
+      const e = uploadErr as { response?: { status?: number }; message?: string; code?: string };
       console.error("Upload error:", uploadErr);
       
       let errorMessage = "Failed to upload media files.";
@@ -331,27 +334,27 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
       let retryable = true;
 
       // Determine specific error type and message
-      if (uploadErr?.response?.status === 401) {
+      if (e?.response?.status === 401) {
         errorMessage = "Authentication expired. Please log in again.";
         errorType = 'api';
         retryable = false;
-      } else if (uploadErr?.response?.status === 403) {
+      } else if (e?.response?.status === 403) {
         errorMessage = "Access denied. You don't have permission to upload files.";
         errorType = 'api';
         retryable = false;
-      } else if (uploadErr?.response?.status === 413) {
+      } else if (e?.response?.status === 413) {
         errorMessage = "File too large. Please reduce file size and try again.";
         errorType = 'upload';
         retryable = true;
-      } else if (uploadErr?.response?.status >= 500) {
+      } else if ((e?.response?.status ?? 0) >= 500) {
         errorMessage = "Server error during upload. Please try again.";
         errorType = 'upload';
         retryable = true;
-      } else if (uploadErr?.message?.includes('Network Error') || uploadErr?.code === 'NETWORK_ERROR') {
+      } else if (e?.message?.includes('Network Error') || e?.code === 'NETWORK_ERROR') {
         errorMessage = "Network connection failed. Please check your internet connection.";
         errorType = 'network';
         retryable = true;
-      } else if (uploadErr?.message?.includes('timeout')) {
+      } else if (e?.message?.includes('timeout')) {
         errorMessage = "Upload timed out. Please try again.";
         errorType = 'upload';
         retryable = true;
@@ -391,7 +394,7 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
       const media = await uploadMedia();
       const payload = { ...formData, ...media };
 
-      if (editMode) {
+      if (editMode && editData) {
         // Update existing portfolio item
         await api.put(`/portfolio/${editData._id}`, payload, {
           headers: {
@@ -419,7 +422,8 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
       setVideoFile(null);
       setErrors({});
       onClose();
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const e = err as { response?: { status?: number }; message?: string; code?: string };
       console.error("Submit error:", err);
       
       let errorMessage = "Failed to create portfolio.";
@@ -427,27 +431,27 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
       let retryable = true;
 
       // Determine specific error type and message
-      if (err?.response?.status === 401) {
+      if (e?.response?.status === 401) {
         errorMessage = "Authentication expired. Please log in again.";
         errorType = 'api';
         retryable = false;
-      } else if (err?.response?.status === 403) {
+      } else if (e?.response?.status === 403) {
         errorMessage = "Access denied. You don't have permission to create/update portfolio items.";
         errorType = 'api';
         retryable = false;
-      } else if (err?.response?.status === 404) {
+      } else if (e?.response?.status === 404) {
         errorMessage = "Portfolio service not found. Please contact support.";
         errorType = 'api';
         retryable = true;
-      } else if (err?.response?.status >= 500) {
+      } else if ((e?.response?.status ?? 0) >= 500) {
         errorMessage = "Server error. Our team has been notified.";
         errorType = 'api';
         retryable = true;
-      } else if (err?.message?.includes('Network Error') || err?.code === 'NETWORK_ERROR') {
+      } else if (e?.message?.includes('Network Error') || e?.code === 'NETWORK_ERROR') {
         errorMessage = "Network connection failed. Please check your internet connection.";
         errorType = 'network';
         retryable = true;
-      } else if (err?.message?.includes('timeout')) {
+      } else if (e?.message?.includes('timeout')) {
         errorMessage = "Request timed out. Please try again.";
         errorType = 'api';
         retryable = true;
@@ -469,7 +473,7 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
           toast.error(`Retrying... (${newRetryCount}/${MAX_RETRIES})`);
           
           setTimeout(() => {
-            handleSubmit(e);
+            handleSubmit({ preventDefault: () => {} } as React.FormEvent);
           }, RETRY_DELAY * newRetryCount);
         }
       } else {

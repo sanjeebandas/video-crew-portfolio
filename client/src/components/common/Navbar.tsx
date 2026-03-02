@@ -15,20 +15,24 @@ const Navbar = () => {
 
   return (
     <nav className="w-full text-white py-2 shadow-md relative z-50">
-      <div className="max-w-[1248px] mx-auto px-2 flex items-center justify-between font-suit">
+      {/* 
+        Navbar content rail matches body content max-width 
+        for consistent visual alignment on ultra-wide displays
+      */}
+      <div className="max-w-[1248px] 2xl:max-w-[1400px] 3xl:max-w-[1600px] mx-auto px-2 3xl:px-4 flex items-center justify-between font-suit">
         {/* Logo */}
-        <div className="flex items-center space-x-3 -ml-1 md:ml-0 lg:-ml-4">
+        <div className="flex items-center space-x-3 -ml-1 md:ml-0 lg:-ml-4 3xl:ml-0">
           <Link to="/" className="group">
             <img
-              src="/imgs/Frame 362.png"
+              src="/imgs/Video_Crew_Logo_W.svg"
               alt="Logo"
-              className="h-12 md:h-13 w-auto group-hover:scale-110 transition-all duration-300 ease-out"
+              className="h-7 w-auto md:h-8 group-hover:scale-110 transition-all duration-300 ease-out"
             />
           </Link>
         </div>
 
         {/* Desktop Nav */}
-        <ul className="hidden md:flex space-x-12 text-xl font-medium -mr-1 md:mr-0 lg:-mr-4">
+        <ul className="hidden md:flex space-x-12 2xl:space-x-14 3xl:space-x-16 text-xl 2xl:text-xl 3xl:text-2xl font-medium -mr-1 md:mr-0 lg:-mr-4 3xl:mr-0">
           <li>
             <Link
               to="/about"

@@ -1,6 +1,6 @@
-const CACHE_NAME = "videocrew-v1.0.0";
-const STATIC_CACHE = "videocrew-static-v1.0.0";
-const DYNAMIC_CACHE = "videocrew-dynamic-v1.0.0";
+const CACHE_NAME = "videocrew-v1.0.1";
+const STATIC_CACHE = "videocrew-static-v1.0.1";
+const DYNAMIC_CACHE = "videocrew-dynamic-v1.0.1";
 
 // Files to cache immediately
 const STATIC_FILES = [
@@ -94,6 +94,12 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Skip non-http(s) URLs (e.g., chrome-extension://, data:, blob:)
+  // These cannot be cached and will throw errors
+  if (!url.protocol.startsWith('http')) {
+    return;
+  }
+
   // Handle API requests
   if (url.pathname.startsWith("/api/")) {
     event.respondWith(handleApiRequest(request));
@@ -168,6 +174,12 @@ async function handleApiRequest(request) {
 
 // Handle static assets with cache-first strategy
 async function handleStaticAsset(request) {
+  // Skip non-http(s) URLs (e.g., chrome-extension://) - they cannot be cached
+  const url = new URL(request.url);
+  if (!url.protocol.startsWith('http')) {
+    return fetch(request);
+  }
+
   const cachedResponse = await caches.match(request);
 
   if (cachedResponse) {

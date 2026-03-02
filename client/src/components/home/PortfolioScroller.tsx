@@ -68,9 +68,9 @@ const PortfolioScroller = () => {
 
   return (
     <section className="bg-black pt-0 pb-8 xs:pb-10 md:pb-12 overflow-hidden w-full">
-      {/* Text Block */}
+      {/* Text Block - Constrained to content rail for readability */}
       <div className="w-full px-4 xs:px-6 md:px-8 lg:px-6">
-        <div className="max-w-[1248px] mx-auto text-center text-white mb-4 xs:mb-6">
+        <div className="portfolio-scroller-text max-w-[1248px] mx-auto text-center text-white mb-4 xs:mb-6">
           <h2 className="portfolio-title text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold mb-2 leading-snug">
             비디오크루의 영상 제작 사례
           </h2>
@@ -85,14 +85,14 @@ const PortfolioScroller = () => {
         </div>
       </div>
 
-      {/* Carousel Rows */}
+      {/* Carousel Rows - Full width scroll, cards scale on ultra-wide */}
       <div className="space-y-3 xs:space-y-4 sm:space-y-6 mt-8 xs:mt-12 sm:mt-16 md:mt-20 lg:mt-24">
         {/* Row 1 - Left to Right */}
         <div className="portfolio-row-1 flex gap-2 xs:gap-3 sm:gap-4 animate-scroll-left px-4 xs:px-6 sm:px-0 opacity-0">
           {[...images, ...images].map((src, i) => (
             <div
               key={`row1-${i}`}
-              className="w-[180px] xs:w-[200px] sm:w-[220px] md:w-[280px] lg:w-[320px] xl:w-[360px] h-[110px] xs:h-[120px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[201px] rounded-md flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer overflow-hidden"
+              className="portfolio-scroller-card w-[180px] xs:w-[200px] sm:w-[220px] md:w-[280px] lg:w-[320px] xl:w-[360px] h-[110px] xs:h-[120px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[201px] rounded-md flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer overflow-hidden"
             >
               {!imageErrors.has(src) ? (
                 <img
@@ -132,7 +132,7 @@ const PortfolioScroller = () => {
           {[...images, ...images].map((src, i) => (
             <div
               key={`row2-${i}`}
-              className="w-[180px] xs:w-[200px] sm:w-[220px] md:w-[280px] lg:w-[320px] xl:w-[360px] h-[110px] xs:h-[120px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[201px] rounded-md flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer overflow-hidden"
+              className="portfolio-scroller-card w-[180px] xs:w-[200px] sm:w-[220px] md:w-[280px] lg:w-[320px] xl:w-[360px] h-[110px] xs:h-[120px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[201px] rounded-md flex-shrink-0 transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer overflow-hidden"
             >
               {!imageErrors.has(src) ? (
                 <img

@@ -66,23 +66,39 @@ const HeroSection = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [hasStartedPlaying, setHasStartedPlaying] = useState(false); // Track if video ever started (for buffering state)
   const [hasVideoError, setHasVideoError] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Video source - uses environment variable for production (Render storage)
-  // Falls back to local path for development
-  const videoSrc = import.meta.env.VITE_HERO_VIDEO_URL || "/vids/HomePage_Banner_Video_비디오크루_홍보영상(3D)_최종본.mp4";
+  // Cloudinary CDN configuration for optimized video delivery
+  const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+  const videoPublicId = import.meta.env.VITE_CLOUDINARY_VIDEO_PUBLIC_ID;
 
-  // Detect mobile for preload strategy and responsive behavior
+  // Generate Cloudinary video URL with automatic format, quality, and codec optimization
+  // f_auto: automatic format selection (WebM for Chrome, MP4 for Safari)
+  // q_auto: automatic quality optimization (reduces file size 40-60%)
+  // vc_auto: automatic video codec selection (VP9, H.265, etc. based on browser support)
+  const videoSrc = cloudName && videoPublicId
+    ? `https://res.cloudinary.com/${cloudName}/video/upload/f_auto,q_auto,vc_auto/${videoPublicId}`
+    : "/vids/HomePage_Hero_Banner.mp4"; // Fallback for development
+
+  // Generate poster frame from Cloudinary (first frame of video)
+  // so_0: start offset 0 seconds (first frame)
+  // Provides instant visual rendering while video buffers
+  const posterSrc = cloudName && videoPublicId
+    ? `https://res.cloudinary.com/${cloudName}/video/upload/f_auto,q_auto,so_0/${videoPublicId}.jpg`
+    : undefined;
+
+  // Detect mobile for responsive behavior (rail-centering handled by CSS)
   useEffect(() => {
-    const checkMobile = () => {
+    const checkViewport = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    checkViewport();
+    window.addEventListener("resize", checkViewport);
+    return () => window.removeEventListener("resize", checkViewport);
   }, []);
 
   // Hero section animations
@@ -137,6 +153,7 @@ const HeroSection = () => {
 
   const handlePlaying = () => {
     setIsVideoPlaying(true);
+    setHasStartedPlaying(true); // Track that video has started at least once
   };
 
   const handleVideoError = () => {
@@ -151,18 +168,26 @@ const HeroSection = () => {
   return (
     <section
       ref={heroRef}
-      className="relative w-full bg-black text-white overflow-hidden"
+      className="relative w-full bg-black text-white overflow-hidden hero-rail-centered"
       style={{
-        // Responsive height: full viewport on desktop, constrained on mobile to prevent extreme cropping
-        height: "100vh",
-        minHeight: isMobile ? "500px" : "600px",
-        maxHeight: isMobile ? "85vh" : "100vh",
+        // Mobile gets constrained height
+        ...(isMobile && {
+          height: "100vh",
+          minHeight: "500px",
+          maxHeight: "85vh",
+        }),
+        // Desktop uses full viewport height
+        ...(!isMobile && {
+          height: "100vh",
+          minHeight: "600px",
+        }),
       }}
     >
-      {/* Video Banner Container - Responsive aspect handling */}
-      <div className="absolute inset-0 z-0">
-        {/* Skeleton Loading State - Shows while video is loading */}
-        {!isVideoLoaded && !hasVideoError && (
+      {/* Video Banner Container - Locked-width with proportional scaling */}
+      <div className="hero-video-container hero-video-locked-width z-0">
+        {/* Skeleton Loading State - Only shows when no poster frame is available (fallback mode) */}
+        {/* When Cloudinary poster is configured, it provides instant visual rendering */}
+        {!posterSrc && !isVideoLoaded && !hasVideoError && (
           <HeroBannerSkeleton />
         )}
 
@@ -193,22 +218,27 @@ const HeroSection = () => {
           </div>
         )}
 
-        {/* Video Element with responsive object-fit strategy */}
+        {/* Video Element - locked-width with proportional scaling, no cropping */}
+        {/* When poster is available (Cloudinary), show immediately for instant visual */}
+        {/* When no poster (fallback), fade in after first play, stay visible during buffering */}
         <video
           ref={videoRef}
           src={videoSrc}
-          className={`absolute inset-0 w-full h-full transition-opacity duration-700 ${
-            isVideoPlaying && !hasVideoError ? "opacity-100" : "opacity-0"
+          poster={posterSrc}
+          className={`hero-video-element transition-opacity duration-700 ${
+            posterSrc 
+              ? (hasVideoError ? "opacity-0" : "opacity-100")  // Poster: visible immediately
+              : ((isVideoPlaying || hasStartedPlaying) && !hasVideoError ? "opacity-100" : "opacity-0")  // Fallback: stay visible once started (handles buffering)
           }`}
           style={{
-            // Use cover but prioritize center-top on mobile to preserve important content
-            objectFit: "cover",
-            objectPosition: isMobile ? "center 30%" : "center center",
+            // Locked-width approach: video scales proportionally, maintains aspect ratio, no cropping
+            objectFit: "contain",
+            objectPosition: "center center",
           }}
           autoPlay
           muted
           playsInline
-          preload={isMobile ? "metadata" : "auto"}
+          preload="metadata" // Always metadata - poster handles initial visual, avoids blocking LCP
           onCanPlay={handleCanPlay}
           onPlaying={handlePlaying}
           onWaiting={handleWaiting}
@@ -228,20 +258,19 @@ const HeroSection = () => {
             isVideoPlaying ? "opacity-100" : "opacity-0"
           }`}
         />
-      </div>
 
-      {/* Minimal Video Controls - Top Right */}
-      <div className="hero-controls absolute top-4 right-4 md:top-6 md:right-6 z-20">
-        <div className="flex items-center gap-2">
-          {/* Replay Button */}
+        {/* Video Controls - Inside video container so they align with video on large screens */}
+        <div className="hero-controls absolute top-4 right-4 md:top-6 md:right-6 z-20">
+          <div className="flex items-center gap-2 3xl:gap-3">
+          {/* Replay Button - Scaled on ultra-wide */}
           <button
             onClick={handleReplay}
-            className="group flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/60 hover:border-white/30 transition-all duration-300 active:scale-95"
+            className="group flex items-center justify-center w-9 h-9 md:w-10 md:h-10 3xl:w-11 3xl:h-11 rounded-full bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/60 hover:border-white/30 transition-all duration-300 active:scale-95"
             aria-label="Replay video"
             title="다시 재생"
           >
             <svg
-              className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/70 group-hover:text-white transition-colors duration-300"
+              className="w-3.5 h-3.5 md:w-4 md:h-4 3xl:w-5 3xl:h-5 text-white/70 group-hover:text-white transition-colors duration-300"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -255,16 +284,16 @@ const HeroSection = () => {
             </svg>
           </button>
 
-          {/* Volume Toggle Button */}
+          {/* Volume Toggle Button - Scaled on ultra-wide */}
           <button
             onClick={handleToggleMute}
-            className="group flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/60 hover:border-white/30 transition-all duration-300 active:scale-95"
+            className="group flex items-center justify-center w-9 h-9 md:w-10 md:h-10 3xl:w-11 3xl:h-11 rounded-full bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/60 hover:border-white/30 transition-all duration-300 active:scale-95"
             aria-label={isMuted ? "소리 켜기" : "소리 끄기"}
             title={isMuted ? "소리 켜기" : "소리 끄기"}
           >
             {isMuted ? (
               <svg
-                className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/70 group-hover:text-white transition-colors duration-300"
+                className="w-3.5 h-3.5 md:w-4 md:h-4 3xl:w-5 3xl:h-5 text-white/70 group-hover:text-white transition-colors duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -284,7 +313,7 @@ const HeroSection = () => {
               </svg>
             ) : (
               <svg
-                className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/70 group-hover:text-white transition-colors duration-300"
+                className="w-3.5 h-3.5 md:w-4 md:h-4 3xl:w-5 3xl:h-5 text-white/70 group-hover:text-white transition-colors duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -298,6 +327,7 @@ const HeroSection = () => {
               </svg>
             )}
           </button>
+          </div>
         </div>
       </div>
     </section>

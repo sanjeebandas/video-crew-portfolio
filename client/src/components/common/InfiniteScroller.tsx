@@ -14,8 +14,9 @@ const companies: Company[] = [
 ];
 
 export default function InfiniteScroller() {
-  // Duplicate 4 times for smoother looping
+  // Duplicate 5 times for smoother looping on large screens
   const loopCompanies = [
+    ...companies,
     ...companies,
     ...companies,
     ...companies,
@@ -23,9 +24,11 @@ export default function InfiniteScroller() {
   ];
 
   return (
-    <div className="w-full overflow-hidden bg-black">
+    // Full-width scroller - content scales on ultra-wide screens
+    <div className="company-scroller-container w-full overflow-hidden bg-black py-3 sm:py-4">
       <div className="scroll-wrapper relative flex items-center">
-        <div className="scroll-track flex gap-16 company-animate-scroll-left">
+        {/* Gap scales on ultra-wide for better spacing */}
+        <div className="scroll-track flex gap-10 xs:gap-12 sm:gap-14 md:gap-16 company-animate-scroll-left">
           {loopCompanies.map((company, idx) => (
             <CompanyItem key={`${company.name}-${idx}`} {...company} />
           ))}
@@ -52,16 +55,17 @@ function CompanyItem({ name, logo }: Company) {
   const [error, setError] = useState(false);
 
   return (
+    // Logo size scales up on ultra-wide (1920px+)
     <div className="flex-shrink-0">
       {!error ? (
         <img
           src={logo}
           alt={name}
-          className="h-auto w-auto object-contain hover:scale-110 hover:opacity-80 transition-transform duration-300"
+          className="company-logo h-6 xs:h-7 sm:h-8 w-auto object-contain hover:scale-110 hover:opacity-80 transition-transform duration-300"
           onError={() => setError(true)}
         />
       ) : (
-        <span className="text-white/70 text-xl font-semibold">{name}</span>
+        <span className="company-logo-fallback text-white/70 text-base xs:text-lg sm:text-xl font-semibold">{name}</span>
       )}
     </div>
   );

@@ -17,7 +17,7 @@ import ErrorBoundary from "../components/common/ErrorBoundary";
 const Home = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const { fadeInUp, slideUpFadeIn, stackIn, staggerFadeIn, parallaxEffect } =
+  const {slideUpFadeIn, stackIn, staggerFadeIn, parallaxEffect } =
     useScrollAnimations();
 
   useEffect(() => {
@@ -34,11 +34,7 @@ const Home = () => {
           start: "top 110%",
         },
       });
-      fadeInUp(".home-subtitle", {
-        scrollTrigger: {
-          start: "top 110%",
-        },
-      });
+      // Note: .home-subtitle animation removed - element doesn't exist in current layout
       staggerFadeIn(".home-text-line", {
         scrollTrigger: {
           start: "top 115%",
@@ -77,7 +73,7 @@ const Home = () => {
         description="비디오크루는 전문적인 영상 제작 서비스를 제공합니다. 기업 홍보영상, 광고영상, 제품 소개영상 등 다양한 영상 콘텐츠를 제작합니다. 창의적인 스토리텔링과 고품질 영상으로 고객의 비즈니스를 성장시킵니다."
         keywords="영상제작, 비디오제작, 기업홍보영상, 광고영상, 제품소개영상, 스토리텔링, 영상편집, 촬영, 비디오크루"
       />
-      <div ref={containerRef} className="relative overflow-hidden">
+      <div ref={containerRef} className="home-page-container relative overflow-hidden">
         <ErrorBoundary
           onError={(error, errorInfo) => {
             console.error("Home page error:", error, errorInfo);
@@ -98,9 +94,10 @@ const Home = () => {
             <HeroSection />
           </ErrorBoundary>
 
+          {/* Sub-hero content - Rail-centered, scaled on ultra-wide */}
           <section className="bg-black text-white w-full px-4 xs:px-6 md:px-8 lg:px-6 py-12 xs:py-16 md:py-20 home-section-card">
-            <div className="max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-8">
-              {/* Left Title Block — responsive width adjustments */}
+            <div className="home-content-rail max-w-[1248px] mx-auto flex flex-col justify-center items-center space-y-8">
+              {/* Title Block — scaled up on ultra-wide */}
               <div className="w-full md:w-[450px] lg:w-[700px] xl:w-[850px] text-center home-title-left">
                 <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold leading-snug">
                   영상제작,
@@ -109,7 +106,7 @@ const Home = () => {
                 </h2>
               </div>
 
-              {/* Right Paragraph Block — responsive text sizing */}
+              {/* Paragraph Block — scaled text on ultra-wide */}
               <div className="w-full max-w-[800px] md:max-w-[900px] lg:max-w-[1000px] text-lg xs:text-lg sm:text-xl md:text-lg lg:text-xl text-muted leading-relaxed text-center home-title-right">
                 <div className="home-text-line">
                   비디오크루는 단순한 영상 제작을 넘어, 강력한 스토리텔링과 독창적인 표현으로
@@ -168,12 +165,12 @@ const Home = () => {
             </div>
           </ErrorBoundary>
 
-          {/* Browse Portfolio Button */}
+          {/* Browse Portfolio Button - Scaled on ultra-wide */}
           <div className="w-full flex justify-center my-6 xs:my-8 sm:my-10 home-section-card relative z-20">
-            <div className="max-w-[1248px] w-full flex justify-center">
+            <div className="home-content-rail max-w-[1248px] w-full flex justify-center">
               <button
                 onClick={handlePortfolioClick}
-                className="bg-blue-600 hover:bg-blue-800 cursor-pointer text-white font-semibold py-4 px-14 rounded-full transition duration-300 text-lg relative z-10"
+                className="home-portfolio-btn bg-blue-600 hover:bg-blue-800 cursor-pointer text-white font-semibold py-4 px-14 rounded-full transition duration-300 text-lg relative z-10"
               >
                 포트폴리오 둘러보기
               </button>
@@ -191,12 +188,14 @@ const Home = () => {
             }}
           />
 
-          {/* Trusted by Companies Text Block */}
+          {/* Trusted by Companies Text Block - Scaled on ultra-wide */}
           <div className="w-full text-center text-white -mt-20 xs:-mt-24 sm:-mt-32 md:-mt-40 lg:-mt-72 mb-12 xs:mb-16 md:mb-24 px-4 xs:px-6 home-section-card">
-            <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold leading-snug trusted-companies-title">
-              이미 수많은 기업이 <br />
-              비디오크루와 함께 하고 있습니다.
-            </h2>
+            <div className="home-content-rail max-w-[1248px] mx-auto">
+              <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold leading-snug trusted-companies-title">
+                이미 수많은 기업이 <br />
+                비디오크루와 함께 하고 있습니다.
+              </h2>
+            </div>
           </div>
 
           <ErrorBoundary

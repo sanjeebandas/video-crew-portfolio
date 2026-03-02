@@ -61,7 +61,13 @@ const BackgroundBanner = () => {
     <section
       className="mt-16 xs:mt-20 sm:mt-24 mb-16 xs:mb-20 sm:mb-24 relative w-full h-auto py-8 xs:py-10 flex items-center justify-center text-white"
     >
-      <div className="w-full max-w-[1248px] px-4 xs:px-6 md:px-8 lg:px-6 flex flex-col sm:flex-row justify-between items-center text-center gap-y-6 xs:gap-y-8">
+      {/* 
+        Ultra-wide strategy:
+        - Expand max-width progressively on larger screens
+        - Scale typography for better readability at distance
+        - Increase spacing between stat items
+      */}
+      <div className="stats-container w-full max-w-[1248px] px-4 xs:px-6 md:px-8 lg:px-6 flex flex-col sm:flex-row justify-between items-center text-center gap-y-6 xs:gap-y-8 sm:gap-x-8">
         {stats.map((stat, i) => (
           <div
             key={i}
