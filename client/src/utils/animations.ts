@@ -15,6 +15,11 @@ interface AnimationOptions {
   [key: string]: unknown;
 }
 
+type AnimationParam = AnimationOptions | number;
+
+const toOptions = (param: AnimationParam): AnimationOptions =>
+  typeof param === "number" ? { stagger: param } : param;
+
 // Make gsap available globally for lazy loading compatibility
 window.gsap = gsap;
 
@@ -104,8 +109,9 @@ const getResponsiveAnimationValues = () => {
 export const useScrollAnimations = () => {
   const slideInFromLeft = (
     elements: string | Element | Element[],
-    options: AnimationOptions = {}
+    param: AnimationParam = {}
   ) => {
+    const opts = toOptions(param);
     const responsiveValues = getResponsiveAnimationValues();
 
     return gsap.fromTo(
@@ -119,13 +125,13 @@ export const useScrollAnimations = () => {
         opacity: 1,
         duration: responsiveValues.duration,
         ease: ANIMATION_CONFIG.ease,
-        ...options,
+        ...opts,
         scrollTrigger: {
           trigger: elements,
           start: "top 85%",
           end: "bottom 15%",
           toggleActions: "play none none reverse",
-          ...options.scrollTrigger,
+          ...opts.scrollTrigger,
         },
       }
     );
@@ -133,8 +139,9 @@ export const useScrollAnimations = () => {
 
   const slideInFromRight = (
     elements: string | Element | Element[],
-    options: AnimationOptions = {}
+    param: AnimationParam = {}
   ) => {
+    const opts = toOptions(param);
     const responsiveValues = getResponsiveAnimationValues();
 
     return gsap.fromTo(
@@ -148,13 +155,13 @@ export const useScrollAnimations = () => {
         opacity: 1,
         duration: responsiveValues.duration,
         ease: ANIMATION_CONFIG.ease,
-        ...options,
+        ...opts,
         scrollTrigger: {
           trigger: elements,
           start: "top 85%",
           end: "bottom 15%",
           toggleActions: "play none none reverse",
-          ...options.scrollTrigger,
+          ...opts.scrollTrigger,
         },
       }
     );
@@ -162,8 +169,9 @@ export const useScrollAnimations = () => {
 
   const fadeInUp = (
     elements: string | Element | Element[],
-    options: AnimationOptions = {}
+    param: AnimationParam = {}
   ) => {
+    const opts = toOptions(param);
     const responsiveValues = getResponsiveAnimationValues();
 
     return gsap.fromTo(
@@ -177,13 +185,13 @@ export const useScrollAnimations = () => {
         opacity: 1,
         duration: responsiveValues.duration,
         ease: ANIMATION_CONFIG.ease,
-        ...options,
+        ...opts,
         scrollTrigger: {
           trigger: elements,
           start: "top 85%",
           end: "bottom 15%",
           toggleActions: "play none none reverse",
-          ...options.scrollTrigger,
+          ...opts.scrollTrigger,
         },
       }
     );
@@ -191,28 +199,29 @@ export const useScrollAnimations = () => {
 
   const slideUpFadeIn = (
     elements: string | Element | Element[],
-    options: AnimationOptions = {}
+    param: AnimationParam = {}
   ) => {
+    const opts = toOptions(param);
     const responsiveValues = getResponsiveAnimationValues();
 
     return gsap.fromTo(
       elements,
       {
-        y: responsiveValues.fadeDistance + 20, // Slightly more distance for slide up effect
+        y: responsiveValues.fadeDistance + 20,
         opacity: 0,
       },
       {
         y: 0,
         opacity: 1,
-        duration: responsiveValues.duration * 1.8, // Slower timing (1.8x the original)
+        duration: responsiveValues.duration * 1.8,
         ease: "power2.out",
-        ...options,
+        ...opts,
         scrollTrigger: {
           trigger: elements,
           start: "top 85%",
           end: "bottom 15%",
           toggleActions: "play none none reverse",
-          ...options.scrollTrigger,
+          ...opts.scrollTrigger,
         },
       }
     );
@@ -220,8 +229,9 @@ export const useScrollAnimations = () => {
 
   const stackIn = (
     elements: string | Element | Element[],
-    options: AnimationOptions = {}
+    param: AnimationParam = {}
   ) => {
+    const opts = toOptions(param);
     const responsiveValues = getResponsiveAnimationValues();
 
     return gsap.fromTo(
@@ -233,14 +243,14 @@ export const useScrollAnimations = () => {
         scale: 1,
         stagger: responsiveValues.staggerDelay,
         duration: responsiveValues.duration,
-        ease: "back.out(1.4)", // Faster back ease
-        ...options,
+        ease: "back.out(1.4)",
+        ...opts,
         scrollTrigger: {
           trigger: elements,
           start: "top 80%",
           end: "bottom 20%",
           toggleActions: "play none none reverse",
-          ...options.scrollTrigger,
+          ...opts.scrollTrigger,
         },
       }
     );
@@ -248,8 +258,9 @@ export const useScrollAnimations = () => {
 
   const staggerFadeIn = (
     elements: string | Element | Element[],
-    options: AnimationOptions = {}
+    param: AnimationParam = {}
   ) => {
+    const opts = toOptions(param);
     const responsiveValues = getResponsiveAnimationValues();
 
     return gsap.fromTo(
@@ -261,13 +272,13 @@ export const useScrollAnimations = () => {
         stagger: responsiveValues.staggerDelay,
         duration: responsiveValues.duration,
         ease: ANIMATION_CONFIG.ease,
-        ...options,
+        ...opts,
         scrollTrigger: {
           trigger: elements,
           start: "top 90%",
           end: "bottom 10%",
           toggleActions: "play none none reverse",
-          ...options.scrollTrigger,
+          ...opts.scrollTrigger,
         },
       }
     );
