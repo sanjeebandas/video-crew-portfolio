@@ -1,13 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { refreshGSAPAnimations } from "../../utils/animations";
 
-// Extend Window interface to include gsap
-declare global {
-  interface Window {
-    gsap: any;
-  }
-}
-
 interface LazyImageProps {
   src: string;
   alt: string;

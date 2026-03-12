@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { PortfolioItem } from "../../types/portfolio";
 import LazyImage from "../common/LazyImage";
 import VideoModal from "./VideoModal";
+import { getMediaUrl } from "../../utils/helpers";
 
 type Props = {
   item: PortfolioItem;
@@ -28,7 +29,7 @@ const PortfolioCard = ({ item }: Props) => {
             <div 
               className="absolute inset-0 scale-110 blur-2xl opacity-50"
               style={{
-                backgroundImage: `url(${item.thumbnailUrl})`,
+                backgroundImage: `url(${getMediaUrl(item.thumbnailUrl)})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
@@ -66,7 +67,7 @@ const PortfolioCard = ({ item }: Props) => {
             )}
 
             <LazyImage
-              src={item.thumbnailUrl}
+              src={getMediaUrl(item.thumbnailUrl)}
               alt={`${item.title} - 비디오크루 포트폴리오 썸네일`}
               className={`w-full h-full object-contain relative z-[1] transition-opacity duration-300 ${
                 isImageLoading ? 'opacity-0' : 'opacity-100'

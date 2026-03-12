@@ -14,19 +14,7 @@ export const uploadImage = async (req: Request, res: Response) => {
     // Log file details for debugging
     console.log(`📸 Image upload started: ${req.file.originalname} (${req.file.size} bytes, ${req.file.mimetype})`);
 
-    // Generate secure URL
-    const protocol = process.env.NODE_ENV === 'production' ? 'https' : req.protocol;
-    const host = req.get("host");
-    
-    if (!host) {
-      console.error("❌ Image upload failed: No host header found");
-      return res.status(500).json({ 
-        success: false, 
-        message: "Server configuration error" 
-      });
-    }
-
-    const imageUrl = `${protocol}://${host}/uploads/${req.file.filename}`;
+    const imageUrl = `/uploads/${req.file.filename}`;
     
     // Log successful upload
     console.log(`✅ Image uploaded successfully: ${req.file.filename} -> ${imageUrl}`);
@@ -80,19 +68,7 @@ export const uploadVideo = async (req: Request, res: Response) => {
     // Log file details for debugging
     console.log(`🎥 Video upload started: ${req.file.originalname} (${req.file.size} bytes, ${req.file.mimetype})`);
 
-    // Generate secure URL
-    const protocol = process.env.NODE_ENV === 'production' ? 'https' : req.protocol;
-    const host = req.get("host");
-    
-    if (!host) {
-      console.error("❌ Video upload failed: No host header found");
-      return res.status(500).json({ 
-        success: false, 
-        message: "Server configuration error" 
-      });
-    }
-
-    const videoUrl = `${protocol}://${host}/uploads/${req.file.filename}`;
+    const videoUrl = `/uploads/${req.file.filename}`;
     
     // Log successful upload
     console.log(`✅ Video uploaded successfully: ${req.file.filename} -> ${videoUrl}`);

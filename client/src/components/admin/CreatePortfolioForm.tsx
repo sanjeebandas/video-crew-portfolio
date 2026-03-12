@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import { uploadImage, uploadVideo } from "../../services/upload";
 import api from "../../services/api";
-import { getToken } from "../../utils/helpers";
+import { getToken, getMediaUrl } from "../../utils/helpers";
 
 type ErrorState = {
   message: string;
@@ -864,7 +864,7 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
                   <div className="relative group">
                     <div className="bg-gray-700 rounded-xl p-3 sm:p-4 border border-gray-600">
                       <img
-                        src={formData.thumbnailUrl}
+                        src={getMediaUrl(formData.thumbnailUrl)}
                         alt="Current Thumbnail"
                         className="w-full max-w-xs rounded-lg border border-gray-600"
                       />
@@ -1006,7 +1006,7 @@ const CreatePortfolioForm = ({ onCreated, onUpdated, onClose, editMode, editData
                   <div className="relative group">
                     <div className="bg-gray-700 rounded-xl p-3 sm:p-4 border border-gray-600">
                       <video
-                        src={formData.videoUrl}
+                        src={getMediaUrl(formData.videoUrl)}
                         controls
                         className="w-full max-w-xs rounded-lg border border-gray-600"
                       />

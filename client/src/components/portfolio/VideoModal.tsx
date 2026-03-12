@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import type { PortfolioItem } from "../../types/portfolio";
+import { getMediaUrl } from "../../utils/helpers";
 
 type Props = {
   item: PortfolioItem;
@@ -53,7 +54,7 @@ const VideoModal = ({ item, isOpen, onClose }: Props) => {
         <div className="relative w-full h-full">
           <video
             ref={videoRef}
-            src={item.videoUrl}
+            src={getMediaUrl(item.videoUrl)}
             className="w-full h-full object-cover"
             controls
             autoPlay

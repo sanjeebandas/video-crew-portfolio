@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getMediaUrl } from "../../utils/helpers";
 
 type PortfolioItem = {
   _id: string;
@@ -51,7 +52,7 @@ const PortfolioItemCard = ({
       <div className="relative h-48 bg-gray-800">
         {item.thumbnailUrl && !imageError ? (
           <img
-            src={item.thumbnailUrl}
+            src={getMediaUrl(item.thumbnailUrl)}
             alt={item.title}
             className="w-full h-full object-cover"
             onError={handleImageError}
@@ -65,7 +66,7 @@ const PortfolioItemCard = ({
         {/* Video Preview Button */}
         {item.videoUrl && (
           <button
-            onClick={() => onPreviewVideo(item.videoUrl!)}
+            onClick={() => onPreviewVideo(getMediaUrl(item.videoUrl!))}
             className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-lg transition-all duration-200"
             title="Preview Video"
             aria-label={`Preview video for ${item.title}`}

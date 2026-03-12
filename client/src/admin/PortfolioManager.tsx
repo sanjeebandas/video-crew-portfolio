@@ -1,5 +1,5 @@
 // src/admin/PortfolioManager.tsx
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, type ComponentProps } from "react";
 import { useNavigate } from "react-router-dom";
 import CreatePortfolioForm from "../components/admin/CreatePortfolioForm";
 import PortfolioItemCard from "../components/admin/PortfolioItemCard";
@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import { getPortfolioItems, deletePortfolioItem} from "../services/api";
 import AdminNavbar from "../components/admin/AdminNavbar";
+import { getMediaUrl } from "../utils/helpers";
 
 type PortfolioItem = {
   _id: string;
@@ -21,8 +22,14 @@ type PortfolioItem = {
 
 type ModalState = {
   type: 'form' | 'video' | 'details' | null;
-  data?: any;
+  data?: PortfolioItem | string;
   editMode?: boolean;
+};
+
+type ApiError = {
+  response?: { status?: number };
+  message?: string;
+  code?: string;
 };
 
 type ErrorState = {
@@ -119,11 +126,13 @@ const PortfolioManager = () => {
       // Trigger notification refresh to check for new items
       if (
         typeof window !== "undefined" &&
-        (window as any).refreshNotifications
+        "refreshNotifications" in window &&
+        typeof (window as Window & { refreshNotifications?: () => void }).refreshNotifications === "function"
       ) {
-        (window as any).refreshNotifications();
+        (window as Window & { refreshNotifications: () => void }).refreshNotifications();
       }
-    } catch (err: any) {
+    } catch (_err: unknown) {
+      const err = _err as ApiError;
       console.error("Error fetching portfolio items:", err);
       
       let errorMessage = "Failed to load portfolio items.";
@@ -143,7 +152,7 @@ const PortfolioManager = () => {
         errorMessage = "Portfolio service not found. Please contact support.";
         errorType = 'fetch';
         retryable = true;
-      } else if (err?.response?.status >= 500) {
+      } else if ((err?.response?.status ?? 0) >= 500) {
         errorMessage = "Server error. Our team has been notified.";
         errorType = 'fetch';
         retryable = true;
@@ -198,7 +207,8 @@ const PortfolioManager = () => {
       await deletePortfolioItem(id);
       setItems((prev) => prev.filter((item) => item._id !== id));
       toast.success("Portfolio item deleted successfully!");
-    } catch (error: any) {
+    } catch (_error: unknown) {
+      const error = _error as ApiError;
       console.error("Delete error:", error);
       
       let errorMessage = "Failed to delete portfolio item.";
@@ -209,7 +219,7 @@ const PortfolioManager = () => {
         errorMessage = "Access denied. You don't have permission to delete this item.";
       } else if (error?.response?.status === 404) {
         errorMessage = "Portfolio item not found. It may have been already deleted.";
-      } else if (error?.response?.status >= 500) {
+      } else if ((error?.response?.status ?? 0) >= 500) {
         errorMessage = "Server error. Please try again later.";
       } else if (error?.message?.includes('Network Error')) {
         errorMessage = "Network connection failed. Please check your internet connection.";
@@ -241,7 +251,7 @@ const PortfolioManager = () => {
     setModalState({ type: null, editMode: false }); // Close any open modals when changing pages
   }, []);
 
-  const openModal = useCallback((type: ModalState['type'], data?: any, editMode?: boolean) => {
+  const openModal = useCallback((type: ModalState['type'], data?: PortfolioItem | string, editMode?: boolean) => {
     setModalState({ type, data, editMode });
   }, []);
 
@@ -563,7 +573,7 @@ const PortfolioManager = () => {
                 </div>
                 <CreatePortfolioForm
                   editMode={modalState.editMode}
-                  editData={modalState.data}
+                  editData={(typeof modalState.data !== 'string' ? modalState.data : undefined) as ComponentProps<typeof CreatePortfolioForm>['editData']}
                   onCreated={() => {
                     closeModal();
                     fetchItems();
@@ -579,7 +589,7 @@ const PortfolioManager = () => {
           )}
 
           {/* Video Preview Modal */}
-          {modalState.type === 'video' && (
+          {modalState.type === 'video' && typeof modalState.data === 'string' && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
               <div className="relative w-full max-w-4xl">
                 <button
@@ -590,7 +600,7 @@ const PortfolioManager = () => {
                   <i className="fas fa-times mr-1"></i>Close
                 </button>
                 <video
-                  src={modalState.data}
+                  src={getMediaUrl(modalState.data)}
                   controls
                   className="w-full rounded-lg"
                   autoPlay
@@ -602,7 +612,7 @@ const PortfolioManager = () => {
           )}
 
           {/* Item Details Modal */}
-          {modalState.type === 'details' && modalState.data && (
+          {modalState.type === 'details' && modalState.data && typeof modalState.data !== 'string' && (
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
               <div className="bg-black border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                 <div className="flex items-center justify-between mb-4">
@@ -663,7 +673,7 @@ const PortfolioManager = () => {
                         Video:
                       </strong>
                       <video
-                        src={modalState.data.videoUrl}
+                        src={getMediaUrl(modalState.data.videoUrl)}
                         controls
                         className="w-full rounded-lg"
                       >

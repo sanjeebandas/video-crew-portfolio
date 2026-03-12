@@ -3,7 +3,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../services/api";
 import { uploadImage, uploadVideo } from "../services/upload";
-import { getToken } from "../utils/helpers";
+import { getToken, getMediaUrl } from "../utils/helpers";
+
+type ApiError = {
+  response?: { status?: number };
+  message?: string;
+  code?: string;
+};
 
 type ErrorState = {
   message: string;
@@ -167,7 +173,8 @@ const EditPortfolioPage = () => {
           displayOrder: data.displayOrder || 0,
         });
         setRetryCount(0); // Reset retry count on success
-      } catch (err: any) {
+      } catch (_err: unknown) {
+        const err = _err as ApiError;
         console.error("Fetch error:", err);
         
         let errorMessage = "Failed to fetch portfolio item.";
@@ -187,7 +194,7 @@ const EditPortfolioPage = () => {
           errorMessage = "Portfolio item not found. It may have been deleted.";
           errorType = 'fetch';
           retryable = false;
-        } else if (err?.response?.status >= 500) {
+        } else if ((err?.response?.status ?? 0) >= 500) {
           errorMessage = "Server error. Our team has been notified.";
           errorType = 'fetch';
           retryable = true;
@@ -285,7 +292,8 @@ const EditPortfolioPage = () => {
       }
 
       return uploaded;
-    } catch (uploadErr: any) {
+    } catch (_uploadErr: unknown) {
+      const uploadErr = _uploadErr as ApiError;
       console.error("Upload error:", uploadErr);
       
       let errorMessage = "Failed to upload media files.";
@@ -305,7 +313,7 @@ const EditPortfolioPage = () => {
         errorMessage = "File too large. Please reduce file size and try again.";
         errorType = 'upload';
         retryable = true;
-      } else if (uploadErr?.response?.status >= 500) {
+      } else if ((uploadErr?.response?.status ?? 0) >= 500) {
         errorMessage = "Server error during upload. Please try again.";
         errorType = 'upload';
         retryable = true;
@@ -325,7 +333,7 @@ const EditPortfolioPage = () => {
         retryable
       });
 
-      throw uploadErr;
+      throw _uploadErr;
     } finally {
       setIsUploading(false);
       setUploadProgress({thumbnail: 0, video: 0});
@@ -360,7 +368,8 @@ const EditPortfolioPage = () => {
       toast.success("Portfolio updated successfully!");
       setRetryCount(0); // Reset retry count on success
       navigate("/admin/portfolio");
-    } catch (err: any) {
+    } catch (_err: unknown) {
+      const err = _err as ApiError;
       console.error("Submit error:", err);
       
       let errorMessage = "Failed to update portfolio.";
@@ -380,7 +389,7 @@ const EditPortfolioPage = () => {
         errorMessage = "Portfolio item not found. It may have been deleted.";
         errorType = 'api';
         retryable = false;
-      } else if (err?.response?.status >= 500) {
+      } else if ((err?.response?.status ?? 0) >= 500) {
         errorMessage = "Server error. Our team has been notified.";
         errorType = 'api';
         retryable = true;
@@ -732,7 +741,7 @@ const EditPortfolioPage = () => {
                       Current thumbnail:
                     </p>
                     <img
-                      src={formData.thumbnailUrl}
+                      src={getMediaUrl(formData.thumbnailUrl)}
                       alt="Current Thumbnail"
                       className="w-full max-w-xs rounded-lg border border-slate-600/50"
                     />
@@ -810,7 +819,7 @@ const EditPortfolioPage = () => {
                       Current video:
                     </p>
                     <video
-                      src={formData.videoUrl}
+                      src={getMediaUrl(formData.videoUrl)}
                       controls
                       className="w-full max-w-xs rounded-lg border border-slate-600/50"
                     />

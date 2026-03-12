@@ -4,11 +4,15 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
-// Extend Window interface to include gsap
 declare global {
   interface Window {
-    gsap: any;
+    gsap: typeof gsap | undefined;
   }
+}
+
+interface AnimationOptions {
+  scrollTrigger?: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
 // Make gsap available globally for lazy loading compatibility
@@ -100,7 +104,7 @@ const getResponsiveAnimationValues = () => {
 export const useScrollAnimations = () => {
   const slideInFromLeft = (
     elements: string | Element | Element[],
-    options: any = {}
+    options: AnimationOptions = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
 
@@ -129,7 +133,7 @@ export const useScrollAnimations = () => {
 
   const slideInFromRight = (
     elements: string | Element | Element[],
-    options: any = {}
+    options: AnimationOptions = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
 
@@ -158,7 +162,7 @@ export const useScrollAnimations = () => {
 
   const fadeInUp = (
     elements: string | Element | Element[],
-    options: any = {}
+    options: AnimationOptions = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
 
@@ -187,7 +191,7 @@ export const useScrollAnimations = () => {
 
   const slideUpFadeIn = (
     elements: string | Element | Element[],
-    options: any = {}
+    options: AnimationOptions = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
 
@@ -216,7 +220,7 @@ export const useScrollAnimations = () => {
 
   const stackIn = (
     elements: string | Element | Element[],
-    options: any = {}
+    options: AnimationOptions = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
 
@@ -244,7 +248,7 @@ export const useScrollAnimations = () => {
 
   const staggerFadeIn = (
     elements: string | Element | Element[],
-    options: any = {}
+    options: AnimationOptions = {}
   ) => {
     const responsiveValues = getResponsiveAnimationValues();
 
@@ -272,7 +276,7 @@ export const useScrollAnimations = () => {
   const parallaxEffect = (
     element: string | Element,
     speed: number = 0.5,
-    options: any = {}
+    options: ScrollTrigger.Vars = {}
   ) => {
     // Adjust parallax speed for mobile devices
     const isMobile = window.innerWidth < 768;
