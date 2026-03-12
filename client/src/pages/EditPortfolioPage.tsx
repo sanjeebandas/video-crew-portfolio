@@ -68,13 +68,36 @@ const EditPortfolioPage = () => {
   const MAX_RETRIES = 3;
   const RETRY_DELAY = 2000; // 2 seconds
 
+  // Retry handler
+  const handleRetry = useCallback(async () => {
+    if (retryCount >= MAX_RETRIES) return;
+
+    try {
+      setIsRetrying(true);
+      const newRetryCount = retryCount + 1;
+      setRetryCount(newRetryCount);
+
+      // Clear errors and retry
+      setError(null);
+
+      // Simulate retry delay
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * newRetryCount));
+
+      // Reset retry count on success
+      setRetryCount(0);
+    } catch (error) {
+      console.error("Retry failed:", error);
+    } finally {
+      setIsRetrying(false);
+    }
+  }, [retryCount]);
+
   // Network status detection
   useEffect(() => {
     const handleOnline = () => {
       setIsOffline(false);
       if (error?.type === 'network') {
         setError(null);
-        // Auto-retry when coming back online
         if (retryCount < MAX_RETRIES) {
           handleRetry();
         }
@@ -102,31 +125,7 @@ const EditPortfolioPage = () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, [error, retryCount]);
-
-  // Retry handler
-  const handleRetry = useCallback(async () => {
-    if (retryCount >= MAX_RETRIES) return;
-
-    try {
-      setIsRetrying(true);
-      const newRetryCount = retryCount + 1;
-      setRetryCount(newRetryCount);
-
-      // Clear errors and retry
-      setError(null);
-
-      // Simulate retry delay
-      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * newRetryCount));
-
-      // Reset retry count on success
-      setRetryCount(0);
-    } catch (error) {
-      console.error("Retry failed:", error);
-    } finally {
-      setIsRetrying(false);
-    }
-  }, [retryCount]);
+  }, [error, retryCount, handleRetry]);
 
   // Validation functions
   const validateName = (name: string): boolean => {
